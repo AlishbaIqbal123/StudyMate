@@ -23,8 +23,8 @@ Before you start, make sure the following are installed on your machine:
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/studymate-alexa.git
-cd studymate-alexa
+git clone https://github.com/AlishbaIqbal123/StudyMate.git
+cd StudyMate
 ```
 
 ---

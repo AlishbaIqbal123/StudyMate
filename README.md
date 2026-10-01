@@ -101,7 +101,7 @@ StudyMate uses **zero paid subscriptions, zero paid API keys, and zero cloud hos
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/StudyMate.git
+git clone https://github.com/AlishbaIqbal123/StudyMate.git
 cd StudyMate
 
 # Install all workspace dependencies
