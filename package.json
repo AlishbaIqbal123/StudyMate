@@ -1,0 +1,29 @@
+{
+  "name": "studymate",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StudyMate — Your academic life, organized through conversation. Alexa+ MCP Add-on & Web Dashboard.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=apps/mcp-server",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev": "npm run dev:server",
+    "build": "npm run build --workspaces",
+    "db:init": "npm run init --workspace=packages/database",
+    "db:seed": "npm run seed --workspace=packages/database",
+    "db:reset": "npm run reset --workspace=packages/database",
+    "typecheck": "npm run typecheck --workspaces"
+  },
+  "keywords": [
+    "alexa-plus",
+    "mcp",
+    "model-context-protocol",
+    "study-assistant",
+    "student-productivity"
+  ],
+  "author": "Alishba Iqbal",
+  "license": "MIT"
+}
