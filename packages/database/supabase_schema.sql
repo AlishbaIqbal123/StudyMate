@@ -1,7 +1,6 @@
 -- ==============================================================================
 -- StudyMate Supabase PostgreSQL Schema & Seed Migration
--- Run this script in the Supabase Dashboard -> SQL Editor
--- Project URL: https://smadzakvfhkvguhzkzpu.supabase.co
+-- Run this script in your Supabase Dashboard -> SQL Editor
 -- ==============================================================================
 
 -- 1. Students table (Single-student MVP; expandable for multi-user in v2)

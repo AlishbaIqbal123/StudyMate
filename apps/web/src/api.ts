@@ -9,7 +9,8 @@ import type {
   TaskStatus,
 } from '@studymate/types';
 
-const API_BASE = '/api';
+const API_HOST = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const API_BASE = `${API_HOST}/api`;
 
 export interface VoiceSimulationResponse {
   intent: string;
@@ -150,7 +151,7 @@ export interface ServerHealthDetails {
 
 export async function fetchHealthDetails(): Promise<ServerHealthDetails | null> {
   try {
-    const res = await fetch('/health');
+    const res = await fetch(`${API_HOST}/health`);
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -160,7 +161,7 @@ export async function fetchHealthDetails(): Promise<ServerHealthDetails | null> 
 
 export async function checkServerHealth(): Promise<boolean> {
   try {
-    const res = await fetch('/health');
+    const res = await fetch(`${API_HOST}/health`);
     return res.ok;
   } catch {
     return false;
@@ -177,7 +178,7 @@ export async function executeMcpJsonRpc(
     method,
     ...(params ? { params } : {}),
   };
-  const res = await fetch('/mcp', {
+  const res = await fetch(`${API_HOST}/mcp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
