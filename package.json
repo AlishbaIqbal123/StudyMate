@@ -11,6 +11,7 @@
     "dev:server": "npm run dev --workspace=apps/mcp-server",
     "dev:web": "npm run dev --workspace=apps/web",
     "dev": "npm run dev:server",
+    "start": "npm run start --workspace=apps/mcp-server",
     "build": "npm run build --workspaces",
     "db:init": "npm run init --workspace=packages/database",
     "db:seed": "npm run seed --workspace=packages/database",
