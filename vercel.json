@@ -3,7 +3,7 @@
   "services": {
     "mcp-server": {
       "root": "apps/mcp-server",
-      "entrypoint": "src/index.ts",
+      "entrypoint": "index.js",
       "framework": "express"
     },
     "web": {
