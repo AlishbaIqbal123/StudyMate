@@ -92,9 +92,10 @@ app.post('/mcp/messages', handleSseMessage);
 // 4. REST API for Web Companion Dashboard
 app.use('/api', apiRouter);
 
-// Start Server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`
+// Start Server when run directly (local / container), skip during serverless invocations
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`
 ╔═══════════════════════════════════════════════════════════════════╗
 ║                   📚 StudyMate MCP Server                         ║
 ║         "Your academic life, organized through conversation"      ║
@@ -108,4 +109,9 @@ app.listen(PORT, '0.0.0.0', () => {
 ║           update_progress, get_course_progress                    ║
 ╚═══════════════════════════════════════════════════════════════════╝
 `);
-});
+  });
+}
+
+export { app };
+export default app;
+
