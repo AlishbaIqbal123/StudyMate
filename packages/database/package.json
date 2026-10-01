@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@studymate/types": "*"
+    "@studymate/types": "*",
+    "@supabase/supabase-js": "^2.49.1"
   },
   "devDependencies": {
     "tsx": "^4.19.3",
