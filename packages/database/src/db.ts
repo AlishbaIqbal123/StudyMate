@@ -4,7 +4,8 @@ import * as fs from 'node:fs';
 let DatabaseSyncClass: any = null;
 try {
   // @ts-ignore
-  DatabaseSyncClass = require('node:sqlite')?.DatabaseSync;
+  const sqlite = await import('node:sqlite');
+  DatabaseSyncClass = sqlite?.DatabaseSync || null;
 } catch {
   DatabaseSyncClass = null;
 }
