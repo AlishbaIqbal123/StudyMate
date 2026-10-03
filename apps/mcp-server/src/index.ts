@@ -92,8 +92,7 @@ app.post('/mcp/messages', handleSseMessage);
 // 4. REST API for Web Companion Dashboard
 app.use('/api', apiRouter);
 
-// Start Server when run directly (local / container), skip during serverless invocations
-if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`
 ╔═══════════════════════════════════════════════════════════════════╗
