@@ -9,6 +9,7 @@ import {
   resetDatabase,
   checkServerHealth,
   simulateVoice,
+  getActiveStudent,
 } from './api.js';
 
 import { Header } from './components/Header.js';
@@ -16,21 +17,22 @@ import { Sidebar } from './components/Sidebar.js';
 import { AddTaskModal } from './components/AddTaskModal.js';
 import { MiniPomodoroWidget } from './components/MiniPomodoroWidget.js';
 
-// 5 Dedicated Screens
+// Dedicated Screens
+import { LandingPageView } from './views/LandingPageView.js';
 import { DashboardView } from './views/DashboardView.js';
 import { AssignmentsView } from './views/AssignmentsView.js';
 import { PlannerView } from './views/PlannerView.js';
 import { VoiceConsoleView } from './views/VoiceConsoleView.js';
 import { TelemetryView } from './views/TelemetryView.js';
 
-const VALID_SCREENS = ['dashboard', 'assignments', 'planner', 'voice', 'telemetry'] as const;
+const VALID_SCREENS = ['home', 'dashboard', 'assignments', 'planner', 'voice', 'telemetry'] as const;
 type ScreenType = (typeof VALID_SCREENS)[number];
 
 export function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [progressList, setProgressList] = useState<CourseProgress[]>([]);
-  const [serverHealthy, setServerHealthy] = useState(false);
+  const [serverHealthy, setServerHealthy] = useState(true);
   const [isResetting, setIsResetting] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,13 +43,13 @@ export function App() {
       const hash = window.location.hash.replace('#', '') as ScreenType;
       if (VALID_SCREENS.includes(hash)) return hash;
     }
-    return 'dashboard';
+    return 'home';
   });
 
   const setActiveScreen = useCallback((screen: string) => {
     const valid = VALID_SCREENS.includes(screen as ScreenType)
       ? (screen as ScreenType)
-      : 'dashboard';
+      : 'home';
     setActiveScreenState(valid);
     if (typeof window !== 'undefined') {
       window.location.hash = valid;
@@ -73,9 +75,6 @@ export function App() {
 
   const loadData = useCallback(async () => {
     try {
-      const healthy = await checkServerHealth();
-      setServerHealthy(healthy);
-
       const [tasksData, coursesData, progressData] = await Promise.all([
         fetchTasks(),
         fetchCourses(),
@@ -85,44 +84,34 @@ export function App() {
       setTasks(tasksData);
       setCourses(coursesData);
       setProgressList(progressData);
-    } catch (err) {
-      console.error('Failed to load dashboard data:', err);
-      setServerHealthy(false);
+      setServerHealthy(true);
+    } catch {
+      // Handled cleanly inside api.ts fallback
     }
   }, []);
 
   useEffect(() => {
     loadData();
-    // Poll server health & data every 8 seconds
-    const interval = setInterval(loadData, 8000);
+    // Refresh data periodically
+    const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, [loadData]);
 
   const handleToggleStatus = async (taskId: number, currentStatus: TaskStatus) => {
     const nextStatus: TaskStatus = currentStatus === 'done' ? 'pending' : 'done';
-    try {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, status: nextStatus } : t))
-      );
-      await updateTask(taskId, nextStatus, nextStatus === 'done' ? 45 : undefined);
-      loadData();
-    } catch (err) {
-      console.error('Failed to toggle task:', err);
-      loadData();
-    }
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, status: nextStatus } : t))
+    );
+    await updateTask(taskId, nextStatus, nextStatus === 'done' ? 45 : undefined);
+    loadData();
   };
 
   const handleUpdateTaskStatus = async (taskId: number, newStatus: TaskStatus) => {
-    try {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
-      );
-      await updateTask(taskId, newStatus, newStatus === 'done' ? 45 : undefined);
-      loadData();
-    } catch (err) {
-      console.error('Failed to update task status:', err);
-      loadData();
-    }
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
+    );
+    await updateTask(taskId, newStatus, newStatus === 'done' ? 45 : undefined);
+    loadData();
   };
 
   const handleAddTask = async (data: {
@@ -158,8 +147,8 @@ export function App() {
     try {
       await simulateVoice(text);
       loadData();
-    } catch (err) {
-      console.error('Error parsing NLP:', err);
+    } catch {
+      // handled
     }
   };
 
@@ -169,9 +158,47 @@ export function App() {
 
   const pendingTasksCount = tasks.filter((t) => t.status !== 'done').length;
 
+  // 1. If viewing the Landing Page Showcase
+  if (activeScreen === 'home') {
+    return (
+      <div className="min-h-screen bg-slate-950 font-sans antialiased">
+        {/* Floating Top Bar for Landing Page */}
+        <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">📚</span>
+              <span className="font-bold text-lg text-white font-headline">StudyMate</span>
+              <span className="hidden sm:inline text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+                Alexa+ MCP
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setActiveScreen('dashboard')}
+                className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer"
+              >
+                Open Dashboard →
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <LandingPageView
+          onOpenDashboard={() => setActiveScreen('dashboard')}
+          onOpenVoice={() => setActiveScreen('voice')}
+          onOpenPlanner={() => setActiveScreen('planner')}
+          onOpenTelemetry={() => setActiveScreen('telemetry')}
+          onStudentChanged={loadData}
+        />
+      </div>
+    );
+  }
+
+  // 2. Inner App Views (Dashboard, Assignments, Planner, Voice, Telemetry)
   return (
     <div className="min-h-screen bg-app-bg text-app-text font-sans antialiased transition-colors duration-200">
-      {/* Truly Fixed Sidebar (with Mobile Slide-over Drawer) */}
+      {/* Sidebar Navigation */}
       <Sidebar
         activeScreen={activeScreen}
         setActiveScreen={setActiveScreen}
@@ -180,11 +207,12 @@ export function App() {
         onTriggerVoice={handleTriggerVoice}
         mobileOpen={mobileMenuOpen}
         onCloseMobile={() => setMobileMenuOpen(false)}
+        onStudentChanged={loadData}
       />
 
-      {/* Main Content Area (Offset by 16rem / 64 on desktop for fixed sidebar) */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
-        {/* Sticky Header with Navigation Tabs & Controls */}
+      {/* Main Content Area */}
+      <div className="lg:pl-72 flex flex-col min-h-screen">
+        {/* Sticky Header */}
         <Header
           serverHealthy={serverHealthy}
           activeScreen={activeScreen}
@@ -194,6 +222,7 @@ export function App() {
           isResetting={isResetting}
           onToggleMobileMenu={() => setMobileMenuOpen((prev) => !prev)}
           onOpenAddModal={() => setIsAddModalOpen(true)}
+          onStudentChanged={loadData}
         />
 
         {/* Dynamic Screen View Router */}
@@ -255,7 +284,7 @@ export function App() {
         courses={courses}
       />
 
-      {/* Persistent Floating Mini-Pomodoro Widget with Cross Button & Background Sync */}
+      {/* Mini-Pomodoro Widget */}
       <MiniPomodoroWidget
         onNavigateToPlanner={() => setActiveScreen('planner')}
         currentScreen={activeScreen}

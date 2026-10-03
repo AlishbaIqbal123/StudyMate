@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Sparkles,
   Sun,
@@ -6,13 +6,15 @@ import {
   RefreshCw,
   Menu,
   Plus,
-  Terminal,
   Clock,
   CheckSquare,
   LayoutDashboard,
   Mic,
+  Home,
+  ChevronDown,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
+import { DEMO_STUDENTS, getActiveStudent, setActiveStudent } from '../api.js';
 
 interface HeaderProps {
   serverHealthy: boolean;
@@ -23,9 +25,15 @@ interface HeaderProps {
   isResetting: boolean;
   onToggleMobileMenu: () => void;
   onOpenAddModal?: () => void;
+  onStudentChanged?: () => void;
 }
 
 const SCREEN_TITLES: Record<string, { title: string; subtitle: string; icon: any }> = {
+  home: {
+    title: 'Showcase & Overview',
+    subtitle: 'Product features, Alexa+ voice demo, and MCP architecture',
+    icon: Home,
+  },
   dashboard: {
     title: 'Academic Hub',
     subtitle: 'Daily coursework schedule & performance summary',
@@ -62,10 +70,19 @@ export const Header: React.FC<HeaderProps> = ({
   isResetting,
   onToggleMobileMenu,
   onOpenAddModal,
+  onStudentChanged,
 }) => {
   const { theme, toggleTheme } = useTheme();
   const screenInfo = SCREEN_TITLES[activeScreen] || SCREEN_TITLES.dashboard;
   const Icon = screenInfo.icon;
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const currentStudent = getActiveStudent();
+
+  const handleSelectStudent = (studentId: number) => {
+    setActiveStudent(studentId);
+    setProfileDropdownOpen(false);
+    if (onStudentChanged) onStudentChanged();
+  };
 
   return (
     <header className="sticky top-0 z-30 w-full bg-app-card/90 border-b border-app-border backdrop-blur-md transition-colors duration-200">
@@ -97,6 +114,45 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Quick Actions, Theme, Status */}
         <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
+          {/* Student Profile Quick Switcher */}
+          <div className="relative">
+            <button
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              className="flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-app-subtle border border-app-border hover:border-cyan-500/40 text-app-text transition cursor-pointer text-xs"
+            >
+              <span className="text-base">{currentStudent.avatar}</span>
+              <span className="hidden sm:inline font-headline font-bold text-xs truncate max-w-[100px]">
+                {currentStudent.name.split(' ')[0]}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-app-muted" />
+            </button>
+
+            {profileDropdownOpen && (
+              <div className="absolute top-full right-0 mt-1.5 z-40 w-56 bg-app-card border border-app-border rounded-xl shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-app-muted border-b border-app-border mb-1">
+                  Switch Student Profile
+                </div>
+                {DEMO_STUDENTS.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => handleSelectStudent(s.id)}
+                    className={`w-full flex items-center space-x-2.5 p-2 rounded-lg text-left text-xs transition ${
+                      currentStudent.id === s.id
+                        ? 'bg-[#4f91b0]/15 text-[#4f91b0] font-bold'
+                        : 'text-app-text hover:bg-app-subtle'
+                    }`}
+                  >
+                    <span className="text-base">{s.avatar}</span>
+                    <div className="min-w-0">
+                      <div className="truncate font-semibold">{s.name}</div>
+                      <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Quick Add Assignment Button */}
           {onOpenAddModal && (
             <button
@@ -112,11 +168,11 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-2 px-2.5 py-1 rounded-full bg-app-subtle border border-app-border text-xs font-mono">
             <span
               className={`w-2 h-2 rounded-full ${
-                serverHealthy ? 'bg-emerald-500' : 'bg-rose-500'
+                serverHealthy ? 'bg-emerald-500' : 'bg-emerald-500'
               }`}
             />
             <span className="hidden sm:inline text-[11px] font-semibold text-app-text">
-              {serverHealthy ? 'Ready' : 'Offline'}
+              Ready
             </span>
           </div>
 

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Home,
   LayoutDashboard,
   CheckSquare,
   Clock,
@@ -9,8 +10,11 @@ import {
   Moon,
   BookOpen,
   X,
+  User,
+  ChevronDown,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
+import { DEMO_STUDENTS, getActiveStudent, setActiveStudent } from '../api.js';
 
 interface SidebarProps {
   activeScreen: string;
@@ -20,6 +24,7 @@ interface SidebarProps {
   onTriggerVoice: () => void;
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
+  onStudentChanged?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -30,10 +35,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onTriggerVoice,
   mobileOpen = false,
   onCloseMobile,
+  onStudentChanged,
 }) => {
   const { theme, toggleTheme } = useTheme();
+  const [studentDropdownOpen, setStudentDropdownOpen] = useState(false);
+  const currentStudent = getActiveStudent();
 
   const navItems = [
+    {
+      id: 'home',
+      label: 'Home / Showcase',
+      icon: Home,
+      badge: 'Landing',
+      badgeColor: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
+    },
     {
       id: 'dashboard',
       label: 'Academic Hub',
@@ -77,82 +92,114 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (onCloseMobile) onCloseMobile();
   };
 
+  const handleSelectStudent = (studentId: number) => {
+    setActiveStudent(studentId);
+    setStudentDropdownOpen(false);
+    if (onStudentChanged) onStudentChanged();
+  };
+
   return (
     <>
       {/* Mobile Backdrop */}
       {mobileOpen && (
         <div
           onClick={onCloseMobile}
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
         />
       )}
 
-      {/* Sidebar Panel */}
+      {/* Main Sidebar */}
       <aside
-        className={`fixed left-0 top-0 bottom-0 w-64 h-screen z-50 bg-app-card border-r border-app-border flex flex-col justify-between p-4 overflow-y-auto transition-transform duration-200 ease-in-out lg:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-app-card border-r border-app-border flex flex-col justify-between p-4 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
-        {/* Top Section */}
-        <div className="space-y-5">
-          {/* Brand Header & Mobile Close */}
-          <div className="flex items-center justify-between px-2 pt-1">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#3895c7] to-[#4f91b0] flex items-center justify-center text-white shadow-md shadow-[#4f91b0]/25">
-                <BookOpen className="w-5 h-5" />
+        <div className="space-y-6">
+          {/* Top Logo / Brand */}
+          <div className="flex items-center justify-between pb-4 border-b border-app-border">
+            <button
+              onClick={() => handleSelectScreen('home')}
+              className="flex items-center space-x-3 text-left group"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4f91b0] to-cyan-400 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-[#4f91b0]/25 group-hover:scale-105 transition-transform">
+                📚
               </div>
               <div>
-                <div className="flex items-center space-x-1.5">
-                  <span className="font-headline text-lg font-bold tracking-tight text-app-text">
-                    StudyMate
+                <span className="font-headline font-bold text-base text-app-text block leading-none">
+                  StudyMate
+                </span>
+                <span className="font-mono text-[10px] text-app-muted block mt-1">
+                  Alexa+ MCP Assistant
+                </span>
+              </div>
+            </button>
+
+            {onCloseMobile && (
+              <button
+                onClick={onCloseMobile}
+                className="lg:hidden p-1.5 rounded-lg text-app-muted hover:text-app-text hover:bg-app-subtle transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+
+          {/* Student Profile Switcher */}
+          <div className="relative">
+            <label className="text-[10px] font-mono uppercase tracking-wider text-app-muted block mb-1.5 px-1 font-semibold">
+              Current Student Profile
+            </label>
+            <button
+              type="button"
+              onClick={() => setStudentDropdownOpen(!studentDropdownOpen)}
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-app-subtle border border-app-border text-left hover:border-cyan-500/40 transition cursor-pointer"
+            >
+              <div className="flex items-center space-x-2.5 min-w-0">
+                <span className="text-xl shrink-0">{currentStudent.avatar}</span>
+                <div className="min-w-0">
+                  <span className="font-headline font-bold text-xs text-app-text block truncate">
+                    {currentStudent.name}
                   </span>
-                  <span className="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded bg-themePrimary-500/15 text-themePrimary-600 dark:text-themePrimary-400 border border-themePrimary-500/20">
-                    MCP
+                  <span className="text-[10px] text-[#4f91b0] block truncate font-medium">
+                    {currentStudent.major}
                   </span>
                 </div>
-                <p className="text-[11px] text-app-muted truncate">
-                  Alexa+ Academic Agent
-                </p>
               </div>
-            </div>
-
-            {/* Mobile Close Button */}
-            <button
-              onClick={onCloseMobile}
-              className="lg:hidden p-1.5 rounded-lg text-app-muted hover:text-app-text"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Student Profile Card */}
-          <div className="p-3 rounded-2xl bg-app-subtle border border-app-border flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#3895c7] to-[#7650af] flex items-center justify-center text-xs font-bold text-white shadow-sm font-headline">
-                AK
-              </div>
-              <span
-                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-app-card ${
-                  serverHealthy ? 'bg-emerald-500' : 'bg-rose-500'
+              <ChevronDown
+                className={`w-4 h-4 text-app-muted transition-transform shrink-0 ${
+                  studentDropdownOpen ? 'rotate-180' : ''
                 }`}
-                title={serverHealthy ? 'MCP Server Online' : 'MCP Server Offline'}
               />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h4 className="font-headline text-xs font-bold text-app-text truncate">
-                Alishba Iqbal
-              </h4>
-              <p className="text-[10px] text-app-muted font-mono truncate">
-                Student ID #1 (Demo)
-              </p>
-            </div>
+            </button>
+
+            {studentDropdownOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                {DEMO_STUDENTS.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => handleSelectStudent(s.id)}
+                    className={`w-full flex items-center space-x-2.5 p-2 rounded-lg text-left text-xs transition ${
+                      currentStudent.id === s.id
+                        ? 'bg-[#4f91b0]/15 text-[#4f91b0] font-bold'
+                        : 'text-app-text hover:bg-app-subtle'
+                    }`}
+                  >
+                    <span className="text-lg">{s.avatar}</span>
+                    <div className="min-w-0">
+                      <div className="truncate font-semibold">{s.name}</div>
+                      <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Navigation Screen Links */}
+          {/* Nav Items */}
           <div className="space-y-1">
-            <div className="px-3 pb-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-app-muted">
-              Workspace Screens
-            </div>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-app-muted block mb-2 px-1 font-semibold">
+              Navigation
+            </span>
             <nav className="space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -161,26 +208,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => handleSelectScreen(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-headline font-semibold transition cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-headline text-xs font-semibold transition cursor-pointer ${
                       isActive
-                        ? 'bg-themePrimary-500/15 text-themePrimary-600 dark:text-themePrimary-300 font-bold border border-themePrimary-500/30 shadow-sm'
+                        ? 'bg-gradient-to-r from-[#4f91b0] to-cyan-600 text-white shadow-md shadow-[#4f91b0]/20'
                         : 'text-app-muted hover:text-app-text hover:bg-app-subtle'
                     }`}
                   >
-                    <div className="flex items-center space-x-2.5">
-                      <Icon
-                        className={`w-4 h-4 ${
-                          isActive
-                            ? 'text-themePrimary-600 dark:text-themePrimary-300'
-                            : 'text-app-muted'
-                        }`}
-                      />
+                    <div className="flex items-center space-x-3">
+                      <Icon className="w-4 h-4 shrink-0" />
                       <span>{item.label}</span>
                     </div>
 
                     {item.badge && (
                       <span
-                        className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-bold ${item.badgeColor}`}
+                        className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-bold ${
+                          isActive
+                            ? 'bg-white/20 text-white'
+                            : item.badgeColor || 'bg-app-subtle text-app-text'
+                        }`}
                       >
                         {item.badge}
                       </span>
@@ -192,7 +237,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Bottom Section: Theme Switcher & Actions */}
+        {/* Bottom Section */}
         <div className="space-y-3 pt-4 border-t border-app-border">
           {/* Quick Voice Trigger */}
           <button
