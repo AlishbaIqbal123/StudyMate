@@ -1,11 +1,15 @@
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+
 let DatabaseSyncClass: any = null;
 try {
-  // @ts-ignore
-  const sqlite = await import('node:sqlite');
-  DatabaseSyncClass = sqlite?.DatabaseSync || null;
+  if (!process.env.VERCEL) {
+    const sqlite = require('node:sqlite');
+    DatabaseSyncClass = sqlite?.DatabaseSync || null;
+  }
 } catch {
   DatabaseSyncClass = null;
 }
@@ -139,7 +143,7 @@ export function getDb(): any {
     return dbInstance;
   }
 
-  if (!DatabaseSyncClass) {
+  if (process.env.VERCEL || !DatabaseSyncClass) {
     dbInstance = new InMemoryFallbackDb();
     return dbInstance;
   }
