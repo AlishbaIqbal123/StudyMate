@@ -405,9 +405,61 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
   const store = getClientStore();
   const student = getActiveStudent();
 
+  // 1. "What should I do next?" / "recommend" / "suggest" / "what next"
+  if (
+    query.includes('what should i do') ||
+    query.includes('what next') ||
+    query.includes('next task') ||
+    query.includes('what to do') ||
+    query.includes('recommend') ||
+    query.includes('suggest')
+  ) {
+    const pending = store.tasks.filter((t: any) => t.status !== 'done');
+    const topTask = pending[0] || store.tasks[0];
+    const speech = `Based on your course deadlines, your highest priority is "${topTask.title}" for ${topTask.course_name}. It's due on ${topTask.due_date || 'soon'}. I recommend starting a focused 45-minute study block right now.`;
+    return {
+      intent: 'RecommendNextActionIntent',
+      tool: 'create_study_plan',
+      arguments: {
+        task_id: topTask.id,
+        course: topTask.course_name,
+        available_minutes: 45,
+      },
+      speechResponse: speech,
+      data: {
+        actionType: 'recommendation',
+        topTask,
+        suggestedDuration: 45,
+        otherPending: pending.slice(1, 3),
+      },
+    };
+  }
+
+  // 2. Add task
+  if (query.startsWith('add') || query.includes('new task') || query.includes('create task') || query.includes('remind me')) {
+    let title = utterance.replace(/^(add|create|new)\s+(a\s+)?(task|assignment)?(:|\s)?/i, '').trim();
+    if (!title || title.length < 3) title = 'Review lecture notes & exam prep';
+    const course = store.courses[0]?.name || 'General Studies';
+    const newTask = await createTask({
+      title,
+      course,
+      due_date: '2026-10-06',
+      est_minutes: 60,
+      priority: 'high',
+    });
+    return {
+      intent: 'AddTaskIntent',
+      tool: 'add_task',
+      arguments: { title: newTask.title, course: newTask.course_name, priority: 'high' },
+      speechResponse: `I've created a new assignment: "${newTask.title}" for ${newTask.course_name}, due Monday with high priority.`,
+      data: newTask,
+    };
+  }
+
+  // 3. Due dates & tasks
   if (query.includes('due') || query.includes('what do i have') || query.includes('task') || query.includes('assignments')) {
     const urgent = store.tasks.slice(0, 3);
-    const speech = `Hey ${student.name.split(' ')[0]}! You have ${store.tasks.length} tasks on your plate. Your top upcoming assignment is "${urgent[0]?.title || 'study session'}" for ${urgent[0]?.course_name || 'your courses'}, due soon. Would you like me to build a study plan for it?`;
+    const speech = `Hey ${student.name.split(' ')[0]}! You have ${store.tasks.length} active assignments. Your most urgent task is "${urgent[0]?.title || 'study session'}" for ${urgent[0]?.course_name || 'your coursework'}, due ${urgent[0]?.due_date || 'soon'}.`;
     return {
       intent: 'CheckTasksIntent',
       tool: 'get_tasks',
@@ -417,12 +469,13 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
+  // 4. Study plan
   if (query.includes('study plan') || query.includes('minutes') || query.includes('help me study') || query.includes('hour')) {
     let mins = 60;
     const match = query.match(/(\d+)/);
     if (match) mins = parseInt(match[1], 10);
     const plan = await generateStudyPlan(mins);
-    const speech = `I created a ${mins}-minute focused study plan for you, ${student.name.split(' ')[0]}. It features 2 high-intensity study intervals and a structured recovery break. Ready to crush it?`;
+    const speech = `I generated a ${mins}-minute focused Pomodoro study plan for you, ${student.name.split(' ')[0]}. It features 2 deep work intervals and a 10-minute recovery break. Ready to begin?`;
     return {
       intent: 'CreateStudyPlanIntent',
       tool: 'create_study_plan',
@@ -432,6 +485,7 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
+  // 5. Update progress / mark done
   if (query.includes('finished') || query.includes('done') || query.includes('completed')) {
     const target = store.tasks.find((t: any) => t.status !== 'done') || store.tasks[0];
     if (target) {
@@ -441,12 +495,13 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
         intent: 'UpdateProgressIntent',
         tool: 'update_progress',
         arguments: { task_id: target.id, status: 'done' },
-        speechResponse: `Fantastic work, ${student.name.split(' ')[0]}! I marked "${target.title}" as completed. Your course progress has been updated on your dashboard.`,
+        speechResponse: `Awesome job, ${student.name.split(' ')[0]}! I marked "${target.title}" as completed. Your course progress has been recalculated on your dashboard.`,
         data: target,
       };
     }
   }
 
+  // 6. Course progress & analytics
   if (query.includes('progress') || query.includes('how am i doing') || query.includes('grade')) {
     const topCourse = store.progress[0];
     return {
@@ -458,12 +513,19 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
+  // 7. General Help Fallback
+  const urgentTask = store.tasks[0];
   return {
     intent: 'HelpIntent',
     tool: 'get_tasks',
     arguments: {},
-    speechResponse: `Hello ${student.name}! I'm StudyMate, your Alexa+ academic co-pilot. You can ask me: "What's due this week?", "I have 90 minutes tonight, help me study", or "How am I doing in Algorithms?"`,
-    data: store.tasks,
+    speechResponse: `Hello ${student.name.split(' ')[0]}! I'm StudyMate, your Alexa+ academic co-pilot. You can ask me what is due this week, request a 45-minute study plan, or say "what should I do next?" to see your top academic priority.`,
+    data: {
+      actionType: 'recommendation',
+      topTask: urgentTask,
+      suggestedDuration: 45,
+      otherPending: store.tasks.slice(1, 3),
+    },
   };
 }
 
