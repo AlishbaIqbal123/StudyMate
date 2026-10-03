@@ -4,7 +4,7 @@ import {
   createStudyPlan,
   updateProgress,
   getCourseProgress,
-} from '../packages/database/src/index.js';
+} from '../packages/database/dist/index.js';
 
 async function executeTool(name: string, args: any = {}) {
   switch (name) {

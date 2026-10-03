@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "StudyMate — Your academic life, organized through conversation. Alexa+ MCP Add-on & Web Dashboard.",
+  "type": "module",
   "workspaces": [
     "packages/*",
     "apps/*"
