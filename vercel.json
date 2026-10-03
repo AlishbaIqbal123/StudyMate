@@ -1,66 +1,38 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "mcp-server": {
-      "root": "apps/mcp-server",
-      "entrypoint": "index.js",
-      "framework": "express"
-    },
-    "web": {
-      "root": "apps/web",
-      "framework": "vite",
-      "bindings": [
-        {
-          "type": "service",
-          "service": "mcp-server",
-          "format": "url",
-          "env": "MCP_SERVER_URL"
-        }
-      ]
-    }
-  },
+  "buildCommand": "npm run build --workspace=@studymate/web",
+  "outputDirectory": "apps/web/dist",
   "rewrites": [
     {
       "source": "/health",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "destination": "/api/health"
     },
     {
       "source": "/auth",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "destination": "/api/auth"
     },
     {
-      "source": "/auth/(.*)",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "source": "/auth/token",
+      "destination": "/api/auth"
     },
     {
       "source": "/mcp",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "destination": "/api/mcp"
     },
     {
       "source": "/mcp/(.*)",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "destination": "/api/mcp"
+    },
+    {
+      "source": "/api/tasks/:id*",
+      "destination": "/api/tasks"
     },
     {
       "source": "/api/(.*)",
-      "destination": {
-        "service": "mcp-server"
-      }
+      "destination": "/api/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": {
-        "service": "web"
-      }
+      "source": "/((?!assets/|favicon.ico|robots.txt|manifest.json).*)",
+      "destination": "/index.html"
     }
   ]
 }

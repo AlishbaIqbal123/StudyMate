@@ -1,0 +1,16 @@
+{
+  "short_name": "StudyMate",
+  "name": "StudyMate — Academic Management & Alexa+ Companion",
+  "description": "Voice-driven academic task management and Pomodoro planner for Alexa+ and MCP.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "display": "standalone"
+}
