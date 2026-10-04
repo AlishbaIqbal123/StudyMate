@@ -179,10 +179,9 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const originalTitle = 'StudyMate — Academic Management & Alexa+ Companion';
     if (timerRunning) {
-      const modeEmoji = mode === 'focus' ? '🎯' : '☕';
-      document.title = `(${formatTime(secondsRemaining)}) ${modeEmoji} ${mode === 'focus' ? 'Focus' : 'Break'} | StudyMate`;
+      document.title = `(${formatTime(secondsRemaining)}) [${mode === 'focus' ? 'Focus' : 'Break'}] | StudyMate`;
     } else if (secondsRemaining === 0) {
-      document.title = '🔔 (00:00) Focus Complete! | StudyMate';
+      document.title = '(00:00) Focus Session Complete! | StudyMate';
     } else {
       document.title = originalTitle;
     }

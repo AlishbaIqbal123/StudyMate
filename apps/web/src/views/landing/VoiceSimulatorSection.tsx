@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Mic,
+  MicOff,
   Volume2,
   Terminal,
   Zap,
@@ -37,11 +38,87 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showJson, setShowJson] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [micError, setMicError] = useState<string | null>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort();
+        } catch {}
+      }
+    };
+  }, []);
+
+  const handleToggleMic = () => {
+    setMicError(null);
+    if (isListening) {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch {}
+      }
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      setMicError('Microphone speech recognition is not supported in this browser.');
+      return;
+    }
+
+    try {
+      const rec = new SpeechRecognition();
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.lang = 'en-US';
+
+      rec.onstart = () => {
+        setIsListening(true);
+        setMicError(null);
+      };
+
+      rec.onresult = (event: any) => {
+        const text = Array.from(event.results)
+          .map((res: any) => res[0].transcript)
+          .join('');
+        onPromptChange(text);
+      };
+
+      rec.onerror = (e: any) => {
+        if (e.error === 'not-allowed') {
+          setMicError('Microphone permission denied.');
+        }
+        setIsListening(false);
+      };
+
+      rec.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = rec;
+      rec.start();
+    } catch {
+      setMicError('Failed to access microphone.');
+      setIsListening(false);
+    }
+  };
 
   const handleSimulate = async () => {
     if (!currentPrompt.trim()) return;
     setIsLoading(true);
     setIsPlayingAudio(true);
+    if (isListening && recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch {}
+      setIsListening(false);
+    }
     try {
       const res = await simulateVoice(currentPrompt);
       setResponse(res);
@@ -56,7 +133,20 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
   const isRecommendation = Boolean(
     response?.data &&
       typeof response.data === 'object' &&
-      'actionType' in (response.data as Record<string, any>)
+      'actionType' in (response.data as Record<string, any>) &&
+      (response.data as any).actionType === 'recommendation'
+  );
+
+  const isAcademicAdvice = Boolean(
+    response?.data &&
+      typeof response.data === 'object' &&
+      (response.data as any).actionType === 'academic_advice'
+  );
+
+  const isTimerStarted = Boolean(
+    response?.data &&
+      typeof response.data === 'object' &&
+      (response.data as any).action === 'start_timer'
   );
 
   const isTaskList = Boolean(
@@ -126,17 +216,51 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
           </div>
         </div>
 
+        {/* Listening banner */}
+        {isListening && (
+          <div className="mt-4 p-3 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs flex items-center justify-between animate-pulse">
+            <span className="flex items-center space-x-2 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+              <span>Listening to your voice... Speak your question now!</span>
+            </span>
+            <button
+              onClick={handleToggleMic}
+              className="px-2.5 py-1 rounded-lg bg-red-500 hover:bg-red-600 text-white font-mono text-[10px] font-bold transition cursor-pointer"
+            >
+              Stop
+            </button>
+          </div>
+        )}
+
+        {micError && (
+          <div className="mt-4 p-3 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs">
+            {micError}
+          </div>
+        )}
+
         {/* Input Bar */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
+        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 flex items-center">
             <input
               type="text"
               value={currentPrompt}
               onChange={(e) => onPromptChange(e.target.value)}
               placeholder="e.g. what should i do next ? or I have 60 minutes tonight..."
-              className="w-full bg-slate-950/90 border border-slate-700/80 rounded-2xl px-5 py-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-medium"
+              className="w-full bg-slate-950/90 border border-slate-700/80 rounded-2xl pl-5 pr-14 py-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-medium"
               onKeyDown={(e) => e.key === 'Enter' && handleSimulate()}
             />
+            <button
+              type="button"
+              onClick={handleToggleMic}
+              className={`absolute right-3 p-2.5 rounded-xl transition-all cursor-pointer ${
+                isListening
+                  ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/30'
+                  : 'text-slate-400 hover:text-cyan-400 hover:bg-slate-900'
+              }`}
+              title={isListening ? 'Stop listening' : 'Speak into microphone'}
+            >
+              {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </button>
           </div>
 
           <button
@@ -418,6 +542,59 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* CASE E: Pomodoro Session Active / Started */}
+            {isTimerStarted && (
+              <div className="bg-slate-950/80 border border-emerald-500/40 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center space-x-2 text-xs font-bold font-mono uppercase tracking-wider text-emerald-400">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>Pomodoro Timer Initialized</span>
+                </div>
+
+                <div className="bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-lg font-bold text-white">
+                      {(response.data as any).course || 'Deep Work Session'}
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Interval 1: <span className="text-emerald-400 font-bold">{(response.data as any).duration_minutes || 25} minutes</span> on the clock.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={onOpenDashboard}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs shadow-md flex items-center space-x-2 cursor-pointer transition-all"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Open Timer in Dashboard</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* CASE F: Academic Guidance & Concept Tutoring */}
+            {isAcademicAdvice && (
+              <div className="bg-slate-950/80 border border-cyan-500/30 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center space-x-2 text-xs font-bold font-mono uppercase tracking-wider text-cyan-400">
+                  <Sparkles className="w-4 h-4 text-cyan-400" />
+                  <span>{(response.data as any).topic || 'Academic Guidance & Study Strategy'}</span>
+                </div>
+
+                {(response.data as any).keyPoints && (
+                  <div className="space-y-2">
+                    {(response.data as any).keyPoints.map((point: string, idx: number) => (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-200 flex items-start space-x-2.5"
+                      >
+                        <ChevronRight className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                        <span className="leading-relaxed">{point}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

@@ -17,7 +17,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { KpiCards } from '../components/KpiCards.js';
-import { simulateVoice } from '../api.js';
+import { simulateVoice, getActiveStudent } from '../api.js';
 import { usePomodoro } from '../context/PomodoroContext.js';
 import type { Course, CourseProgress, Task, TaskPriority, TaskStatus } from '@studymate/types';
 
@@ -47,6 +47,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [voiceQuery, setVoiceQuery] = useState('');
   const [voiceLoading, setVoiceLoading] = useState(false);
   const [voiceResponse, setVoiceResponse] = useState<string | null>(null);
+  const activeStudent = getActiveStudent();
+  const studentFirstName = activeStudent?.name ? activeStudent.name.split(' ')[0] : 'Scholar';
 
   // Global Pomodoro Timer
   const {
@@ -142,8 +144,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <span className="font-mono text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider">
               Student Workspace
             </span>
-            <h1 className="font-headline text-2xl sm:text-3xl font-bold tracking-tight mt-2">
-              Welcome back, Alishba! 👋
+            <h1 className="font-headline text-2xl sm:text-3xl font-bold tracking-tight mt-2 flex items-center gap-2">
+              <span>Welcome back, {studentFirstName}!</span>
+              <Sparkles className="w-5 h-5 text-cyan-200 animate-pulse" />
             </h1>
             <p className="text-sm text-white/90 mt-1 max-w-xl">
               You have <span className="font-bold underline">{pendingTasks.length} active assignments</span>. Let's make today productive and stress-free.
@@ -264,8 +267,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <div className="space-y-2.5">
             {recentTasks.length === 0 ? (
-              <div className="text-center py-8 text-xs text-app-muted font-mono">
-                🎉 All caught up! No pending assignments.
+              <div className="text-center py-8 text-xs text-app-muted font-mono flex items-center justify-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>All caught up! No pending assignments.</span>
               </div>
             ) : (
               recentTasks.map((task) => (

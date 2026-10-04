@@ -160,10 +160,10 @@ export function registerMcpTools(server: McpServer) {
       try {
         const plan = createStudyPlan(available_minutes, course, topics);
 
-        let planText = `📚 ${plan.summary}\n\nSession Timeline:\n`;
+        let planText = `${plan.summary}\n\nSession Timeline:\n`;
         plan.blocks.forEach((b) => {
-          const icon = b.type === 'study' ? '📖' : '☕';
-          planText += `• ${icon} Step ${b.order} [${b.duration_minutes} mins] ${b.type.toUpperCase()}: ${b.description}\n`;
+          const typeLabel = b.type === 'study' ? '[STUDY]' : '[BREAK]';
+          planText += `• ${typeLabel} Step ${b.order} [${b.duration_minutes} mins] ${b.type.toUpperCase()}: ${b.description}\n`;
         });
 
         return {
@@ -204,9 +204,9 @@ export function registerMcpTools(server: McpServer) {
 
         const statusLabel =
           status === 'done'
-            ? 'COMPLETED 🎉'
+            ? 'COMPLETED'
             : status === 'in_progress'
-            ? 'IN PROGRESS ⏳'
+            ? 'IN PROGRESS'
             : 'PENDING';
 
         const textResponse = `Task #${task_id} ("${result.task.title}") marked as ${statusLabel}. Course "${result.courseProgress.course_name}" progress is now ${result.courseProgress.completed_pct}% (${result.courseProgress.completed_tasks}/${result.courseProgress.total_tasks} completed, ${result.courseProgress.hours_this_week} hrs studied this week).`;
@@ -254,7 +254,7 @@ export function registerMcpTools(server: McpServer) {
           };
         }
 
-        let summaryText = '📊 Course Progress Summary:\n';
+        let summaryText = 'Course Progress Summary:\n';
         progressList.forEach((cp) => {
           summaryText += `• ${cp.course_name} (${cp.course_code || 'General'}): ${cp.completed_pct}% complete | ${cp.completed_tasks}/${cp.total_tasks} tasks done | ${cp.hours_this_week} hrs studied this week\n`;
         });

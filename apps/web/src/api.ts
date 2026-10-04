@@ -27,7 +27,7 @@ export const DEMO_STUDENTS: StudentProfile[] = [
     name: 'Alishba Iqbal',
     major: 'Computer Science & AI',
     year: 'Senior Year',
-    avatar: '👩‍💻',
+    avatar: 'AI',
     email: 'alishba@university.edu',
   },
   {
@@ -35,7 +35,7 @@ export const DEMO_STUDENTS: StudentProfile[] = [
     name: 'Marcus Chen',
     major: 'Software Engineering',
     year: 'Junior Year',
-    avatar: '👨‍🎓',
+    avatar: 'MC',
     email: 'marcus@university.edu',
   },
   {
@@ -43,7 +43,7 @@ export const DEMO_STUDENTS: StudentProfile[] = [
     name: 'Elena Rostova',
     major: 'Applied Mathematics & Data Science',
     year: 'Graduate / M.S.',
-    avatar: '👩‍🔬',
+    avatar: 'ER',
     email: 'elena@university.edu',
   },
 ];
@@ -167,9 +167,9 @@ function saveClientStore(data: any) {
 export interface VoiceSimulationResponse {
   intent: string;
   tool: string;
-  arguments: Record<string, unknown>;
+  arguments: Record<string, any>;
   speechResponse: string;
-  data: unknown;
+  data: any;
 }
 
 export async function fetchTasks(filters?: {
@@ -386,26 +386,116 @@ export async function generateStudyPlan(
   };
 }
 
-export async function simulateVoice(utterance: string): Promise<VoiceSimulationResponse> {
-  try {
-    const res = await fetch(`${API_BASE}/simulate-voice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ utterance }),
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (json.data) return json.data;
-    }
-  } catch {
-    // Graceful fallback
-  }
+export interface ConversationMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  intent?: string;
+  tool?: string;
+  data?: any;
+  timestamp?: string;
+}
 
+export interface ConversationSessionState {
+  lastIntent?: string;
+  lastTool?: string;
+  lastPlan?: StudyPlan | null;
+  lastTasks?: Task[] | null;
+  lastCourse?: string | null;
+  lastTaskCreated?: Task | null;
+  pendingContext?: 'confirm_study_plan' | 'confirm_task_done' | null;
+  history: ConversationMessage[];
+}
+
+const sessionState: ConversationSessionState = {
+  history: [],
+};
+
+export function getConversationState(): ConversationSessionState {
+  return sessionState;
+}
+
+export function clearConversationState(): void {
+  sessionState.lastIntent = undefined;
+  sessionState.lastTool = undefined;
+  sessionState.lastPlan = null;
+  sessionState.lastTasks = null;
+  sessionState.lastCourse = null;
+  sessionState.lastTaskCreated = null;
+  sessionState.pendingContext = null;
+  sessionState.history = [];
+}
+
+export async function simulateVoice(utterance: string): Promise<VoiceSimulationResponse> {
   const query = utterance.toLowerCase().trim();
   const store = getClientStore();
   const student = getActiveStudent();
+  const studentFirstName = student.name.split(' ')[0];
 
-  // 1. "What should I do next?" / "recommend" / "suggest" / "what next"
+  // 1. Check for Confirmation to a pending action (e.g. "Ready to begin?" -> "yes", "start", "sure")
+  const isAffirmative =
+    query === 'yes' ||
+    query === 'yeah' ||
+    query === 'yep' ||
+    query === 'sure' ||
+    query === 'start' ||
+    query === 'start timer' ||
+    query === 'begin' ||
+    query === 'ready' ||
+    query === 'ok' ||
+    query === 'okay' ||
+    query === "let's go" ||
+    query === 'do it' ||
+    query.startsWith('yes ') ||
+    query.startsWith('start now');
+
+  if (isAffirmative && (sessionState.pendingContext === 'confirm_study_plan' || sessionState.lastPlan)) {
+    const plan = sessionState.lastPlan || (await generateStudyPlan(45));
+    const firstBlockMinutes = plan.blocks[0]?.duration_minutes || 25;
+    const speech = `Starting your ${plan.total_minutes}-minute study session for ${plan.focus_course} now! I've activated your first ${firstBlockMinutes}-minute deep work Pomodoro timer. Let's make today count!`;
+    sessionState.pendingContext = null;
+    sessionState.lastIntent = 'ConfirmStartStudyPlanIntent';
+
+    return {
+      intent: 'ConfirmStartStudyPlanIntent',
+      tool: 'start_pomodoro_timer',
+      arguments: {
+        duration_minutes: firstBlockMinutes,
+        total_session: plan.total_minutes,
+        course: plan.focus_course,
+      },
+      speechResponse: speech,
+      data: {
+        action: 'start_timer',
+        plan,
+        duration_minutes: firstBlockMinutes,
+        total_minutes: plan.total_minutes,
+        course: plan.focus_course,
+      },
+    };
+  }
+
+  // 2. Check for Negation / Cancellation (e.g. "no", "cancel", "not now", "stop")
+  const isNegative =
+    query === 'no' ||
+    query === 'nope' ||
+    query === 'cancel' ||
+    query === 'not now' ||
+    query === 'stop' ||
+    query === 'wait' ||
+    query.startsWith('no ');
+
+  if (isNegative && sessionState.pendingContext === 'confirm_study_plan') {
+    sessionState.pendingContext = null;
+    return {
+      intent: 'CancelStudyPlanIntent',
+      tool: 'create_study_plan',
+      arguments: {},
+      speechResponse: `No problem, ${studentFirstName}! I've saved your study plan. You can start it anytime from the Planner view, or ask me for a different study duration whenever you're ready.`,
+      data: { action: 'plan_saved', plan: sessionState.lastPlan },
+    };
+  }
+
+  // 3. "What should I do next?" / "recommend" / "suggest" / "what next"
   if (
     query.includes('what should i do') ||
     query.includes('what next') ||
@@ -416,7 +506,13 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
   ) {
     const pending = store.tasks.filter((t: any) => t.status !== 'done');
     const topTask = pending[0] || store.tasks[0];
-    const speech = `Based on your course deadlines, your highest priority is "${topTask.title}" for ${topTask.course_name}. It's due on ${topTask.due_date || 'soon'}. I recommend starting a focused 45-minute study block right now.`;
+    const speech = `Based on your course deadlines, your highest priority is "${topTask.title}" for ${topTask.course_name}. It's due on ${topTask.due_date || 'soon'}. I recommend starting a focused 45-minute study block right now. Ready to begin?`;
+    
+    sessionState.lastIntent = 'RecommendNextActionIntent';
+    sessionState.lastTasks = pending;
+    sessionState.pendingContext = 'confirm_study_plan';
+    sessionState.lastPlan = await generateStudyPlan(45, topTask.course_name);
+
     return {
       intent: 'RecommendNextActionIntent',
       tool: 'create_study_plan',
@@ -435,7 +531,7 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
-  // 2. Add task
+  // 4. Add task
   if (query.startsWith('add') || query.includes('new task') || query.includes('create task') || query.includes('remind me')) {
     let title = utterance.replace(/^(add|create|new)\s+(a\s+)?(task|assignment)?(:|\s)?/i, '').trim();
     if (!title || title.length < 3) title = 'Review lecture notes & exam prep';
@@ -447,6 +543,9 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
       est_minutes: 60,
       priority: 'high',
     });
+    sessionState.lastTaskCreated = newTask;
+    sessionState.lastIntent = 'AddTaskIntent';
+
     return {
       intent: 'AddTaskIntent',
       tool: 'add_task',
@@ -456,54 +555,74 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
-  // 3. Due dates & tasks
-  if (query.includes('due') || query.includes('what do i have') || query.includes('task') || query.includes('assignments')) {
-    const urgent = store.tasks.slice(0, 3);
-    const speech = `Hey ${student.name.split(' ')[0]}! You have ${store.tasks.length} active assignments. Your most urgent task is "${urgent[0]?.title || 'study session'}" for ${urgent[0]?.course_name || 'your coursework'}, due ${urgent[0]?.due_date || 'soon'}.`;
+  // 5. Due dates & tasks
+  if (query.includes('due') || query.includes('what do i have') || query.includes('task') || query.includes('assignments') || query.includes('what is due')) {
+    const pending = store.tasks.filter((t: any) => t.status !== 'done');
+    const urgent = pending.slice(0, 3);
+    const speech = `Hey ${studentFirstName}! You have ${pending.length} active assignments. Your most urgent task is "${urgent[0]?.title || 'study session'}" for ${urgent[0]?.course_name || 'your coursework'}, due ${urgent[0]?.due_date || 'soon'}.`;
+    sessionState.lastTasks = pending;
+    sessionState.lastIntent = 'CheckTasksIntent';
+
     return {
       intent: 'CheckTasksIntent',
       tool: 'get_tasks',
       arguments: { status: 'pending' },
       speechResponse: speech,
-      data: store.tasks,
+      data: pending,
     };
   }
 
-  // 4. Study plan
-  if (query.includes('study plan') || query.includes('minutes') || query.includes('help me study') || query.includes('hour')) {
-    let mins = 60;
+  // 6. Study plan generation
+  if (query.includes('study plan') || query.includes('minutes') || query.includes('help me study') || query.includes('hour') || query.includes('pomodoro')) {
+    let mins = 45;
     const match = query.match(/(\d+)/);
     if (match) mins = parseInt(match[1], 10);
-    const plan = await generateStudyPlan(mins);
-    const speech = `I generated a ${mins}-minute focused Pomodoro study plan for you, ${student.name.split(' ')[0]}. It features 2 deep work intervals and a 10-minute recovery break. Ready to begin?`;
+
+    // Contextual course matching
+    let targetCourse = store.courses[0]?.name;
+    for (const c of store.courses) {
+      if (query.includes(c.name.toLowerCase()) || query.includes(c.code.toLowerCase())) {
+        targetCourse = c.name;
+        break;
+      }
+    }
+
+    const plan = await generateStudyPlan(mins, targetCourse);
+    sessionState.lastPlan = plan;
+    sessionState.pendingContext = 'confirm_study_plan';
+    sessionState.lastIntent = 'CreateStudyPlanIntent';
+
+    const speech = `I generated a ${mins}-minute focused Pomodoro study plan for you, ${studentFirstName}, targeting ${plan.focus_course}. It features 2 deep work intervals and a 10-minute recovery break. Ready to begin?`;
     return {
       intent: 'CreateStudyPlanIntent',
       tool: 'create_study_plan',
-      arguments: { available_minutes: mins },
+      arguments: { available_minutes: mins, course: plan.focus_course },
       speechResponse: speech,
       data: plan,
     };
   }
 
-  // 5. Update progress / mark done
-  if (query.includes('finished') || query.includes('done') || query.includes('completed')) {
+  // 7. Update progress / mark done
+  if (query.includes('finished') || query.includes('done') || query.includes('completed') || query.includes('mark done')) {
     const target = store.tasks.find((t: any) => t.status !== 'done') || store.tasks[0];
     if (target) {
       target.status = 'done';
       saveClientStore(store);
+      sessionState.lastIntent = 'UpdateProgressIntent';
       return {
         intent: 'UpdateProgressIntent',
         tool: 'update_progress',
         arguments: { task_id: target.id, status: 'done' },
-        speechResponse: `Awesome job, ${student.name.split(' ')[0]}! I marked "${target.title}" as completed. Your course progress has been recalculated on your dashboard.`,
+        speechResponse: `Awesome job, ${studentFirstName}! I marked "${target.title}" as completed. Your course progress has been recalculated on your dashboard.`,
         data: target,
       };
     }
   }
 
-  // 6. Course progress & analytics
-  if (query.includes('progress') || query.includes('how am i doing') || query.includes('grade')) {
+  // 8. Course progress & analytics
+  if (query.includes('progress') || query.includes('how am i doing') || query.includes('grade') || query.includes('analytics')) {
     const topCourse = store.progress[0];
+    sessionState.lastIntent = 'GetCourseProgressIntent';
     return {
       intent: 'GetCourseProgressIntent',
       tool: 'get_course_progress',
@@ -513,13 +632,73 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
     };
   }
 
-  // 7. General Help Fallback
+  // 9. Academic Guidance / Study Advice / Concepts
+  if (
+    query.includes('how to study') ||
+    query.includes('how should i study') ||
+    query.includes('tips') ||
+    query.includes('exam') ||
+    query.includes('dynamic programming') ||
+    query.includes('algorithms') ||
+    query.includes('operating systems') ||
+    query.includes('virtual memory') ||
+    query.includes('linear algebra') ||
+    query.includes('statistics')
+  ) {
+    let topic = 'Academic Study Strategy';
+    let keyPoints = [
+      'Break large syllabus chapters into 25-minute Pomodoro focus sprints.',
+      'Apply active recall and self-testing instead of passive reading.',
+      'Review high-priority assignment deadlines to prioritize submission impact.',
+    ];
+
+    if (query.includes('dynamic programming')) {
+      topic = 'Dynamic Programming & Memoization';
+      keyPoints = [
+        'Identify optimal substructure and overlapping subproblems.',
+        'Define state space clearly: DP[i] represents optimal solution up to state i.',
+        'Compare top-down memoization (recursion + cache) vs bottom-up tabulation.',
+      ];
+    } else if (query.includes('operating systems') || query.includes('virtual memory')) {
+      topic = 'Operating Systems & Virtual Memory';
+      keyPoints = [
+        'Understand page tables, TLB cache lookups, and page fault handling.',
+        'Review synchronization primitives: semaphores, mutexes, and deadlocks.',
+        'Practice kernel lab tracing using GDB and process memory maps.',
+      ];
+    } else if (query.includes('linear algebra')) {
+      topic = 'Linear Algebra & Matrix Decompositions';
+      keyPoints = [
+        'Visualize eigenvalues and eigenvectors as non-rotational scaling axes.',
+        'Master matrix orthogonalization via Gram-Schmidt and QR decomposition.',
+        'Connect SVD (Singular Value Decomposition) to dimensionality reduction.',
+      ];
+    }
+
+    sessionState.lastIntent = 'AcademicGuidanceIntent';
+    return {
+      intent: 'AcademicGuidanceIntent',
+      tool: 'create_study_plan',
+      arguments: { topic },
+      speechResponse: `Here is a high-yield study strategy for ${topic}, ${studentFirstName}. Focus on core problem sets, test edge cases, and use short active recall blocks to lock in long-term retention.`,
+      data: {
+        actionType: 'academic_advice',
+        topic,
+        keyPoints,
+      },
+    };
+  }
+
+  // 10. General Help Fallback (Stateful)
   const urgentTask = store.tasks[0];
+  sessionState.pendingContext = 'confirm_study_plan';
+  sessionState.lastPlan = await generateStudyPlan(45, urgentTask?.course_name);
+
   return {
     intent: 'HelpIntent',
     tool: 'get_tasks',
     arguments: {},
-    speechResponse: `Hello ${student.name.split(' ')[0]}! I'm StudyMate, your Alexa+ academic co-pilot. You can ask me what is due this week, request a 45-minute study plan, or say "what should I do next?" to see your top academic priority.`,
+    speechResponse: `Hello ${studentFirstName}! I'm StudyMate, your Alexa+ academic co-pilot. You can ask what is due this week, request a 45-minute study plan, or say "what should I do next?" to see your top priority.`,
     data: {
       actionType: 'recommendation',
       topTask: urgentTask,

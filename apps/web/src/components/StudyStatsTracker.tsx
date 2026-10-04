@@ -163,7 +163,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
             {stats ? formatHoursMins(stats.todayMinutes) : '0m'}
           </div>
           <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-            🎯 Target: 2h daily
+            Target: 2h daily
           </div>
         </div>
 
@@ -203,7 +203,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
           </div>
           <div className="font-mono text-2xl font-black text-amber-600 dark:text-amber-400 flex items-center space-x-1">
             <span>{stats?.streakDays || 1}</span>
-            <span className="text-xs font-headline font-semibold text-app-muted">Days 🔥</span>
+            <span className="text-xs font-headline font-semibold text-app-muted">Days</span>
           </div>
           <div className="text-[10px] text-app-muted">
             Consistency streak

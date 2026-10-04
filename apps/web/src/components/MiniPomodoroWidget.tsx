@@ -148,7 +148,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     // Mode title
     ctx.fillStyle = mode === 'focus' ? '#4f91b0' : '#d97706';
     ctx.font = 'bold 12px "Space Grotesk", sans-serif';
-    ctx.fillText(mode === 'focus' ? '🎯 STUDYMATE FOCUS POD' : '☕ REST BREAK', 22, 32);
+    ctx.fillText(mode === 'focus' ? 'STUDYMATE FOCUS POD' : 'REST BREAK', 22, 32);
 
     // Status pill (RUNNING vs PAUSED)
     ctx.fillStyle = timerRunning ? '#10b981' : '#f59e0b';

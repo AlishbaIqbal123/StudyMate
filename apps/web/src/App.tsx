@@ -161,37 +161,13 @@ export function App() {
   // 1. If viewing the Landing Page Showcase
   if (activeScreen === 'home') {
     return (
-      <div className="min-h-screen bg-slate-950 font-sans antialiased">
-        {/* Floating Top Bar for Landing Page */}
-        <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">📚</span>
-              <span className="font-bold text-lg text-white font-headline">StudyMate</span>
-              <span className="hidden sm:inline text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30">
-                Alexa+ MCP
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setActiveScreen('dashboard')}
-                className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer"
-              >
-                Open Dashboard →
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <LandingPageView
-          onOpenDashboard={() => setActiveScreen('dashboard')}
-          onOpenVoice={() => setActiveScreen('voice')}
-          onOpenPlanner={() => setActiveScreen('planner')}
-          onOpenTelemetry={() => setActiveScreen('telemetry')}
-          onStudentChanged={loadData}
-        />
-      </div>
+      <LandingPageView
+        onOpenDashboard={() => setActiveScreen('dashboard')}
+        onOpenVoice={() => setActiveScreen('voice')}
+        onOpenPlanner={() => setActiveScreen('planner')}
+        onOpenTelemetry={() => setActiveScreen('telemetry')}
+        onStudentChanged={loadData}
+      />
     );
   }
 

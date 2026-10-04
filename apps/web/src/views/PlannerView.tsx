@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Bell,
   CheckCircle2,
+  Target,
 } from 'lucide-react';
 import type { Course, CourseProgress, StudyPlan } from '@studymate/types';
 import { generateStudyPlan } from '../api.js';
@@ -131,7 +132,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
       {focusTitle && (
         <div className="p-3.5 rounded-xl bg-[#4f91b0]/10 border border-[#4f91b0]/20 text-xs text-app-text flex items-center justify-between">
-          <span>🎯 Focused Assignment: <strong>{focusTitle}</strong> ({selectedCourse})</span>
+          <span className="flex items-center gap-1.5"><Target className="w-4 h-4 text-cyan-500" /> Focused Assignment: <strong>{focusTitle}</strong> ({selectedCourse})</span>
           <span className="text-xs font-mono text-[#4f91b0] font-semibold">Auto-targeted</span>
         </div>
       )}
@@ -173,7 +174,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 {formatTime(secondsRemaining)}
               </div>
               <p className="text-xs font-mono text-app-muted mt-2">
-                {mode === 'focus' ? '🎯 Stay in deep focus' : '☕ Relax and recharge'}
+                {mode === 'focus' ? 'Stay in deep focus' : 'Relax and recharge'}
               </p>
             </div>
 

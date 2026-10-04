@@ -12,6 +12,7 @@ import {
   X,
   User,
   ChevronDown,
+  GraduationCap,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
 import { DEMO_STUDENTS, getActiveStudent, setActiveStudent } from '../api.js';
@@ -121,8 +122,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleSelectScreen('home')}
               className="flex items-center space-x-3 text-left group"
             >
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4f91b0] to-cyan-400 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-[#4f91b0]/25 group-hover:scale-105 transition-transform">
-                📚
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4f91b0] to-cyan-400 text-white flex items-center justify-center shadow-md shadow-[#4f91b0]/25 group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
                 <span className="font-headline font-bold text-base text-app-text block leading-none">

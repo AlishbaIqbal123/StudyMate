@@ -96,7 +96,7 @@ if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`
 ╔═══════════════════════════════════════════════════════════════════╗
-║                   📚 StudyMate MCP Server                         ║
+║                     StudyMate MCP Server                          ║
 ║         "Your academic life, organized through conversation"      ║
 ╠═══════════════════════════════════════════════════════════════════╣
 ║  • Server listening on:  http://localhost:${PORT}                    ║
