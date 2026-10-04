@@ -48,6 +48,8 @@ export const DEMO_STUDENTS: StudentProfile[] = [
   },
 ];
 
+export const DEMO_STUDENT: StudentProfile = DEMO_STUDENTS[0];
+
 // Persistent active student profile
 let activeStudentId = 1;
 export function getActiveStudent(): StudentProfile {

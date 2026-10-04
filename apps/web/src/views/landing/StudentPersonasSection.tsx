@@ -12,10 +12,9 @@ import {
 } from 'lucide-react';
 import {
   DEMO_STUDENTS,
-  getActiveStudent,
-  setActiveStudent,
   type StudentProfile,
 } from '../../api.js';
+import { useAuth } from '../../context/AuthContext.js';
 
 interface StudentPersonasSectionProps {
   onStudentChanged: () => void;
@@ -26,7 +25,8 @@ export const StudentPersonasSection: React.FC<StudentPersonasSectionProps> = ({
   onStudentChanged,
   onOpenDashboard,
 }) => {
-  const currentStudent = getActiveStudent();
+  const { user, loginWithPersona } = useAuth();
+  const currentStudentId = Number(user?.id) || 1;
 
   const getStudentMeta = (id: number) => {
     switch (id) {
@@ -58,8 +58,8 @@ export const StudentPersonasSection: React.FC<StudentPersonasSectionProps> = ({
     }
   };
 
-  const handleSelect = (id: number) => {
-    setActiveStudent(id);
+  const handleSelect = async (id: number) => {
+    await loginWithPersona(id);
     onStudentChanged();
   };
 
@@ -81,7 +81,7 @@ export const StudentPersonasSection: React.FC<StudentPersonasSectionProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {DEMO_STUDENTS.map((student) => {
-          const isSelected = currentStudent.id === student.id;
+          const isSelected = currentStudentId === student.id;
           const meta = getStudentMeta(student.id);
           const Icon = meta.icon;
 

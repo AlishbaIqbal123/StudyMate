@@ -81,10 +81,10 @@ export const Header: React.FC<HeaderProps> = ({
   const screenInfo = SCREEN_TITLES[activeScreen] || SCREEN_TITLES.dashboard;
   const Icon = screenInfo.icon;
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const { user, openAuthModal, logout, loginWithPersona } = useAuth();
+  const { user, openAuthModal, logout, loginWithDemoAccount } = useAuth();
 
-  const handleSelectStudent = async (studentId: number) => {
-    await loginWithPersona(studentId);
+  const handleSelectDemo = async () => {
+    await loginWithDemoAccount();
     setProfileDropdownOpen(false);
     if (onStudentChanged) onStudentChanged();
   };
@@ -148,6 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </span>
                   </div>
                   <p className="text-[10px] text-app-muted truncate mt-0.5">{user?.major || 'Unregistered'}</p>
+                  <p className="text-[10px] text-app-muted truncate">{user?.email}</p>
 
                   {/* Alexa Linked Status */}
                   <div className="mt-2 flex items-center justify-between px-2 py-1 rounded-lg bg-app-subtle border border-app-border text-[10px]">
@@ -161,31 +162,31 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
 
-                {/* Switch Persona Options */}
-                <div>
-                  <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-app-muted">
-                    Switch Persona
-                  </div>
-                  {DEMO_STUDENTS.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => handleSelectStudent(s.id)}
-                      className={`w-full flex items-center space-x-2.5 p-1.5 rounded-lg text-left text-xs transition cursor-pointer ${
-                        user?.id === s.id
-                          ? 'bg-cyan-500/15 text-cyan-400 font-bold'
-                          : 'text-app-text hover:bg-app-subtle'
-                      }`}
-                    >
-                      <div className="w-5 h-5 rounded-md bg-app-subtle border border-app-border text-[9px] font-mono font-bold flex items-center justify-center shrink-0">
-                        {s.avatar}
+                {/* Sample Demo Account Shortcut */}
+                <div className="px-1 py-1">
+                  <button
+                    onClick={handleSelectDemo}
+                    className={`w-full flex items-center justify-between p-2 rounded-lg text-left text-xs transition cursor-pointer border ${
+                      user?.id === 1 || user?.isDemo
+                        ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 font-bold'
+                        : 'bg-app-subtle border-app-border text-app-text hover:border-cyan-500/30'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2 min-w-0">
+                      <div className="w-5 h-5 rounded-md bg-cyan-500/20 text-cyan-400 font-mono font-bold text-[9px] flex items-center justify-center shrink-0">
+                        AI
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate font-semibold text-xs">{s.name}</div>
-                        <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+                      <div className="min-w-0">
+                        <div className="truncate text-xs font-semibold">Alishba Iqbal</div>
+                        <div className="text-[9px] text-app-muted truncate">Sample Demo Account</div>
                       </div>
-                      {user?.id === s.id && <UserCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
-                    </button>
-                  ))}
+                    </div>
+                    {user?.id === 1 || user?.isDemo ? (
+                      <span className="text-[9px] font-mono text-emerald-400 font-semibold shrink-0">Active</span>
+                    ) : (
+                      <span className="text-[9px] font-mono text-cyan-400 shrink-0">Load</span>
+                    )}
+                  </button>
                 </div>
 
                 {/* Account & OAuth Actions */}
@@ -198,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Auth & Alexa Settings</span>
+                    <span>Supabase Auth & Alexa</span>
                   </button>
                   <button
                     onClick={() => {
