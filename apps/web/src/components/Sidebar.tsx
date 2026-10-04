@@ -13,9 +13,14 @@ import {
   User,
   ChevronDown,
   GraduationCap,
+  Radio,
+  ShieldCheck,
+  LogOut,
+  UserCheck,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
-import { DEMO_STUDENTS, getActiveStudent, setActiveStudent } from '../api.js';
+import { useAuth } from '../context/AuthContext.js';
+import { DEMO_STUDENTS } from '../api.js';
 
 interface SidebarProps {
   activeScreen: string;
@@ -40,7 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const [studentDropdownOpen, setStudentDropdownOpen] = useState(false);
-  const currentStudent = getActiveStudent();
+  const { user, openAuthModal, logout, loginWithPersona } = useAuth();
 
   const navItems = [
     {
@@ -93,8 +98,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (onCloseMobile) onCloseMobile();
   };
 
-  const handleSelectStudent = (studentId: number) => {
-    setActiveStudent(studentId);
+  const handleSelectStudent = async (studentId: number) => {
+    await loginWithPersona(studentId);
     setStudentDropdownOpen(false);
     if (onStudentChanged) onStudentChanged();
   };
@@ -147,22 +152,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Student Profile Switcher */}
           <div className="relative">
-            <label className="text-[10px] font-mono uppercase tracking-wider text-app-muted block mb-1.5 px-1 font-semibold">
-              Current Student Profile
-            </label>
+            <div className="flex items-center justify-between mb-1.5 px-1">
+              <label className="text-[10px] font-mono uppercase tracking-wider text-app-muted font-semibold">
+                Student Profile
+              </label>
+              {user?.alexaLinked && (
+                <span className="inline-flex items-center space-x-1 text-[9px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
+                  <Radio className="w-2.5 h-2.5 animate-pulse" />
+                  <span>Alexa+</span>
+                </span>
+              )}
+            </div>
             <button
               type="button"
               onClick={() => setStudentDropdownOpen(!studentDropdownOpen)}
               className="w-full flex items-center justify-between p-2.5 rounded-xl bg-app-subtle border border-app-border text-left hover:border-cyan-500/40 transition cursor-pointer"
             >
               <div className="flex items-center space-x-2.5 min-w-0">
-                <span className="text-xl shrink-0">{currentStudent.avatar}</span>
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
+                  {user?.avatar || 'ST'}
+                </div>
                 <div className="min-w-0">
                   <span className="font-headline font-bold text-xs text-app-text block truncate">
-                    {currentStudent.name}
+                    {user?.name || 'Guest Student'}
                   </span>
-                  <span className="text-[10px] text-[#4f91b0] block truncate font-medium">
-                    {currentStudent.major}
+                  <span className="text-[10px] text-cyan-400 block truncate font-medium">
+                    {user?.major || 'Academic Portal'}
                   </span>
                 </div>
               </div>
@@ -174,24 +189,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
 
             {studentDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                {DEMO_STUDENTS.map((s) => (
+              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-2 space-y-2 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-app-muted">
+                  Quick Personas
+                </div>
+                <div className="space-y-1">
+                  {DEMO_STUDENTS.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleSelectStudent(s.id)}
+                      className={`w-full flex items-center space-x-2 p-1.5 rounded-lg text-left text-xs transition cursor-pointer ${
+                        user?.id === s.id
+                          ? 'bg-cyan-500/15 text-cyan-400 font-bold'
+                          : 'text-app-text hover:bg-app-subtle'
+                      }`}
+                    >
+                      <div className="w-5 h-5 rounded-md bg-app-subtle border border-app-border text-[9px] font-mono font-bold flex items-center justify-center shrink-0">
+                        {s.avatar}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-semibold text-xs">{s.name}</div>
+                        <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+                      </div>
+                      {user?.id === s.id && <UserCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="pt-1.5 border-t border-app-border space-y-1">
                   <button
-                    key={s.id}
-                    onClick={() => handleSelectStudent(s.id)}
-                    className={`w-full flex items-center space-x-2.5 p-2 rounded-lg text-left text-xs transition ${
-                      currentStudent.id === s.id
-                        ? 'bg-[#4f91b0]/15 text-[#4f91b0] font-bold'
-                        : 'text-app-text hover:bg-app-subtle'
-                    }`}
+                    onClick={() => {
+                      setStudentDropdownOpen(false);
+                      openAuthModal();
+                    }}
+                    className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
                   >
-                    <span className="text-lg">{s.avatar}</span>
-                    <div className="min-w-0">
-                      <div className="truncate font-semibold">{s.name}</div>
-                      <div className="text-[10px] text-app-muted truncate">{s.major}</div>
-                    </div>
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Auth & Alexa Settings</span>
                   </button>
-                ))}
+                  <button
+                    onClick={() => {
+                      setStudentDropdownOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center justify-center space-x-1.5 py-1 px-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -268,6 +314,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <span className="font-mono text-[10px] uppercase font-bold text-app-muted px-1.5 py-0.5 rounded bg-app-card border border-app-border">
               {theme === 'dark' ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Alexa+ Device Linking Status */}
+          <button
+            onClick={() => {
+              openAuthModal();
+              if (onCloseMobile) onCloseMobile();
+            }}
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-app-subtle border border-app-border text-[11px] text-app-text hover:border-cyan-500/40 transition cursor-pointer"
+          >
+            <div className="flex items-center space-x-2">
+              <Radio className={`w-3.5 h-3.5 ${user?.alexaLinked ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
+              <span className="font-medium">Alexa+ Voice Link</span>
+            </div>
+            <span className={`text-[10px] font-mono font-semibold ${user?.alexaLinked ? 'text-emerald-400' : 'text-amber-400'}`}>
+              {user?.alexaLinked ? 'Linked (PKCE)' : 'Pair Device'}
             </span>
           </button>
 

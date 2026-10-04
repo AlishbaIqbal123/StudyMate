@@ -16,6 +16,7 @@ import { Header } from './components/Header.js';
 import { Sidebar } from './components/Sidebar.js';
 import { AddTaskModal } from './components/AddTaskModal.js';
 import { MiniPomodoroWidget } from './components/MiniPomodoroWidget.js';
+import { AuthModal } from './components/AuthModal.js';
 
 // Dedicated Screens
 import { LandingPageView } from './views/LandingPageView.js';
@@ -161,13 +162,16 @@ export function App() {
   // 1. If viewing the Landing Page Showcase
   if (activeScreen === 'home') {
     return (
-      <LandingPageView
-        onOpenDashboard={() => setActiveScreen('dashboard')}
-        onOpenVoice={() => setActiveScreen('voice')}
-        onOpenPlanner={() => setActiveScreen('planner')}
-        onOpenTelemetry={() => setActiveScreen('telemetry')}
-        onStudentChanged={loadData}
-      />
+      <>
+        <LandingPageView
+          onOpenDashboard={() => setActiveScreen('dashboard')}
+          onOpenVoice={() => setActiveScreen('voice')}
+          onOpenPlanner={() => setActiveScreen('planner')}
+          onOpenTelemetry={() => setActiveScreen('telemetry')}
+          onStudentChanged={loadData}
+        />
+        <AuthModal />
+      </>
     );
   }
 
@@ -265,6 +269,9 @@ export function App() {
         onNavigateToPlanner={() => setActiveScreen('planner')}
         currentScreen={activeScreen}
       />
+
+      {/* University Authentication & Alexa Linking Modal */}
+      <AuthModal />
     </div>
   );
 }

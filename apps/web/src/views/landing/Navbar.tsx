@@ -9,8 +9,9 @@ import {
   X,
   Radio,
   Cpu,
+  ShieldCheck,
 } from 'lucide-react';
-import { getActiveStudent } from '../../api.js';
+import { useAuth } from '../../context/AuthContext.js';
 
 interface NavbarProps {
   onOpenDashboard: () => void;
@@ -25,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const currentStudent = getActiveStudent();
+  const { user, openAuthModal } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,12 +106,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right CTA Actions */}
         <div className="hidden sm:flex items-center space-x-3">
-          {/* Active Profile Pill */}
-          <div className="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-slate-400">Profile:</span>
-            <span className="font-semibold text-white">{currentStudent.name.split(' ')[0]}</span>
-          </div>
+          {/* Active Profile Pill / Auth Modal Trigger */}
+          <button
+            onClick={openAuthModal}
+            className="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 text-xs text-slate-300 transition cursor-pointer"
+            title="Manage Student Account & Alexa+ Linking"
+          >
+            <div className="w-5 h-5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center">
+              {user?.avatar || 'ST'}
+            </div>
+            <span className="font-semibold text-white">{user?.name ? user.name.split(' ')[0] : 'Sign In'}</span>
+            {user?.alexaLinked ? (
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50" title="Alexa+ Linked" />
+            ) : (
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" title="Alexa+ Not Linked" />
+            )}
+          </button>
 
           {/* Primary Action Button */}
           <button
@@ -178,9 +189,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
+                openAuthModal();
+              }}
+              className="w-full py-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-cyan-300 text-sm font-medium text-center flex items-center justify-center space-x-2"
+            >
+              <ShieldCheck className="w-4 h-4 text-cyan-400" />
+              <span>Student Account & Alexa OAuth</span>
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
                 onOpenVoice();
               }}
-              className="w-full py-3 rounded-xl bg-slate-900 border border-slate-800 text-cyan-300 text-sm font-medium text-center"
+              className="w-full py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-sm font-medium text-center"
             >
               Open Voice Console
             </button>

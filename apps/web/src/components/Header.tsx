@@ -12,9 +12,14 @@ import {
   Mic,
   Home,
   ChevronDown,
+  ShieldCheck,
+  Radio,
+  LogOut,
+  UserCheck,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
-import { DEMO_STUDENTS, getActiveStudent, setActiveStudent } from '../api.js';
+import { useAuth } from '../context/AuthContext.js';
+import { DEMO_STUDENTS } from '../api.js';
 
 interface HeaderProps {
   serverHealthy: boolean;
@@ -76,10 +81,10 @@ export const Header: React.FC<HeaderProps> = ({
   const screenInfo = SCREEN_TITLES[activeScreen] || SCREEN_TITLES.dashboard;
   const Icon = screenInfo.icon;
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const currentStudent = getActiveStudent();
+  const { user, openAuthModal, logout, loginWithPersona } = useAuth();
 
-  const handleSelectStudent = (studentId: number) => {
-    setActiveStudent(studentId);
+  const handleSelectStudent = async (studentId: number) => {
+    await loginWithPersona(studentId);
     setProfileDropdownOpen(false);
     if (onStudentChanged) onStudentChanged();
   };
@@ -114,41 +119,98 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Quick Actions, Theme, Status */}
         <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
-          {/* Student Profile Quick Switcher */}
+          {/* Student Profile Quick Switcher & University Auth */}
           <div className="relative">
             <button
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
               className="flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-app-subtle border border-app-border hover:border-cyan-500/40 text-app-text transition cursor-pointer text-xs"
             >
-              <span className="text-base">{currentStudent.avatar}</span>
-              <span className="hidden sm:inline font-headline font-bold text-xs truncate max-w-[100px]">
-                {currentStudent.name.split(' ')[0]}
+              <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center shrink-0 border border-cyan-500/30">
+                {user?.avatar || 'ST'}
+              </div>
+              <span className="hidden sm:inline font-headline font-semibold text-xs truncate max-w-[100px]">
+                {user ? user.name.split(' ')[0] : 'Sign In'}
               </span>
-              <ChevronDown className="w-3.5 h-3.5 text-app-muted" />
+              {user?.alexaLinked && (
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50" title="Alexa+ Linked" />
+              )}
+              <ChevronDown className={`w-3.5 h-3.5 text-app-muted transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {profileDropdownOpen && (
-              <div className="absolute top-full right-0 mt-1.5 z-40 w-56 bg-app-card border border-app-border rounded-xl shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-app-muted border-b border-app-border mb-1">
-                  Switch Student Profile
-                </div>
-                {DEMO_STUDENTS.map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => handleSelectStudent(s.id)}
-                    className={`w-full flex items-center space-x-2.5 p-2 rounded-lg text-left text-xs transition ${
-                      currentStudent.id === s.id
-                        ? 'bg-[#4f91b0]/15 text-[#4f91b0] font-bold'
-                        : 'text-app-text hover:bg-app-subtle'
-                    }`}
-                  >
-                    <span className="text-base">{s.avatar}</span>
-                    <div className="min-w-0">
-                      <div className="truncate font-semibold">{s.name}</div>
-                      <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+              <div className="absolute top-full right-0 mt-1.5 z-40 w-64 bg-app-card border border-app-border rounded-xl shadow-xl p-2 space-y-2 animate-in fade-in zoom-in-95 duration-150">
+                {/* User Info Header */}
+                <div className="px-2 py-1.5 border-b border-app-border">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-app-text truncate">{user?.name || 'Guest Student'}</span>
+                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                      {user?.studentId || 'ID: 2026-STU'}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-app-muted truncate mt-0.5">{user?.major || 'Unregistered'}</p>
+
+                  {/* Alexa Linked Status */}
+                  <div className="mt-2 flex items-center justify-between px-2 py-1 rounded-lg bg-app-subtle border border-app-border text-[10px]">
+                    <div className="flex items-center space-x-1.5">
+                      <Radio className={`w-3 h-3 ${user?.alexaLinked ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
+                      <span className="font-medium text-app-text">Alexa+ Voice</span>
                     </div>
+                    <span className={`text-[9px] font-semibold ${user?.alexaLinked ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {user?.alexaLinked ? 'Linked (OAuth 2.1)' : 'Not Linked'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Switch Persona Options */}
+                <div>
+                  <div className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-app-muted">
+                    Switch Persona
+                  </div>
+                  {DEMO_STUDENTS.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleSelectStudent(s.id)}
+                      className={`w-full flex items-center space-x-2.5 p-1.5 rounded-lg text-left text-xs transition cursor-pointer ${
+                        user?.id === s.id
+                          ? 'bg-cyan-500/15 text-cyan-400 font-bold'
+                          : 'text-app-text hover:bg-app-subtle'
+                      }`}
+                    >
+                      <div className="w-5 h-5 rounded-md bg-app-subtle border border-app-border text-[9px] font-mono font-bold flex items-center justify-center shrink-0">
+                        {s.avatar}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-semibold text-xs">{s.name}</div>
+                        <div className="text-[10px] text-app-muted truncate">{s.major}</div>
+                      </div>
+                      {user?.id === s.id && <UserCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Account & OAuth Actions */}
+                <div className="pt-1.5 border-t border-app-border space-y-1">
+                  <button
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      openAuthModal();
+                    }}
+                    className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Auth & Alexa Settings</span>
                   </button>
-                ))}
+                  <button
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      logout();
+                    }}
+                    className="w-full flex items-center justify-center space-x-1.5 py-1 px-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
