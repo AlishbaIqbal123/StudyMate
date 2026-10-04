@@ -149,7 +149,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <Sparkles className="w-5 h-5 text-cyan-200 animate-pulse" />
             </h1>
             <p className="text-sm text-white/90 mt-1 max-w-xl">
-              You have <span className="font-bold underline">{pendingTasks.length} active assignments</span>. Let's make today productive and stress-free.
+              {pendingTasks.length > 0 ? (
+                <>
+                  You have <span className="font-bold underline">{pendingTasks.length} active assignments</span>. Let's make today productive and stress-free.
+                </>
+              ) : (
+                <>
+                  Welcome to StudyMate! Your workspace is fresh and ready. Click <span className="font-bold underline">+ Add Assignment</span> to begin.
+                </>
+              )}
             </p>
           </div>
 
@@ -267,9 +275,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <div className="space-y-2.5">
             {recentTasks.length === 0 ? (
-              <div className="text-center py-8 text-xs text-app-muted font-mono flex items-center justify-center space-x-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>All caught up! No pending assignments.</span>
+              <div className="text-center py-10 px-4 rounded-xl bg-app-subtle border border-dashed border-app-border flex flex-col items-center justify-center space-y-3">
+                <div className="w-10 h-10 rounded-full bg-themePrimary-500/10 text-[#4f91b0] flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div className="space-y-1 text-center">
+                  <p className="text-xs font-semibold text-app-text">No assignments recorded yet</p>
+                  <p className="text-[11px] text-app-muted">Create your first task or syllabus topic to get started</p>
+                </div>
+                <button
+                  onClick={onOpenAddModal}
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-sm flex items-center space-x-1.5 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add First Task</span>
+                </button>
               </div>
             ) : (
               recentTasks.map((task) => (
@@ -384,24 +404,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <div className="space-y-3 pt-1">
-              {progressList.slice(0, 4).map((p) => (
-                <div key={p.course_id} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-headline font-semibold text-app-text">
-                      {p.course_code || p.course_name}
-                    </span>
-                    <span className="font-mono font-bold text-[#3895c7]">
-                      {p.completed_pct}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-app-subtle h-2 rounded-full overflow-hidden border border-app-border">
-                    <div
-                      className="h-full rounded-full bg-[#4f91b0] transition-all duration-300"
-                      style={{ width: `${p.completed_pct}%` }}
-                    />
-                  </div>
+              {progressList.length === 0 ? (
+                <div className="py-6 text-center text-xs text-app-muted font-mono">
+                  No courses enrolled yet. Add an assignment above to track your course progress!
                 </div>
-              ))}
+              ) : (
+                progressList.slice(0, 4).map((p) => (
+                  <div key={p.course_id} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-headline font-semibold text-app-text">
+                        {p.course_code || p.course_name}
+                      </span>
+                      <span className="font-mono font-bold text-[#3895c7]">
+                        {p.completed_pct}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-app-subtle h-2 rounded-full overflow-hidden border border-app-border">
+                      <div
+                        className="h-full rounded-full bg-[#4f91b0] transition-all duration-300"
+                        style={{ width: `${p.completed_pct}%` }}
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

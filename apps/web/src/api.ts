@@ -50,72 +50,73 @@ export const DEMO_STUDENTS: StudentProfile[] = [
 
 export const DEMO_STUDENT: StudentProfile = DEMO_STUDENTS[0];
 
-// Persistent active student profile
-let activeStudentId = 1;
-export function getActiveStudent(): StudentProfile {
+export function getActiveAuthSession(): {
+  id: string | number;
+  email: string;
+  name: string;
+  major?: string;
+  year?: string;
+  avatar?: string;
+  isDemo?: boolean;
+} | null {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('studymate_active_student_id');
-    if (saved) activeStudentId = Number(saved) || 1;
+    try {
+      const raw = localStorage.getItem('studymate_auth_session');
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // ignore
+    }
   }
-  return DEMO_STUDENTS.find((s) => s.id === activeStudentId) || DEMO_STUDENTS[0];
+  return null;
+}
+
+export function isDemoSession(): boolean {
+  const session = getActiveAuthSession();
+  if (!session) return true; // Default fallback to demo student if no session exists
+  return Boolean(session.isDemo || session.id === 1 || session.email === 'alishba@university.edu');
+}
+
+export function getCurrentUserStoreKey(): string {
+  const session = getActiveAuthSession();
+  if (isDemoSession()) {
+    return 'studymate_data_v2_demo_1';
+  }
+  return `studymate_data_v2_user_${session?.id || 'guest'}`;
+}
+
+export function getActiveStudent(): StudentProfile {
+  const session = getActiveAuthSession();
+  if (session && !session.isDemo && session.id !== 1 && session.email !== 'alishba@university.edu') {
+    return {
+      id: typeof session.id === 'number' ? session.id : 999,
+      name: session.name || 'Enrolled Student',
+      major: session.major || 'Applied Sciences',
+      year: session.year || 'Enrolled Scholar',
+      avatar: session.avatar || 'ST',
+      email: session.email || 'student@university.edu',
+    };
+  }
+  return DEMO_STUDENT;
 }
 
 export function setActiveStudent(studentId: number): void {
-  activeStudentId = studentId;
   if (typeof window !== 'undefined') {
     localStorage.setItem('studymate_active_student_id', String(studentId));
   }
 }
 
-// Student Dataset Initializer
-function getInitialData(studentId: number) {
-  if (studentId === 2) {
+// Dataset Initializer: Clean 0-data real-time state for new users, seed data ONLY for demo account
+function getInitialData(isDemo: boolean = false) {
+  if (!isDemo) {
+    // New user workspace: completely clean real-time state with NO preloaded data!
     return {
-      courses: [
-        { id: 201, student_id: 2, name: 'CS 210 Advanced Data Structures', code: 'CS 210', color: '#3b82f6' },
-        { id: 202, student_id: 2, name: 'CS 350 Operating Systems Internals', code: 'CS 350', color: '#10b981' },
-        { id: 203, student_id: 2, name: 'PHYS 150 Wave Mechanics & Optics', code: 'PHYS 150', color: '#8b5cf6' },
-        { id: 204, student_id: 2, name: 'ENG 201 Technical Communication', code: 'ENG 201', color: '#f59e0b' },
-      ],
-      tasks: [
-        { id: 201, course_id: 201, title: 'Red-Black Tree Self-Balancing Tests', due_date: '2026-10-04', priority: 'high' as TaskPriority, est_minutes: 90, status: 'in_progress' as TaskStatus, created_at: new Date().toISOString(), course_name: 'CS 210 Advanced Data Structures', course_code: 'CS 210' },
-        { id: 202, course_id: 202, title: 'Paging & Memory Virtualization Lab', due_date: '2026-10-06', priority: 'high' as TaskPriority, est_minutes: 150, status: 'pending' as TaskStatus, created_at: new Date().toISOString(), course_name: 'CS 350 Operating Systems Internals', course_code: 'CS 350' },
-        { id: 203, course_id: 203, title: 'Harmonic Oscillators Lab Analysis', due_date: '2026-10-05', priority: 'medium' as TaskPriority, est_minutes: 60, status: 'pending' as TaskStatus, created_at: new Date().toISOString(), course_name: 'PHYS 150 Wave Mechanics & Optics', course_code: 'PHYS 150' },
-        { id: 204, course_id: 204, title: 'Design Document Executive Summary', due_date: '2026-10-08', priority: 'low' as TaskPriority, est_minutes: 45, status: 'done' as TaskStatus, created_at: new Date().toISOString(), course_name: 'ENG 201 Technical Communication', course_code: 'ENG 201' },
-      ],
-      progress: [
-        { id: 201, course_id: 201, course_name: 'CS 210 Advanced Data Structures', completed_pct: 75, hours_this_week: 5.0, total_tasks: 4, completed_tasks: 3 },
-        { id: 202, course_id: 202, course_name: 'CS 350 Operating Systems Internals', completed_pct: 45, hours_this_week: 3.5, total_tasks: 3, completed_tasks: 1 },
-        { id: 203, course_id: 203, course_name: 'PHYS 150 Wave Mechanics & Optics', completed_pct: 60, hours_this_week: 2.5, total_tasks: 2, completed_tasks: 1 },
-        { id: 204, course_id: 204, course_name: 'ENG 201 Technical Communication', completed_pct: 100, hours_this_week: 1.5, total_tasks: 1, completed_tasks: 1 },
-      ],
+      courses: [] as Course[],
+      tasks: [] as Task[],
+      progress: [] as CourseProgress[],
     };
   }
 
-  if (studentId === 3) {
-    return {
-      courses: [
-        { id: 301, student_id: 3, name: 'STAT 400 Mathematical Statistics', code: 'STAT 400', color: '#10b981' },
-        { id: 302, student_id: 3, name: 'CS 480 Deep Learning & Transformers', code: 'CS 480', color: '#ec4899' },
-        { id: 303, student_id: 3, name: 'MATH 310 Abstract Algebra & Galois Theory', code: 'MATH 310', color: '#8b5cf6' },
-        { id: 304, student_id: 3, name: 'BIO 220 Computational Genomics', code: 'BIO 220', color: '#06b6d4' },
-      ],
-      tasks: [
-        { id: 301, course_id: 301, title: 'MLE Parameter Estimation for Gaussian Mixtures', due_date: '2026-10-04', priority: 'high' as TaskPriority, est_minutes: 100, status: 'in_progress' as TaskStatus, created_at: new Date().toISOString(), course_name: 'STAT 400 Mathematical Statistics', course_code: 'STAT 400' },
-        { id: 302, course_id: 302, title: 'Implement FlashAttention CUDA Kernel', due_date: '2026-10-05', priority: 'high' as TaskPriority, est_minutes: 180, status: 'pending' as TaskStatus, created_at: new Date().toISOString(), course_name: 'CS 480 Deep Learning & Transformers', course_code: 'CS 480' },
-        { id: 303, course_id: 303, title: 'Permutation Groups & Sylow Theorem Proofs', due_date: '2026-10-07', priority: 'medium' as TaskPriority, est_minutes: 80, status: 'pending' as TaskStatus, created_at: new Date().toISOString(), course_name: 'MATH 310 Abstract Algebra & Galois Theory', course_code: 'MATH 310' },
-        { id: 304, course_id: 304, title: 'FASTA Multi-Sequence Alignment Notebook', due_date: '2026-10-03', priority: 'high' as TaskPriority, est_minutes: 70, status: 'done' as TaskStatus, created_at: new Date().toISOString(), course_name: 'BIO 220 Computational Genomics', course_code: 'BIO 220' },
-      ],
-      progress: [
-        { id: 301, course_id: 301, course_name: 'STAT 400 Mathematical Statistics', completed_pct: 85, hours_this_week: 6.0, total_tasks: 4, completed_tasks: 3 },
-        { id: 302, course_id: 302, course_name: 'CS 480 Deep Learning & Transformers', completed_pct: 60, hours_this_week: 5.5, total_tasks: 3, completed_tasks: 1 },
-        { id: 303, course_id: 303, course_name: 'MATH 310 Abstract Algebra & Galois Theory', completed_pct: 70, hours_this_week: 3.0, total_tasks: 2, completed_tasks: 1 },
-        { id: 304, course_id: 304, course_name: 'BIO 220 Computational Genomics', completed_pct: 100, hours_this_week: 4.0, total_tasks: 1, completed_tasks: 1 },
-      ],
-    };
-  }
-
-  // Default: Alishba (Student 1)
+  // Sample Demo Student (Alishba Iqbal) - pre-populated for testing & evaluation
   return {
     courses: [
       { id: 1, student_id: 1, name: 'CS 301 Design & Analysis of Algorithms', code: 'CS 301', color: '#3b82f6' },
@@ -138,29 +139,31 @@ function getInitialData(studentId: number) {
   };
 }
 
-// Local Cache Helper
+// Local Cache Helper - strictly user-scoped
 function getClientStore() {
-  const student = getActiveStudent();
-  const key = `studymate_data_v2_student_${student.id}`;
+  const isDemo = isDemoSession();
+  const key = getCurrentUserStoreKey();
   if (typeof window !== 'undefined') {
     const raw = localStorage.getItem(key);
     if (raw) {
       try {
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.tasks) && Array.isArray(parsed.courses)) {
+          return parsed;
+        }
       } catch {
         // fallback to default
       }
     }
-    const initial = getInitialData(student.id);
+    const initial = getInitialData(isDemo);
     localStorage.setItem(key, JSON.stringify(initial));
     return initial;
   }
-  return getInitialData(student.id);
+  return getInitialData(isDemo);
 }
 
 function saveClientStore(data: any) {
-  const student = getActiveStudent();
-  const key = `studymate_data_v2_student_${student.id}`;
+  const key = getCurrentUserStoreKey();
   if (typeof window !== 'undefined') {
     localStorage.setItem(key, JSON.stringify(data));
   }
@@ -178,20 +181,24 @@ export async function fetchTasks(filters?: {
   course?: string;
   status?: TaskStatus | 'all';
 }): Promise<Task[]> {
-  try {
-    const params = new URLSearchParams();
-    if (filters?.course) params.append('course', filters.course);
-    if (filters?.status && filters.status !== 'all') params.append('status', filters.status);
+  const isDemo = isDemoSession();
 
-    const res = await fetch(`${API_BASE}/tasks?${params.toString()}`);
-    if (res.ok) {
-      const json = await res.json();
-      if (Array.isArray(json.data) && json.data.length > 0) {
-        return json.data;
+  if (isDemo) {
+    try {
+      const params = new URLSearchParams();
+      if (filters?.course) params.append('course', filters.course);
+      if (filters?.status && filters.status !== 'all') params.append('status', filters.status);
+
+      const res = await fetch(`${API_BASE}/tasks?${params.toString()}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.data) && json.data.length > 0) {
+          return json.data;
+        }
       }
+    } catch {
+      // Graceful fallback to client store
     }
-  } catch {
-    // Graceful fallback to client store
   }
 
   const store = getClientStore();
@@ -212,18 +219,21 @@ export async function createTask(task: {
   est_minutes?: number;
   priority?: TaskPriority;
 }): Promise<Task> {
-  try {
-    const res = await fetch(`${API_BASE}/tasks`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(task),
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (json.data) return json.data;
+  const isDemo = isDemoSession();
+  if (isDemo) {
+    try {
+      const res = await fetch(`${API_BASE}/tasks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(task),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) return json.data;
+      }
+    } catch {
+      // Graceful fallback
     }
-  } catch {
-    // Graceful fallback
   }
 
   const store = getClientStore();
@@ -236,7 +246,8 @@ export async function createTask(task: {
       id: Date.now() + 1,
       student_id: getActiveStudent().id,
       name: task.course,
-      color: '#3b82f6',
+      code: task.course.substring(0, 8),
+      color: '#06b6d4',
     };
     store.courses.push(courseObj);
   }
@@ -246,7 +257,7 @@ export async function createTask(task: {
     course_id: courseObj.id,
     title: task.title,
     due_date: task.due_date || null,
-    est_minutes: task.est_minutes || 60,
+    est_minutes: task.est_minutes || 45,
     priority: task.priority || 'medium',
     status: 'pending',
     created_at: new Date().toISOString(),
@@ -255,6 +266,24 @@ export async function createTask(task: {
   };
 
   store.tasks.unshift(newTask);
+
+  // Sync course progress tracking
+  let progObj = store.progress.find((p: any) => p.course_id === courseObj.id);
+  if (!progObj) {
+    progObj = {
+      id: Date.now() + 2,
+      course_id: courseObj.id,
+      course_name: courseObj.name,
+      completed_pct: 0,
+      hours_this_week: 0,
+      total_tasks: 1,
+      completed_tasks: 0,
+    };
+    store.progress.push(progObj);
+  } else {
+    progObj.total_tasks = (progObj.total_tasks || 0) + 1;
+  }
+
   saveClientStore(store);
   return newTask;
 }
@@ -264,18 +293,21 @@ export async function updateTask(
   status: TaskStatus,
   minutesSpent?: number
 ): Promise<{ task: Task; courseProgress: CourseProgress }> {
-  try {
-    const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, minutes_spent: minutesSpent }),
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (json.data) return json.data;
+  const isDemo = isDemoSession();
+  if (isDemo) {
+    try {
+      const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, minutes_spent: minutesSpent }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) return json.data;
+      }
+    } catch {
+      // Graceful fallback
     }
-  } catch {
-    // Graceful fallback
   }
 
   const store = getClientStore();
@@ -284,48 +316,62 @@ export async function updateTask(
     t.status = status;
   }
 
-  const p = store.progress.find((pr: any) => pr.course_id === t?.course_id) || {
-    id: 1,
-    course_id: t?.course_id || 1,
-    course_name: t?.course_name || 'General',
-    completed_pct: 85,
-    hours_this_week: 4.5,
-  };
-
-  if (status === 'done') {
-    p.completed_pct = Math.min(100, (p.completed_pct || 50) + 15);
+  let p = store.progress.find((pr: any) => pr.course_id === t?.course_id);
+  if (!p && t) {
+    p = {
+      id: Date.now(),
+      course_id: t.course_id || 1,
+      course_name: t.course_name || 'General Course',
+      completed_pct: status === 'done' ? 100 : 0,
+      hours_this_week: minutesSpent ? minutesSpent / 60 : 1,
+      total_tasks: 1,
+      completed_tasks: status === 'done' ? 1 : 0,
+    };
+    store.progress.push(p);
+  } else if (p) {
+    if (status === 'done') {
+      p.completed_tasks = Math.min(p.total_tasks || 1, (p.completed_tasks || 0) + 1);
+      p.completed_pct = Math.round((p.completed_tasks / Math.max(1, p.total_tasks || 1)) * 100);
+      if (minutesSpent) p.hours_this_week += minutesSpent / 60;
+    }
   }
 
   saveClientStore(store);
-  return { task: t || ({} as Task), courseProgress: p };
+  return { task: t || ({} as Task), courseProgress: p || ({} as CourseProgress) };
 }
 
 export async function fetchCourses(): Promise<Course[]> {
-  try {
-    const res = await fetch(`${API_BASE}/courses`);
-    if (res.ok) {
-      const json = await res.json();
-      if (Array.isArray(json.data) && json.data.length > 0) return json.data;
+  const isDemo = isDemoSession();
+  if (isDemo) {
+    try {
+      const res = await fetch(`${API_BASE}/courses`);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.data) && json.data.length > 0) return json.data;
+      }
+    } catch {
+      // Graceful fallback
     }
-  } catch {
-    // Graceful fallback
   }
   const store = getClientStore();
   return store.courses;
 }
 
 export async function fetchProgress(course?: string): Promise<CourseProgress[]> {
-  try {
-    const params = new URLSearchParams();
-    if (course) params.append('course', course);
+  const isDemo = isDemoSession();
+  if (isDemo) {
+    try {
+      const params = new URLSearchParams();
+      if (course) params.append('course', course);
 
-    const res = await fetch(`${API_BASE}/progress?${params.toString()}`);
-    if (res.ok) {
-      const json = await res.json();
-      if (Array.isArray(json.data) && json.data.length > 0) return json.data;
+      const res = await fetch(`${API_BASE}/progress?${params.toString()}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.data) && json.data.length > 0) return json.data;
+      }
+    } catch {
+      // Graceful fallback
     }
-  } catch {
-    // Graceful fallback
   }
   const store = getClientStore();
   let list = store.progress;
@@ -354,7 +400,7 @@ export async function generateStudyPlan(
     // Graceful fallback
   }
 
-  const focusCourse = course || 'Dynamic Algorithms & Data Structures';
+  const focusCourse = course || (isDemoSession() ? 'Dynamic Algorithms & Data Structures' : 'General Study & Review');
   const studyMins = availableMinutes > 60 ? 45 : 25;
   const breakMins = availableMinutes > 60 ? 10 : 5;
 
@@ -368,7 +414,7 @@ export async function generateStudyPlan(
         order: 1,
         type: 'study',
         course_name: focusCourse,
-        description: `Deep dive into key problem sets for ${focusCourse}.`,
+        description: `Deep dive into key concepts and materials for ${focusCourse}.`,
         duration_minutes: studyMins,
       },
       {
@@ -381,7 +427,7 @@ export async function generateStudyPlan(
         order: 3,
         type: 'study',
         course_name: focusCourse,
-        description: 'Solve active exam questions and verify runtime complexities.',
+        description: `Review notes, practice problems, and consolidate mastery in ${focusCourse}.`,
         duration_minutes: Math.max(20, availableMinutes - studyMins - breakMins),
       },
     ],
@@ -508,6 +554,19 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
   ) {
     const pending = store.tasks.filter((t: any) => t.status !== 'done');
     const topTask = pending[0] || store.tasks[0];
+    if (!topTask) {
+      sessionState.lastIntent = 'RecommendNextActionIntent';
+      return {
+        intent: 'RecommendNextActionIntent',
+        tool: 'create_study_plan',
+        arguments: {},
+        speechResponse: `You don't have any assignments recorded yet, ${studentFirstName}! You can add your first task using the "+ Add Assignment" button, or ask me to start a 25-minute focus session.`,
+        data: {
+          actionType: 'empty',
+          pendingCount: 0,
+        },
+      };
+    }
     const speech = `Based on your course deadlines, your highest priority is "${topTask.title}" for ${topTask.course_name}. It's due on ${topTask.due_date || 'soon'}. I recommend starting a focused 45-minute study block right now. Ready to begin?`;
     
     sessionState.lastIntent = 'RecommendNextActionIntent';
@@ -560,6 +619,17 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
   // 5. Due dates & tasks
   if (query.includes('due') || query.includes('what do i have') || query.includes('task') || query.includes('assignments') || query.includes('what is due')) {
     const pending = store.tasks.filter((t: any) => t.status !== 'done');
+    if (pending.length === 0) {
+      sessionState.lastTasks = [];
+      sessionState.lastIntent = 'CheckTasksIntent';
+      return {
+        intent: 'CheckTasksIntent',
+        tool: 'get_tasks',
+        arguments: { status: 'pending' },
+        speechResponse: `You're all caught up, ${studentFirstName}! You currently have 0 pending assignments. You can say "add a task" anytime to log one.`,
+        data: [],
+      };
+    }
     const urgent = pending.slice(0, 3);
     const speech = `Hey ${studentFirstName}! You have ${pending.length} active assignments. Your most urgent task is "${urgent[0]?.title || 'study session'}" for ${urgent[0]?.course_name || 'your coursework'}, due ${urgent[0]?.due_date || 'soon'}.`;
     sessionState.lastTasks = pending;
@@ -618,18 +688,37 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
         speechResponse: `Awesome job, ${studentFirstName}! I marked "${target.title}" as completed. Your course progress has been recalculated on your dashboard.`,
         data: target,
       };
+    } else {
+      sessionState.lastIntent = 'UpdateProgressIntent';
+      return {
+        intent: 'UpdateProgressIntent',
+        tool: 'update_progress',
+        arguments: {},
+        speechResponse: `There are no open assignments to mark as done right now, ${studentFirstName}!`,
+        data: null,
+      };
     }
   }
 
   // 8. Course progress & analytics
   if (query.includes('progress') || query.includes('how am i doing') || query.includes('grade') || query.includes('analytics')) {
+    if (store.courses.length === 0) {
+      sessionState.lastIntent = 'GetCourseProgressIntent';
+      return {
+        intent: 'GetCourseProgressIntent',
+        tool: 'get_course_progress',
+        arguments: {},
+        speechResponse: `You haven't enrolled in any courses yet, ${studentFirstName}. Add your first assignment or course to start tracking your completion progress!`,
+        data: [],
+      };
+    }
     const topCourse = store.progress[0];
     sessionState.lastIntent = 'GetCourseProgressIntent';
     return {
       intent: 'GetCourseProgressIntent',
       tool: 'get_course_progress',
       arguments: {},
-      speechResponse: `You're tracking across ${store.courses.length} active courses. In ${topCourse?.course_name || 'your coursework'}, you are at ${topCourse?.completed_pct || 75}% completion with ${topCourse?.hours_this_week || 4} hours logged this week!`,
+      speechResponse: `You're tracking across ${store.courses.length} active courses. In ${topCourse?.course_name || store.courses[0]?.name}, you are at ${topCourse?.completed_pct || 0}% completion with ${topCourse?.hours_this_week || 0} hours logged this week!`,
       data: store.progress,
     };
   }
@@ -711,37 +800,80 @@ export async function simulateVoice(utterance: string): Promise<VoiceSimulationR
 }
 
 export async function fetchStudyStats(): Promise<StudyStats> {
-  try {
-    const res = await fetch(`${API_BASE}/study-stats`);
-    if (res.ok) {
-      const json = await res.json();
-      if (json.data) return json.data;
+  const isDemo = isDemoSession();
+
+  if (isDemo) {
+    try {
+      const res = await fetch(`${API_BASE}/study-stats`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) return json.data;
+      }
+    } catch {
+      // Graceful fallback
     }
-  } catch {
-    // Graceful fallback
+
+    return {
+      todayMinutes: 120,
+      weekMinutes: 990,
+      monthMinutes: 3420,
+      totalMinutes: 7200,
+      streakDays: 6,
+      dailyBreakdown: [
+        { day: 'Mon', date: '2026-09-28', minutes: 150 },
+        { day: 'Tue', date: '2026-09-29', minutes: 180 },
+        { day: 'Wed', date: '2026-09-30', minutes: 240 },
+        { day: 'Thu', date: '2026-10-01', minutes: 120 },
+        { day: 'Fri', date: '2026-10-02', minutes: 210 },
+        { day: 'Sat', date: '2026-10-03', minutes: 90 },
+        { day: 'Sun', date: '2026-10-04', minutes: 0 },
+      ],
+      courseDistribution: [
+        { course_name: 'Algorithms', minutes: 360, color: '#3b82f6' },
+        { course_name: 'Distributed Systems', minutes: 270, color: '#10b981' },
+        { course_name: 'Linear Algebra', minutes: 210, color: '#8b5cf6' },
+        { course_name: 'Software Architecture', minutes: 150, color: '#f59e0b' },
+      ],
+      recentSessions: [],
+    };
   }
 
+  // Non-demo new user: zero real-time data until they record study time
+  const statsKey = `${getCurrentUserStoreKey()}_stats`;
+  if (typeof window !== 'undefined') {
+    const raw = localStorage.getItem(statsKey);
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        // fallback
+      }
+    }
+  }
+
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const today = new Date();
+  const currentDayIndex = (today.getDay() + 6) % 7; // Mon=0, Sun=6
+
+  const emptyBreakdown = days.map((day, idx) => {
+    const diff = idx - currentDayIndex;
+    const d = new Date(today);
+    d.setDate(today.getDate() + diff);
+    return {
+      day,
+      date: d.toISOString().split('T')[0],
+      minutes: 0,
+    };
+  });
+
   return {
-    todayMinutes: 120,
-    weekMinutes: 990,
-    monthMinutes: 3420,
-    totalMinutes: 7200,
-    streakDays: 6,
-    dailyBreakdown: [
-      { day: 'Mon', date: '2026-09-28', minutes: 150 },
-      { day: 'Tue', date: '2026-09-29', minutes: 180 },
-      { day: 'Wed', date: '2026-09-30', minutes: 240 },
-      { day: 'Thu', date: '2026-10-01', minutes: 120 },
-      { day: 'Fri', date: '2026-10-02', minutes: 210 },
-      { day: 'Sat', date: '2026-10-03', minutes: 90 },
-      { day: 'Sun', date: '2026-10-04', minutes: 0 },
-    ],
-    courseDistribution: [
-      { course_name: 'Algorithms', minutes: 360, color: '#3b82f6' },
-      { course_name: 'Distributed Systems', minutes: 270, color: '#10b981' },
-      { course_name: 'Linear Algebra', minutes: 210, color: '#8b5cf6' },
-      { course_name: 'Software Architecture', minutes: 150, color: '#f59e0b' },
-    ],
+    todayMinutes: 0,
+    weekMinutes: 0,
+    monthMinutes: 0,
+    totalMinutes: 0,
+    streakDays: 0,
+    dailyBreakdown: emptyBreakdown,
+    courseDistribution: [],
     recentSessions: [],
   };
 }
@@ -753,25 +885,67 @@ export async function logStudySession(params: {
   duration_minutes: number;
   notes?: string;
 }): Promise<StudySession> {
-  return {
+  const newSession: StudySession = {
     id: Date.now(),
-    course_name: params.course_name || 'General Studies',
+    course_name: params.course_name || 'General Focus',
     course_id: params.course_id || 1,
     task_id: params.task_id || null,
     date: new Date().toISOString().split('T')[0],
     duration_minutes: params.duration_minutes,
     notes: params.notes,
   };
+
+  const isDemo = isDemoSession();
+  if (!isDemo && typeof window !== 'undefined') {
+    const statsKey = `${getCurrentUserStoreKey()}_stats`;
+    const curStats = await fetchStudyStats();
+
+    curStats.todayMinutes += params.duration_minutes;
+    curStats.weekMinutes += params.duration_minutes;
+    curStats.monthMinutes += params.duration_minutes;
+    curStats.totalMinutes += params.duration_minutes;
+    if (curStats.streakDays === 0) curStats.streakDays = 1;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayBar = curStats.dailyBreakdown.find((b) => b.date === todayStr);
+    if (todayBar) {
+      todayBar.minutes += params.duration_minutes;
+    }
+
+    const courseName = params.course_name || 'General Focus';
+    const cEntry = curStats.courseDistribution.find((c) => c.course_name === courseName);
+    if (cEntry) {
+      cEntry.minutes += params.duration_minutes;
+    } else {
+      curStats.courseDistribution.push({
+        course_name: courseName,
+        minutes: params.duration_minutes,
+        color: '#06b6d4',
+      });
+    }
+
+    curStats.recentSessions.unshift(newSession);
+    localStorage.setItem(statsKey, JSON.stringify(curStats));
+  }
+
+  return newSession;
 }
 
 export async function resetDatabase(): Promise<void> {
-  const student = getActiveStudent();
-  const initial = getInitialData(student.id);
+  const isDemo = isDemoSession();
+  const initial = getInitialData(isDemo);
   saveClientStore(initial);
-  try {
-    await fetch(`${API_BASE}/reset-db`, { method: 'POST' });
-  } catch {
-    // ignore
+
+  if (!isDemo && typeof window !== 'undefined') {
+    localStorage.removeItem(`${getCurrentUserStoreKey()}_stats`);
+  }
+
+  if (isDemo) {
+    try {
+      await fetch(`${API_BASE}/reset-db`, { method: 'POST' });
+    } catch {
+      // ignore
+    }
   }
 }
 

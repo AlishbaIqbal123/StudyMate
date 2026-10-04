@@ -18,13 +18,13 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
     (t) => (t.status === 'pending' || t.status === 'in_progress') && t.priority === 'high'
   ).length;
 
-  const totalHoursWeek = progressList.reduce((acc, p) => acc + p.hours_this_week, 0);
+  const totalHoursWeek = progressList.reduce((acc, p) => acc + (p.hours_this_week || 0), 0);
   const avgCompletion =
     progressList.length > 0
       ? Math.round(
-          progressList.reduce((acc, p) => acc + p.completed_pct, 0) / progressList.length
+          progressList.reduce((acc, p) => acc + (p.completed_pct || 0), 0) / progressList.length
         )
-      : 94;
+      : 0;
 
   const courseCodes = courses
     .map((c) => c.code || c.name.slice(0, 8))
@@ -40,18 +40,18 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
             Pending Tasks
           </span>
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-            Due Soon
+            {pendingCount > 0 ? 'Active' : 'All Clear'}
           </span>
         </div>
         <div className="flex items-baseline space-x-2">
           <span className="font-headline text-3xl font-extrabold text-app-text tracking-tight">
-            {pendingCount || 7}
+            {pendingCount}
           </span>
           <span className="text-xs text-app-muted font-sans">active items</span>
         </div>
         <p className="mt-2 text-xs font-mono text-rose-600 dark:text-rose-400 flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1" />
-          <span>{highPriorityCount || 2} High priority assignments</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${highPriorityCount > 0 ? 'bg-rose-500' : 'bg-slate-400'} mr-1`} />
+          <span>{highPriorityCount} High priority assignments</span>
         </p>
       </div>
 
@@ -67,12 +67,12 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
         </div>
         <div className="flex items-baseline space-x-2">
           <span className="font-headline text-3xl font-extrabold text-app-text tracking-tight">
-            {courses.length || 5}
+            {courses.length}
           </span>
           <span className="text-xs text-app-muted font-sans">Enrolled</span>
         </div>
         <p className="mt-2 text-xs font-mono text-app-muted truncate">
-          {courseCodes ? `${courseCodes}, ...` : 'CS 420, MATH 312, AI 501, ...'}
+          {courseCodes ? `${courseCodes}${courses.length > 3 ? ', ...' : ''}` : 'No courses enrolled yet'}
         </p>
       </div>
 
@@ -83,17 +83,17 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
             Weekly Study Time
           </span>
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-            +4.2 hrs vs last wk
+            {totalHoursWeek > 0 ? `${totalHoursWeek.toFixed(1)}h logged` : 'Real-Time'}
           </span>
         </div>
         <div className="flex items-baseline space-x-2">
           <span className="font-headline text-3xl font-extrabold text-app-text tracking-tight">
-            {Math.round((totalHoursWeek || 28.5) * 10) / 10}
+            {Math.round(totalHoursWeek * 10) / 10}
           </span>
           <span className="text-xs text-app-muted font-sans">hrs logged</span>
         </div>
         <p className="mt-2 text-xs font-mono text-app-muted">
-          Target: 32 hrs (89% complete)
+          {courses.length > 0 ? 'Target: 20 hrs / week' : 'Add courses to track study velocity'}
         </p>
       </div>
 
@@ -109,12 +109,12 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
         </div>
         <div className="flex items-baseline space-x-1">
           <span className="font-headline text-3xl font-extrabold text-app-text tracking-tight">
-            {avgCompletion || 94.2}%
+            {avgCompletion}%
           </span>
         </div>
         <p className="mt-2 text-xs font-mono text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
           <Award className="w-3.5 h-3.5 mr-1 inline" />
-          <span>Top academic standing</span>
+          <span>{courses.length > 0 ? 'Coursework progress' : 'Awaiting course assignments'}</span>
         </p>
       </div>
     </div>

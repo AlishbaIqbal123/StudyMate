@@ -106,7 +106,26 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
   // Multi-horizon real-time chart data
   const chartData = useMemo(() => {
+    const isNewUser = (stats?.totalMinutes || 0) === 0 && (stats?.todayMinutes || 0) === 0;
+
     if (timeHorizon === 'day') {
+      if (isNewUser) {
+        return [
+          { label: '8 AM', minutes: 0, highlight: false },
+          { label: '10 AM', minutes: 0, highlight: false },
+          { label: '12 PM', minutes: 0, highlight: false },
+          { label: '2 PM', minutes: 0, highlight: false },
+          { label: '4 PM', minutes: 0, highlight: false },
+          { label: '6 PM', minutes: 0, highlight: false },
+          {
+            label: 'Now',
+            minutes: liveElapsedMinutes,
+            highlight: true,
+            live: timerRunning,
+          },
+          { label: '10 PM', minutes: 0, highlight: false },
+        ];
+      }
       return [
         { label: '8 AM', minutes: 25, highlight: false },
         { label: '10 AM', minutes: 45, highlight: false },
@@ -115,7 +134,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
         { label: '4 PM', minutes: 50, highlight: false },
         { label: '6 PM', minutes: 30, highlight: false },
         {
-          label: '8 PM',
+          label: 'Now',
           minutes: Math.max(20, liveElapsedMinutes),
           highlight: true,
           live: timerRunning,
@@ -125,6 +144,15 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
     }
 
     if (timeHorizon === 'month') {
+      if (isNewUser) {
+        return [
+          { label: 'Wk 1', minutes: 0, highlight: false },
+          { label: 'Wk 2', minutes: 0, highlight: false },
+          { label: 'Wk 3', minutes: 0, highlight: false },
+          { label: 'Wk 4', minutes: liveElapsedMinutes, highlight: true, live: timerRunning },
+          { label: 'Wk 5', minutes: 0, highlight: false },
+        ];
+      }
       const w1 = 780;
       const w2 = 920;
       const w3 = 840;
@@ -139,7 +167,33 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
     }
 
     // Default: 'week'
-    const days = [
+    if (stats?.dailyBreakdown && stats.dailyBreakdown.length > 0) {
+      return stats.dailyBreakdown.map((item) => ({
+        label: item.day,
+        minutes: item.day === 'Today' ? item.minutes + liveElapsedMinutes : item.minutes,
+        highlight: item.day === 'Today',
+        live: item.day === 'Today' && timerRunning,
+      }));
+    }
+
+    if (isNewUser) {
+      return [
+        { label: 'Mon', minutes: 0, highlight: false },
+        { label: 'Tue', minutes: 0, highlight: false },
+        { label: 'Wed', minutes: 0, highlight: false },
+        { label: 'Thu', minutes: 0, highlight: false },
+        { label: 'Fri', minutes: 0, highlight: false },
+        { label: 'Sat', minutes: 0, highlight: false },
+        {
+          label: 'Today',
+          minutes: liveElapsedMinutes,
+          highlight: true,
+          live: timerRunning,
+        },
+      ];
+    }
+
+    return [
       { label: 'Mon', minutes: 135, highlight: false },
       { label: 'Tue', minutes: 180, highlight: false },
       { label: 'Wed', minutes: 240, highlight: false },
@@ -153,17 +207,6 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
         live: timerRunning,
       },
     ];
-
-    if (stats?.dailyBreakdown && stats.dailyBreakdown.length > 0) {
-      return stats.dailyBreakdown.map((item) => ({
-        label: item.day,
-        minutes: item.day === 'Today' ? item.minutes + liveElapsedMinutes : item.minutes,
-        highlight: item.day === 'Today',
-        live: item.day === 'Today' && timerRunning,
-      }));
-    }
-
-    return days;
   }, [timeHorizon, stats, liveElapsedMinutes, timerRunning]);
 
   const maxChartMinutes = useMemo(() => {
@@ -328,7 +371,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
             <Flame className="w-3.5 h-3.5 text-amber-500" />
           </div>
           <div className="font-mono text-2xl font-black text-amber-600 dark:text-amber-400 flex items-center space-x-1">
-            <span>{stats?.streakDays || 6}</span>
+            <span>{stats?.streakDays || 0}</span>
             <span className="text-xs font-headline font-semibold text-app-muted">Days</span>
           </div>
           <div className="text-[10px] text-app-muted">
@@ -400,13 +443,13 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
           <div className="flex items-center justify-between text-[11px] font-mono text-app-muted pt-2 border-t border-app-border">
             <span>
               {timeHorizon === 'day'
-                ? 'Target: 120 mins daily · Peak window: 2 PM – 5 PM'
+                ? `Target: 120 mins daily · ${liveTodayMinutes > 0 ? `${liveTodayMinutes}m completed today` : 'No study logged today yet'}`
                 : timeHorizon === 'month'
-                ? 'Monthly Total: 57.0 hrs · On pace for semester targets'
-                : 'Target: 2h daily · Current pace: 16.5 hrs this week'}
+                ? `Monthly Total: ${(liveMonthMinutes / 60).toFixed(1)} hrs · ${liveMonthMinutes > 0 ? 'On pace for semester targets' : 'Start your first focus session'}`
+                : `Target: 2h daily · Current pace: ${(liveWeekMinutes / 60).toFixed(1)} hrs this week`}
             </span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400">
-              Active Streak: 6 Days
+              Active Streak: {stats?.streakDays || 0} {(stats?.streakDays || 0) === 1 ? 'Day' : 'Days'}
             </span>
           </div>
         </div>

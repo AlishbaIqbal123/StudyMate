@@ -852,75 +852,93 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
             {/* Stored Records List */}
             <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
               {activeDbTab === 'tasks' &&
-                tasks.map((t) => (
-                  <div
-                    key={t.id}
-                    className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-headline font-bold text-app-text truncate">
-                        {t.title}
-                      </span>
-                      <span
-                        className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                          t.status === 'done'
-                            ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                            : 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
-                        }`}
-                      >
-                        {t.status === 'done' ? 'Done' : 'To Do'}
-                      </span>
-                    </div>
-                    <div className="text-[11px] text-app-muted flex items-center justify-between">
-                      <span>{t.course_name}</span>
-                      <span>{t.due_date ? `Due ${t.due_date}` : 'No deadline'}</span>
-                    </div>
+                (tasks.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-app-muted font-mono">
+                    No tasks recorded in current workspace yet.
                   </div>
+                ) : (
+                  tasks.map((t) => (
+                    <div
+                      key={t.id}
+                      className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-headline font-bold text-app-text truncate">
+                          {t.title}
+                        </span>
+                        <span
+                          className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                            t.status === 'done'
+                              ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                              : 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
+                          }`}
+                        >
+                          {t.status === 'done' ? 'Done' : 'To Do'}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-app-muted flex items-center justify-between">
+                        <span>{t.course_name}</span>
+                        <span>{t.due_date ? `Due ${t.due_date}` : 'No deadline'}</span>
+                      </div>
+                    </div>
+                  ))
                 ))}
 
               {activeDbTab === 'courses' &&
-                courses.map((c) => (
-                  <div
-                    key={c.id}
-                    className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-headline font-bold text-app-text">
-                        {c.code || c.name}
-                      </span>
-                      <span className="text-[10px] text-app-muted">{c.instructor || 'Faculty'}</span>
-                    </div>
-                    <div className="text-[11px] text-app-muted">
-                      {c.name}
-                    </div>
+                (courses.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-app-muted font-mono">
+                    No courses enrolled in current workspace yet.
                   </div>
+                ) : (
+                  courses.map((c) => (
+                    <div
+                      key={c.id}
+                      className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-headline font-bold text-app-text">
+                          {c.code || c.name}
+                        </span>
+                        <span className="text-[10px] text-app-muted">{c.instructor || 'Faculty'}</span>
+                      </div>
+                      <div className="text-[11px] text-app-muted">
+                        {c.name}
+                      </div>
+                    </div>
+                  ))
                 ))}
 
               {activeDbTab === 'progress' &&
-                progressList.map((p) => (
-                  <div
-                    key={p.course_id}
-                    className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-headline font-bold text-app-text">
-                        {p.course_code || p.course_name}
-                      </span>
-                      <span className="text-[#4f91b0] font-bold">
-                        {p.completed_pct}% Completed
-                      </span>
-                    </div>
-                    <div className="w-full bg-app-card rounded-full h-1.5 overflow-hidden my-1">
-                      <div
-                        className="bg-[#4f91b0] h-1.5 rounded-full"
-                        style={{ width: `${p.completed_pct}%` }}
-                      />
-                    </div>
-                    <div className="text-[10px] text-app-muted flex items-center justify-between">
-                      <span>{p.completed_tasks} of {p.total_tasks} tasks done</span>
-                      <span>{p.hours_this_week.toFixed(1)} hrs studied</span>
-                    </div>
+                (progressList.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-app-muted font-mono">
+                    No course pacing recorded in current workspace yet.
                   </div>
+                ) : (
+                  progressList.map((p) => (
+                    <div
+                      key={p.course_id}
+                      className="p-2.5 rounded-xl bg-app-subtle border border-app-border text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-headline font-bold text-app-text">
+                          {p.course_code || p.course_name}
+                        </span>
+                        <span className="text-[#4f91b0] font-bold">
+                          {p.completed_pct}% Completed
+                        </span>
+                      </div>
+                      <div className="w-full bg-app-card rounded-full h-1.5 overflow-hidden my-1">
+                        <div
+                          className="bg-[#4f91b0] h-1.5 rounded-full"
+                          style={{ width: `${p.completed_pct}%` }}
+                        />
+                      </div>
+                      <div className="text-[10px] text-app-muted flex items-center justify-between">
+                        <span>{p.completed_tasks} of {p.total_tasks} tasks done</span>
+                        <span>{p.hours_this_week.toFixed(1)} hrs studied</span>
+                      </div>
+                    </div>
+                  ))
                 ))}
             </div>
           </div>

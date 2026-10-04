@@ -521,7 +521,19 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
       ) : (
         /* List View */
         <div className="p-6 rounded-2xl bg-app-card border border-app-border shadow-sm space-y-3">
-          {filtered.map((task) => {
+          {filtered.length === 0 ? (
+            <div className="py-12 px-4 text-center space-y-3">
+              <p className="text-xs text-app-muted font-mono">No assignments found in workspace</p>
+              <button
+                onClick={onOpenAddModal}
+                className="px-3.5 py-1.5 rounded-lg text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-sm inline-flex items-center space-x-1 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Create Assignment</span>
+              </button>
+            </div>
+          ) : (
+            filtered.map((task) => {
             const isDone = task.status === 'done';
             return (
               <div
@@ -575,7 +587,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                 </div>
               </div>
             );
-          })}
+          }))}
         </div>
       )}
     </div>

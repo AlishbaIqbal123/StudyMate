@@ -17,6 +17,7 @@ import { Sidebar } from './components/Sidebar.js';
 import { AddTaskModal } from './components/AddTaskModal.js';
 import { MiniPomodoroWidget } from './components/MiniPomodoroWidget.js';
 import { AuthModal } from './components/AuthModal.js';
+import { useAuth } from './context/AuthContext.js';
 
 // Dedicated Screens
 import { LandingPageView } from './views/LandingPageView.js';
@@ -30,6 +31,7 @@ const VALID_SCREENS = ['home', 'dashboard', 'assignments', 'planner', 'voice', '
 type ScreenType = (typeof VALID_SCREENS)[number];
 
 export function App() {
+  const { user } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [progressList, setProgressList] = useState<CourseProgress[]>([]);
@@ -96,7 +98,7 @@ export function App() {
     // Refresh data periodically
     const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
-  }, [loadData]);
+  }, [loadData, user]);
 
   const handleToggleStatus = async (taskId: number, currentStatus: TaskStatus) => {
     const nextStatus: TaskStatus = currentStatus === 'done' ? 'pending' : 'done';
