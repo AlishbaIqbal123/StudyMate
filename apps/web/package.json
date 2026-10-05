@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "npm run build --workspace=@studymate/types",
+    "prebuild": "npm run build --workspace=@studymate/types && npm run build --workspace=@studymate/database",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"

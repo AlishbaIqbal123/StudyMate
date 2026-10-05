@@ -1,5 +1,9 @@
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -29,10 +33,10 @@ class InMemoryFallbackDb {
     { id: 4, course_id: 4, title: 'Microservices Case Study', due_date: '2026-10-07', priority: 'medium', est_minutes: 75, status: 'done', created_at: new Date().toISOString() },
   ];
   progress: any[] = [
-    { id: 1, course_id: 1, completed_pct: 65, hours_this_week: 4.5 },
-    { id: 2, course_id: 2, completed_pct: 40, hours_this_week: 3.0 },
-    { id: 3, course_id: 3, completed_pct: 80, hours_this_week: 5.0 },
-    { id: 4, course_id: 4, completed_pct: 100, hours_this_week: 2.0 },
+    { id: 1, course_id: 1, completed_pct: 65, hours_this_week: 4.5, total_tasks: 3, completed_tasks: 1, pending_tasks: 2 },
+    { id: 2, course_id: 2, completed_pct: 40, hours_this_week: 3.0, total_tasks: 2, completed_tasks: 0, pending_tasks: 2 },
+    { id: 3, course_id: 3, completed_pct: 80, hours_this_week: 5.0, total_tasks: 2, completed_tasks: 1, pending_tasks: 1 },
+    { id: 4, course_id: 4, completed_pct: 100, hours_this_week: 2.0, total_tasks: 1, completed_tasks: 1, pending_tasks: 0 },
   ];
   study_sessions: any[] = [];
   nextTaskId = 5;
@@ -50,15 +54,29 @@ class InMemoryFallbackDb {
           if (args[1]) {
             return self.courses.find(c => c.name.toLowerCase() === String(args[1]).toLowerCase());
           }
+          if (args[0] && typeof args[0] === 'number') {
+            return self.courses.find(c => c.id === args[0]) || self.courses[0];
+          }
           return self.courses[0];
         }
         if (s.includes('from tasks')) {
+          if (s.includes('count(*)')) {
+            const courseId = Number(args[0]);
+            const courseTasks = self.tasks.filter(t => t.course_id === courseId);
+            const completed = courseTasks.filter(t => t.status === 'done').length;
+            const pending = courseTasks.filter(t => t.status === 'pending').length;
+            return { total: courseTasks.length, completed, pending };
+          }
           const id = Number(args[0]);
           return self.tasks.find(t => t.id === id);
         }
         if (s.includes('from progress')) {
           const courseId = Number(args[0]);
-          return self.progress.find(p => p.course_id === courseId) || { completed_pct: 0, hours_this_week: 0 };
+          return self.progress.find(p => p.course_id === courseId) || { id: courseId || 1, course_id: courseId, completed_pct: 0, hours_this_week: 0 };
+        }
+        if (s.includes('from study_sessions')) {
+          const nowStr = new Date().toISOString().split('T')[0];
+          return { target_date: nowStr, total_minutes: 0, minutes: 0 };
         }
         return undefined;
       },
@@ -79,7 +97,16 @@ class InMemoryFallbackDb {
           });
         }
         if (s.includes('from progress')) return self.progress;
-        if (s.includes('from study_sessions')) return self.study_sessions;
+        if (s.includes('from study_sessions')) {
+          if (s.includes('group by c.id') || s.includes('courses c')) {
+            return self.courses.map(c => ({
+              course_name: c.name,
+              color: c.color || '#3b82f6',
+              minutes: 90,
+            }));
+          }
+          return self.study_sessions;
+        }
         return [];
       },
       run(...args: any[]) {

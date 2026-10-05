@@ -11,7 +11,8 @@
   "scripts": {
     "dev:server": "npm run dev --workspace=apps/mcp-server",
     "dev:web": "npm run dev --workspace=apps/web",
-    "dev": "npm run dev:server",
+    "dev:all": "node scripts/dev.js",
+    "dev": "node scripts/dev.js",
     "start": "npm run start --workspace=apps/mcp-server",
     "build": "npm run build --workspaces",
     "db:init": "npm run init --workspace=packages/database",

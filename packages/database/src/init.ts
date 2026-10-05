@@ -1,6 +1,10 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { getDb } from './db.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const FALLBACK_SCHEMA_SQL = `
 PRAGMA foreign_keys = ON;
