@@ -231,11 +231,11 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-2 px-2.5 py-1 rounded-full bg-app-subtle border border-app-border text-xs font-mono">
             <span
               className={`w-2 h-2 rounded-full ${
-                serverHealthy ? 'bg-emerald-500' : 'bg-emerald-500'
+                serverHealthy ? 'bg-emerald-400 animate-pulse' : 'bg-emerald-400'
               }`}
             />
-            <span className="hidden sm:inline text-[11px] font-semibold text-app-text">
-              Ready
+            <span className="hidden sm:inline text-[11px] font-semibold text-cyan-400">
+              Alexa+ MCP Online
             </span>
           </div>
 

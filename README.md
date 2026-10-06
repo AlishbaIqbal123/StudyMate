@@ -1,15 +1,46 @@
-# 🎓 StudyMate — Alexa+ MCP Add-on & Companion Dashboard
+# 🎓 StudyMate — Alexa+ Model Context Protocol (MCP) Add-on & Companion Dashboard
 
 > **"Your academic life, organized through conversation."**  
-> An autonomous conversational agent built on the **Model Context Protocol (MCP)** for **Alexa+**, backed by a local SQLite engine and a modern React + Tailwind web companion.
+> An autonomous conversational academic co-pilot built on the **Model Context Protocol (MCP)** for **Alexa+**, backed by a local-first SQLite engine and a modern React + Tailwind web companion.
 
+[![Build, Ship, Shape Hackathon](https://img.shields.io/badge/Amazon_Hackathon-Build%2C_Ship%2C_Shape-orange.svg)](https://buildshipshape.devpost.com)
+[![Track: Alexa+](https://img.shields.io/badge/Track-Alexa%2B_MCP_Add--on-blue.svg)](#-built-with-track-required-tool)
 [![MCP Protocol](https://img.shields.io/badge/MCP-Streamable_HTTP_2024--11--05-indigo.svg)](https://modelcontextprotocol.io)
 [![100% Free Stack](https://img.shields.io/badge/Stack-100%25_Free_%26_Open_Source-emerald.svg)](#-100-free--open-source-architecture)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 🌟 Why StudyMate? (Competition Highlights)
+## 📑 Hackathon Submission Navigator
+
+For judges and reviewers of the **Build, Ship, Shape** competition, all required assets and evaluation materials are organized below:
+
+| Resource | Description | Quick Link |
+|---|---|:---:|
+| 📝 **Required Product Feedback** | Exhaustive, candid feedback directly for the Alexa+ & developer tools engineering teams | [**PRODUCT_FEEDBACK.md**](PRODUCT_FEEDBACK.md) |
+| 🎬 **3-Minute Video Pitch Script** | Storyboard & timeline script tailored to the 3-minute pitch criteria | [**DEMO_PITCH_SCRIPT.md**](DEMO_PITCH_SCRIPT.md) |
+| 🚀 **Devpost Submission Package** | Full formatted project submission (Inspiration, Architecture, Challenges, What's Next) | [**SUBMISSION.md**](SUBMISSION.md) |
+| 🔒 **Security Verification** | Audit confirming zero hardcoded credentials & strict `.env` git-exclusion | [**# Security & API Key Hygiene**](#-security--api-key-hygiene) |
+
+---
+
+## 🛠️ Built With (Track Required Tool)
+
+StudyMate is built specifically for the **Alexa+** track of the **Build, Ship, Shape** competition. The required tool—**Alexa+ Model Context Protocol (MCP)**—is the core engine powering the entire system:
+
+| Layer | Tool / Technology | Role in StudyMate |
+|---|---|---|
+| **Voice Agent Runtime (Required Tool)** | **Alexa+ MCP Add-on Architecture** | Performs intent discovery, dynamic slot extraction, and executes our academic tools over voice. |
+| **Protocol Specification** | **Model Context Protocol (MCP)** | Standardized JSON-RPC 2.0 communication engine between Alexa+ and local academic databases. |
+| **Official TypeScript SDK** | **`@modelcontextprotocol/sdk` (v1.31)** | Exposes tools (`get_tasks`, `add_task`, `create_study_plan`, etc.) with strict JSON Schema contracts. |
+| **Streaming Transport** | **Streamable HTTP & SSE Transport** | Low-latency Server-Sent Events (`/mcp/sse`) and JSON-RPC (`/mcp`) for persistent voice sessions. |
+| **Local Academic Database** | **Node.js 22 Native SQLite (`node:sqlite`)** | Embedded database in WAL mode with foreign keys; sub-millisecond local execution; zero cloud bills. |
+| **Web Companion Surface** | **React 18 + Vite + Tailwind CSS** | Real-time dual-surface companion with Kanban tracking, Pomodoro focus widget, and telemetry inspection. |
+| **HTTPS Tunneling** | **Cloudflare Quick Tunnel (`cloudflared`)** | Zero-cost Amazon-compliant TLS/HTTPS endpoint without requiring paid VPS or domain registrations. |
+
+---
+
+## 🌟 Why StudyMate? (The Problem & Solution)
 
 Most student apps are passive CRUD dashboards that force students to switch between multiple tabs just to see what's due. **StudyMate transforms academic task management into an active, conversational partner.**
 
@@ -49,7 +80,7 @@ Powered by Amazon's new **Alexa+ MCP Add-on** architecture, StudyMate connects d
             │    • /api/*                → REST endpoints for Web Companion   │
             └───────────────────────────┬─────────────────────────────────────┘
                                         │
-                         better-sqlite3 / node:sqlite
+                         Node.js 22 native SQLite
                          (Foreign Keys ON, WAL Mode)
                                         │
             ┌───────────────────────────▼─────────────────────────────────────┐
@@ -78,24 +109,39 @@ Powered by Amazon's new **Alexa+ MCP Add-on** architecture, StudyMate connects d
 
 ---
 
-## 💎 100% Free & Open-Source Stack
+## 📝 Product Feedback for the Alexa+ Engineering Team
 
-StudyMate uses **zero paid subscriptions, zero paid API keys, and zero cloud hosting fees**:
+As a mandatory part of the **Build, Ship, Shape** competition, we compiled structured feedback directly for the teams building **Alexa+** and the **Model Context Protocol** ecosystem. 
 
-| Component | Technology | Why It's 100% Free |
-|---|---|---|
-| **MCP Server** | Node.js + TypeScript + `@modelcontextprotocol/sdk` | Open-source, free, maintained by Anthropic / Linux Foundation |
-| **Database** | Embedded SQLite with WAL mode | Zero cloud database bills; zero storage overhead; instantaneous queries |
-| **Web Dashboard** | React 18 + Vite + Tailwind CSS + Lucide Icons | Open-source frontend; lightning-fast compilation |
-| **Public HTTPS Tunnel** | Cloudflare Quick Tunnel (`cloudflared`) | Free, no account or credit card required; Amazon-compliant HTTPS TLS |
-| **Conversational AI** | Alexa+ native conversational runtime | Alexa handles dialogue; server simply hosts structured tools |
+*(Read our full, candid evaluation in [PRODUCT_FEEDBACK.md](PRODUCT_FEEDBACK.md))*
+
+### Summary Feedback Matrix:
+
+| Tool / Technology | Purpose | Rating (1-10) | Build Again? | Key Feedback for Amazon / Maintainers |
+|---|---|:---:|:---:|---|
+| **Alexa+ MCP Add-on** | Conversational tool calling | 7.5 | **Yes** | Add a local CLI emulator & rich tool payload debugger in Developer Console. |
+| **`@modelcontextprotocol/sdk`** | TypeScript MCP server | 8.0 | **Yes** | Provide native Express HTTP/SSE middleware helper out-of-the-box. |
+| **Alexa Developer Console** | Endpoint & Auth config | 6.5 | **Yes** | Create dedicated "MCP-First" console layout; hide legacy ASK slot-filling tabs. |
+| **Streamable HTTP / SSE** | Real-time tool transport | 8.5 | **Yes** | Standardize keep-alive heartbeat frequencies and reconnection rules in docs. |
+| **Cloudflare Quick Tunnel** | Free HTTPS tunneling | 10.0 | **Yes** | Exceptional developer tool; consider bundling a built-in tunnel with ASK CLI. |
+| **Node.js `node:sqlite`** | Local database & WAL | 9.0 | **Yes** | Stabilize API beyond experimental flag; publish AWS Lambda storage blueprints. |
+
+---
+
+## 🔒 Security & API Key Hygiene
+
+Per competition guidelines, **API key safety is strictly enforced**:
+- **Zero Hardcoded Secrets:** No API keys, client secrets, or OAuth tokens are committed to source code.
+- **Git-Ignored Credentials:** `.env`, `.env.local`, and SQLite database files (`*.db`, `*.db-wal`, `*.db-shm`) are explicitly excluded via `.gitignore`.
+- **Clean Configuration Template:** A safe template with empty placeholders is provided in [`.env.example`](.env.example).
+- **Public Quick Tunnels:** Cloudflare Quick Tunnel operates without API keys or stored credentials.
 
 ---
 
 ## 🚀 Quickstart Guide
 
 ### 1. Prerequisites
-- **Node.js**: v20+ or v24+
+- **Node.js**: v20+ or v22+
 - **Git**
 
 ### 2. Installation
@@ -114,19 +160,10 @@ npm install
 npm run db:seed
 ```
 
-### 4. Start Development Servers
-
-In terminal 1 — Start the MCP Server:
+### 4. Start Development (Concurrent Server + Web)
 ```bash
-npm run dev:server
-# Running on http://localhost:3000
-# Health check: http://localhost:3000/health
-```
-
-In terminal 2 — Start the Web Dashboard:
-```bash
-npm run dev:web
-# Running on http://localhost:5173
+# Starts MCP Server on :3000 AND Web Dashboard on :5173 concurrently
+npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
@@ -135,7 +172,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## 🎙️ Testing the Alexa+ Experience
 
-Even before configuring the Alexa Developer Console, you can test the **complete voice workflow** using our built-in **Live Agent Simulator** on the web dashboard:
+Even before configuring the physical Alexa Developer Console, you can test the **complete voice workflow** using our built-in **Live Agent Simulator** on the web dashboard:
 
 1. Click any of the **1-Click Demo Phrases**:
    - `"What's due this week?"`
@@ -159,56 +196,6 @@ To connect your local MCP server to the real Alexa+ Developer Console:
 ```
 
 Copy the generated public HTTPS URL (e.g. `https://random-words.trycloudflare.com`) and register it as your MCP server endpoint in the Alexa+ Developer Console!
-
----
-
-## 📂 Project Structure
-
-```
-StudyMate/
-├── apps/
-│   ├── mcp-server/             # Node.js + TypeScript MCP Server
-│   │   ├── src/
-│   │   │   ├── tools/          # 5 core MVP tools (get_tasks, add_task, etc.)
-│   │   │   ├── mcp/            # MCP protocol engine & SSE transport
-│   │   │   ├── voice/          # Conversational simulator & NLP
-│   │   │   ├── api/            # REST routes for Web Companion
-│   │   │   └── index.ts        # Express entry point
-│   │   └── package.json
-│   └── web/                    # React + Vite + Tailwind Companion Dashboard
-│       ├── src/
-│       │   ├── components/     # VoiceAssistantWidget, TaskList, StudyPlanSection, etc.
-│       │   ├── App.tsx         # Dashboard coordinator
-│       │   └── main.tsx
-│       └── package.json
-├── packages/
-│   ├── database/               # SQLite schema migrations, queries & seed scripts
-│   │   ├── schema.sql
-│   │   ├── src/db.ts
-│   │   ├── src/queries.ts
-│   │   └── src/seed.ts
-│   └── types/                  # Shared TypeScript interfaces
-│       └── src/index.ts
-├── docs/                       # Technical architecture, setup & Alexa integration
-│   ├── architecture.md
-│   ├── setup.md
-│   └── alexa-integration.md
-├── bin/                        # Pre-configured cloudflared binary
-├── .env.example
-├── LICENSE
-└── package.json                # Monorepo workspaces
-```
-
----
-
-## 🏆 Hackathon Demo Script
-
-Follow this sequence for the 5-point live demo:
-1. **"What's due this week?"** → Shows real pending assignments dynamically queried from SQLite.
-2. **"Add task: Final Project Presentation for SE 350, due Monday, high priority"** → Persists live row to DB and auto-calculates course metrics.
-3. **"I have 90 minutes tonight, help me study"** → Emits a structured Pomodoro timeline with 25-40 min focus blocks and 10 min rest breaks.
-4. **"I finished my Linear Algebra homework"** → Marks task complete, increments hours studied, and updates course completion percentage.
-5. **"How am I doing in Algorithms?"** → Returns instant summary of total tasks, completed ratio, and weekly study hours.
 
 ---
 
