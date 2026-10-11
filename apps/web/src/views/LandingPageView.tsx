@@ -1,1 +1,8 @@
-export { LandingPage as LandingPageView, LandingPage as default } from './landing/LandingPage.js';
+import React from 'react';
+import { NexumHero } from '../NexumHero.js';
+
+export const LandingPageView: React.FC<any> = () => {
+  return <NexumHero />;
+};
+
+export default LandingPageView;
