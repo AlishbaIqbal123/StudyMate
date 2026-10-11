@@ -8,7 +8,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        sans: ["'Geist'", '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        geist: ["'Geist'", '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        silkscreen: ["'Silkscreen'", 'cursive'],
         headline: ['"Space Grotesk"', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },

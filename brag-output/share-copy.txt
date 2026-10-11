@@ -1,0 +1,51 @@
+# StudyMate — Launch & Share Copy Kit
+
+## 1. Twitter / X (Fast, High Engagement)
+College students don't need a 41st open browser tab.
+
+We built StudyMate — an ambient, voice-driven academic co-pilot powered by Amazon Alexa+ and the Model Context Protocol (MCP).
+
+🗣️ "Alexa, what's due this week?"
+⚡ Autonomous tool execution over Streamable HTTP
+📊 Zero manual data entry, instant dual-surface dashboard sync
+
+Built for the Amazon "Build, Ship, Shape" Hackathon.
+GitHub: https://github.com/AlishbaIqbal123/StudyMate
+
+#AlexaPlus #ModelContextProtocol #Hackathon #AI #EdTech #BuildShipShape
+
+---
+
+## 2. LinkedIn (Product & Architecture Story)
+Most student productivity tools fail because they demand high-friction manual data entry right when students are experiencing cognitive overload and exam burnout.
+
+For Amazon’s "Build, Ship, Shape" hackathon, we built StudyMate — an autonomous academic co-pilot that pairs the conversational intelligence of Alexa+ with the Model Context Protocol (MCP) and a real-time companion web dashboard.
+
+Key Architectural Highlights:
+• Native Alexa+ MCP Add-on: Exposes high-leverage tools (`get_tasks`, `add_task`, `create_study_plan`, `update_progress`) over Streamable HTTP.
+• Real-time Dual-Surface Sync: When a student speaks across their room, tasks and deadlines instantly materialize on their desktop Kanban board without touching a keyboard.
+• Adaptive Pomodoro Engine: Allocates cognitive sprint blocks based on actual assignment urgency and remaining energy.
+• Local-First & Zero Subscriptions: Native SQLite persistence with absolute student data sovereignty.
+
+Check out our 18-second launch demo below!
+
+Code & MCP Manifest: https://github.com/AlishbaIqbal123/StudyMate
+
+#Alexa #ArtificialIntelligence #MCP #FullStack #EdTech #ProductDesign
+
+---
+
+## 3. Hackathon Submission Pitch (Devpost / Portal Summary)
+**Project Name:** StudyMate
+**Elevator Pitch:** An ambient, voice-first academic co-pilot powered by Amazon Alexa+ and MCP that eliminates tab fatigue by organizing course schedules, task deadlines, and Pomodoro focus sprints through natural conversation.
+
+**The Problem:**
+Students juggle LMS platforms, Notion docs, calendars, and chat groups, leading to cognitive fatigue and dropped assignments. When studying intensely, stopping to type into a tracker breaks deep focus.
+
+**The Solution:**
+StudyMate brings ambient intelligence directly to the student's study desk. Powered by an Alexa+ MCP server, students query their schedule, capture new assignments, and generate fatigue-aware study plans simply by speaking. The companion web dashboard syncs every voice action in real time.
+
+**Required Hackathon Tool Integration:**
+• Track: Amazon Alexa+
+• Integration: Custom Model Context Protocol (MCP) Add-on exposing Streamable HTTP endpoints.
+• Tools Provided: `get_tasks`, `add_task`, `create_study_plan`, `update_progress`, `get_course_progress`.

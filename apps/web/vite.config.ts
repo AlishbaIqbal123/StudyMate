@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  envDir: '../../',
   server: {
     port: 5173,
     proxy: {
@@ -15,6 +16,10 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/health': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+      '/auth': {
         target: 'http://localhost:3000',
         changeOrigin: true,
       },

@@ -16,6 +16,7 @@ import {
   Radio,
   LogOut,
   UserCheck,
+  Check,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
 import { useAuth } from '../context/AuthContext.js';
@@ -142,12 +143,29 @@ export const Header: React.FC<HeaderProps> = ({
                 {/* User Info Header */}
                 <div className="px-2 py-1.5 border-b border-app-border">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-app-text truncate">{user?.name || 'Guest Student'}</span>
-                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <div className="flex items-center space-x-1.5 min-w-0">
+                      <span className="font-bold text-xs text-app-text truncate">{user?.name || 'Guest Student'}</span>
+                      {user?.authProvider === 'google' && (
+                        <span className="text-[8px] font-mono px-1.5 py-0.2 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                          Google
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
                       {user?.studentId || 'ID: 2026-STU'}
                     </span>
                   </div>
-                  <p className="text-[10px] text-app-muted truncate mt-0.5">{user?.major || 'Unregistered'}</p>
+                  <div className="flex items-center justify-between mt-0.5">
+                    <p className="text-[10px] text-app-muted truncate">{user?.major || 'Unregistered'}</p>
+                    {user?.emailVerified ? (
+                      <span className="text-[9px] font-mono text-emerald-400 flex items-center space-x-0.5 shrink-0">
+                        <Check className="w-2.5 h-2.5" />
+                        <span>Verified</span>
+                      </span>
+                    ) : (
+                      <span className="text-[9px] font-mono text-amber-400 shrink-0">Unverified</span>
+                    )}
+                  </div>
                   <p className="text-[10px] text-app-muted truncate">{user?.email}</p>
 
                   {/* Alexa Linked Status */}
