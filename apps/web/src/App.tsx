@@ -33,11 +33,6 @@ const VALID_SCREENS = ['home', 'dashboard', 'assignments', 'planner', 'voice', '
 type ScreenType = (typeof VALID_SCREENS)[number];
 
 export function App() {
-  const isStudyMate = typeof window !== 'undefined' && window.location.hash.toLowerCase().includes('studymate');
-
-  if (!isStudyMate) {
-    return <NexumHero />;
-  }
 
   const { user } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -178,6 +173,7 @@ export function App() {
           onOpenVoice={() => setActiveScreen('voice')}
           onOpenPlanner={() => setActiveScreen('planner')}
           onOpenTelemetry={() => setActiveScreen('telemetry')}
+          onOpenAssignments={() => setActiveScreen('assignments')}
           onStudentChanged={loadData}
         />
         <AuthModal />
