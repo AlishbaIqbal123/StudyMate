@@ -182,7 +182,11 @@ export function App() {
 
   // 2. Inner App Views (Dashboard, Assignments, Planner, Voice, Telemetry)
   return (
-    <div className="min-h-screen bg-app-bg text-app-text font-sans antialiased transition-colors duration-200">
+    <div className="min-h-screen bg-[#050508] text-white font-sans antialiased selection:bg-cyan-500/20 selection:text-cyan-200 relative overflow-x-hidden">
+      {/* Subtle Ambient Radial Glow Mesh */}
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.08),rgba(255,255,255,0))] z-0" />
+      <div className="fixed top-1/3 -right-48 w-96 h-96 rounded-full bg-cyan-500/[0.03] blur-3xl pointer-events-none" />
+      <div className="fixed bottom-10 -left-48 w-96 h-96 rounded-full bg-indigo-500/[0.03] blur-3xl pointer-events-none" />
       {/* Sidebar Navigation */}
       <Sidebar
         activeScreen={activeScreen}

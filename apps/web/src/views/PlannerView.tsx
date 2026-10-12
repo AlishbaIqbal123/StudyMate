@@ -85,33 +85,33 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner */}
-      <div className="p-6 rounded-2xl bg-app-card border border-app-border shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-2xl border border-white/15 text-white shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+        <div className="relative z-10">
           <div className="flex items-center space-x-3">
-            <h1 className="font-headline text-2xl font-bold tracking-tight text-app-text">
+            <h1 className="text-2xl font-bold tracking-tight text-white">
               Study Planner
             </h1>
-            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#4f91b0]/15 text-[#4f91b0] border border-[#4f91b0]/25">
+            <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 uppercase tracking-wider">
               Pomodoro Focus
             </span>
           </div>
-          <p className="text-xs text-app-muted mt-1">
-            Focus sessions with automated rest intervals to maximize learning retention
+          <p className="text-xs text-white/60 mt-1 max-w-xl">
+            Focus sessions with automated rest intervals to maximize learning retention and flow state.
           </p>
         </div>
 
         {/* Course Selector & Popout Button */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 relative z-10">
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-mono text-app-muted">Target:</span>
+            <span className="text-xs font-mono text-white/50">Target:</span>
             <select
               value={selectedCourse}
               onChange={(e) => setTargetCourse(e.target.value)}
-              className="bg-app-subtle border border-app-border text-xs font-headline font-semibold text-app-text rounded-xl px-3 py-2 focus:outline-none focus:border-[#4f91b0]"
+              className="bg-white/[0.06] border border-white/15 text-xs text-white rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-400"
             >
-              <option value="">All Pending Courses</option>
+              <option value="" className="bg-[#0c0c12] text-white">All Pending Courses</option>
               {courses.map((c) => (
-                <option key={c.id} value={c.name}>
+                <option key={c.id} value={c.name} className="bg-[#0c0c12] text-white">
                   {c.code ? `${c.code}: ${c.name}` : c.name}
                 </option>
               ))}
@@ -121,19 +121,24 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
           <button
             type="button"
             onClick={() => setFloatingWidgetOpen(true)}
-            className="px-3 py-2 rounded-xl text-xs font-headline font-bold text-app-text bg-app-subtle border border-app-border hover:bg-app-card transition flex items-center space-x-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-full text-xs font-semibold text-white/80 bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:text-white transition flex items-center space-x-1.5 cursor-pointer"
             title="Show floating widget"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-[#4f91b0]" />
+            <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
             <span className="hidden sm:inline">Floating Pop-up</span>
           </button>
         </div>
       </div>
 
       {focusTitle && (
-        <div className="p-3.5 rounded-xl bg-[#4f91b0]/10 border border-[#4f91b0]/20 text-xs text-app-text flex items-center justify-between">
-          <span className="flex items-center gap-1.5"><Target className="w-4 h-4 text-cyan-500" /> Focused Assignment: <strong>{focusTitle}</strong> ({selectedCourse})</span>
-          <span className="text-xs font-mono text-[#4f91b0] font-semibold">Auto-targeted</span>
+        <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 text-xs text-white flex items-center justify-between shadow-lg">
+          <span className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-cyan-400" />
+            Focused Assignment: <strong className="text-white">{focusTitle}</strong> ({selectedCourse})
+          </span>
+          <span className="text-xs font-mono text-cyan-300 font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/30">
+            Auto-targeted
+          </span>
         </div>
       )}
 
@@ -141,16 +146,19 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Big Pomodoro Clock (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="p-8 rounded-3xl bg-app-card border border-app-border shadow-sm text-center space-y-6">
+          <div className="p-8 sm:p-10 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl text-center space-y-8 relative overflow-hidden">
+            {/* Ambient subtle glow orb */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
             {/* Mode Tabs */}
-            <div className="inline-flex items-center p-1 rounded-xl bg-app-subtle border border-app-border text-xs font-headline">
+            <div className="inline-flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10 text-xs relative z-10">
               <button
                 type="button"
                 onClick={() => setMode('focus')}
-                className={`px-4 py-1.5 rounded-lg transition font-bold cursor-pointer ${
+                className={`px-5 py-2 rounded-full transition font-semibold cursor-pointer ${
                   mode === 'focus'
-                    ? 'bg-[#4f91b0] text-white shadow-sm'
-                    : 'text-app-muted hover:text-app-text'
+                    ? 'bg-white/15 text-white shadow-md border border-white/20'
+                    : 'text-white/60 hover:text-white'
                 }`}
               >
                 Deep Focus Session
@@ -158,10 +166,10 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <button
                 type="button"
                 onClick={() => setMode('break')}
-                className={`px-4 py-1.5 rounded-lg transition font-bold cursor-pointer ${
+                className={`px-5 py-2 rounded-full transition font-semibold cursor-pointer ${
                   mode === 'break'
-                    ? 'bg-[#4f91b0] text-white shadow-sm'
-                    : 'text-app-muted hover:text-app-text'
+                    ? 'bg-white/15 text-white shadow-md border border-white/20'
+                    : 'text-white/60 hover:text-white'
                 }`}
               >
                 Break Interval
@@ -169,25 +177,26 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             </div>
 
             {/* Giant Timer Display */}
-            <div className="py-4">
-              <div className="font-mono text-6xl sm:text-7xl font-black text-app-text tracking-wider">
+            <div className="py-4 relative z-10">
+              <div className="font-mono text-6xl sm:text-7xl font-bold text-white tracking-widest drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]">
                 {formatTime(secondsRemaining)}
               </div>
-              <p className="text-xs font-mono text-app-muted mt-2">
-                {mode === 'focus' ? 'Stay in deep focus' : 'Relax and recharge'}
+              <p className="text-xs font-mono text-white/50 mt-3 tracking-wide">
+                {mode === 'focus' ? 'STAY IN DEEP FOCUS • DISTRACTIONS MUTED' : 'RELAX & RECHARGE • REST INTERVAL'}
               </p>
             </div>
 
             {/* Play/Pause/Reset Controls */}
-            <div className="flex items-center justify-center space-x-3">
+            <div className="flex items-center justify-center space-x-4 relative z-10">
               <button
                 type="button"
                 onClick={toggleTimer}
-                className={`px-6 py-3 rounded-2xl font-headline text-sm font-bold text-white transition flex items-center space-x-2 shadow-md cursor-pointer ${
+                className={`px-8 py-3.5 rounded-full text-sm font-semibold text-white transition flex items-center space-x-2 shadow-2xl active:scale-95 cursor-pointer ${
                   timerRunning
-                    ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-600/20'
-                    : 'bg-[#4f91b0] hover:bg-[#3f748d] shadow-[#4f91b0]/25'
+                    ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40'
+                    : 'hover:opacity-90 border border-white/20'
                 }`}
+                style={!timerRunning ? { background: 'linear-gradient(to bottom, #2B2B2B, #101010)' } : undefined}
               >
                 {timerRunning ? (
                   <>
@@ -205,7 +214,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
               <button
                 type="button"
                 onClick={resetTimer}
-                className="p-3 rounded-2xl bg-app-subtle hover:bg-app-border text-app-muted hover:text-app-text border border-app-border transition cursor-pointer"
+                className="p-3.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-white/60 hover:text-white border border-white/10 transition cursor-pointer"
                 title="Reset timer"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -213,9 +222,9 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             </div>
 
             {/* Duration Presets */}
-            <div className="pt-4 border-t border-app-border">
-              <span className="text-[11px] font-mono text-app-muted block mb-2">
-                Change Session Duration:
+            <div className="pt-6 border-t border-white/10 relative z-10">
+              <span className="text-[11px] font-mono text-white/50 block mb-3">
+                Quick Preset Durations:
               </span>
               <div className="flex flex-wrap items-center justify-center gap-2">
                 {[30, 45, 60, 90, 120].map((dur) => (
@@ -223,10 +232,10 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     key={dur}
                     type="button"
                     onClick={() => setDuration(dur)}
-                    className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition cursor-pointer ${
+                    className={`px-4 py-1.5 rounded-full font-mono text-xs font-semibold transition cursor-pointer ${
                       totalDuration === dur
-                        ? 'bg-[#4f91b0] text-white shadow-sm'
-                        : 'bg-app-subtle text-app-muted hover:text-app-text border border-app-border'
+                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                        : 'bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/[0.08] border border-white/10'
                     }`}
                   >
                     {dur}m
@@ -237,11 +246,11 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
             {/* Notification permission prompt if not enabled */}
             {!notificationsEnabled && 'Notification' in window && Notification.permission !== 'granted' && (
-              <div className="pt-2">
+              <div className="pt-2 relative z-10">
                 <button
                   type="button"
                   onClick={requestNotificationPermission}
-                  className="text-xs font-semibold text-[#4f91b0] hover:underline flex items-center justify-center space-x-1.5 mx-auto cursor-pointer"
+                  className="text-xs font-semibold text-cyan-300 hover:underline flex items-center justify-center space-x-1.5 mx-auto cursor-pointer"
                 >
                   <Bell className="w-3.5 h-3.5" />
                   <span>Notify me when timer ends in background</span>
@@ -253,58 +262,58 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
         {/* Right Column: AI Generated Schedule Blocks (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 rounded-3xl bg-app-card border border-app-border shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-app-border">
+          <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-[#4f91b0]" />
-                <h3 className="font-headline text-sm font-bold text-app-text">
+                <Sparkles className="w-4 h-4 text-cyan-300" />
+                <h3 className="text-sm font-bold text-white">
                   AI Study Schedule
                 </h3>
               </div>
-              <span className="font-mono text-[10px] text-app-muted">
+              <span className="font-mono text-[10px] text-white/50">
                 {plan ? `${plan.blocks.length} Intervals` : 'Generating...'}
               </span>
             </div>
 
             {loading ? (
-              <div className="py-12 text-center text-xs text-app-muted font-mono">
+              <div className="py-12 text-center text-xs text-white/40 font-mono">
                 Calculating study timetable...
               </div>
             ) : plan ? (
               <div className="space-y-3">
-                <p className="text-xs text-app-text bg-app-subtle p-3 rounded-xl border border-app-border">
+                <p className="text-xs text-white/80 bg-white/[0.04] p-3.5 rounded-2xl border border-white/10 leading-relaxed">
                   {plan.summary}
                 </p>
 
-                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
                   {plan.blocks.map((block, i) => {
                     const isStudy = block.type === 'study';
                     return (
                       <div
                         key={i}
-                        className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-3 ${
+                        className={`p-3.5 rounded-2xl border text-xs flex items-center justify-between gap-3 transition ${
                           isStudy
-                            ? 'bg-app-card border-app-border text-app-text'
-                            : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                            ? 'bg-white/[0.04] hover:bg-white/[0.07] border-white/10 text-white'
+                            : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300'
                         }`}
                       >
                         <div className="flex items-center space-x-2.5 min-w-0">
                           <span
-                            className={`px-2 py-0.5 rounded-lg font-mono font-bold text-[10px] shrink-0 ${
+                            className={`px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] shrink-0 ${
                               isStudy
-                                ? 'bg-[#4f91b0]/15 text-[#4f91b0]'
-                                : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                                : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                             }`}
                           >
                             {block.duration_minutes}m
                           </span>
-                          <span className="font-headline font-semibold truncate">
+                          <span className="font-semibold truncate">
                             {block.description}
                           </span>
                         </div>
 
-                        <span className="shrink-0 text-app-muted">
-                          {isStudy ? <BookOpen className="w-3.5 h-3.5" /> : <Coffee className="w-3.5 h-3.5" />}
+                        <span className="shrink-0 text-white/40">
+                          {isStudy ? <BookOpen className="w-3.5 h-3.5" /> : <Coffee className="w-3.5 h-3.5 text-emerald-400" />}
                         </span>
                       </div>
                     );
@@ -312,7 +321,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="py-12 text-center text-xs text-app-muted font-mono">
+              <div className="py-12 text-center text-xs text-white/40 font-mono">
                 Calculating study timetable...
               </div>
             )}

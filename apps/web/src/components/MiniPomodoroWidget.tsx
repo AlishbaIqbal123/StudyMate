@@ -138,16 +138,16 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     if (!ctx) return;
 
     // Background
-    ctx.fillStyle = '#080f12';
+    ctx.fillStyle = '#050508';
     ctx.fillRect(0, 0, 340, 190);
 
     // Accent line at top
-    ctx.fillStyle = mode === 'focus' ? '#4f91b0' : '#d97706';
+    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
     ctx.fillRect(0, 0, 340, 4);
 
     // Mode title
-    ctx.fillStyle = mode === 'focus' ? '#4f91b0' : '#d97706';
-    ctx.font = 'bold 12px "Space Grotesk", sans-serif';
+    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
+    ctx.font = 'bold 12px "Geist", -apple-system, sans-serif';
     ctx.fillText(mode === 'focus' ? 'STUDYMATE FOCUS POD' : 'REST BREAK', 22, 32);
 
     // Status pill (RUNNING vs PAUSED)
@@ -166,8 +166,8 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     ctx.fillText(formatTime(secondsRemaining), 22, 94);
 
     // Course / Task name
-    ctx.fillStyle = '#90c7d5';
-    ctx.font = '12px sans-serif';
+    ctx.fillStyle = '#a5f3fc';
+    ctx.font = '12px "Geist", sans-serif';
     const label = focusTitle ? `${focusTitle}` : `${selectedCourse || 'Academic Session'}`;
     ctx.fillText(label.slice(0, 34), 22, 130);
 
@@ -177,10 +177,10 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     ctx.fillText(`${Math.round(progressPct)}%`, 290, 130);
 
     // Progress Bar Background & Active Bar
-    ctx.fillStyle = '#1e293b';
+    ctx.fillStyle = '#181824';
     ctx.fillRect(22, 150, 296, 8);
 
-    ctx.fillStyle = mode === 'focus' ? '#4f91b0' : '#f59e0b';
+    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
     ctx.fillRect(22, 150, Math.max(4, (296 * progressPct) / 100), 8);
   }, [mode, timerRunning, secondsRemaining, focusTitle, selectedCourse, progressPct, formatTime]);
 
@@ -239,14 +239,14 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
   return (
     <div className="fixed bottom-6 right-6 z-[9999] animate-fadeIn select-none">
       {isMinimized ? (
-        /* Dynamic Island / Sleek Floating Capsule Pill matching screenshot media_1790800780061.jpg */
-        <div className="flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-[#071318] border border-slate-700/60 shadow-[0_12px_40px_rgba(0,0,0,0.75)] backdrop-blur-md transition-all duration-300 hover:border-[#4f91b0]/60 hover:shadow-[0_16px_50px_rgba(0,0,0,0.85)]">
+        /* Obsidian Dynamic Island Capsule */
+        <div className="flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-[#0c0c14]/90 border border-white/20 shadow-[0_12px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl transition-all duration-300 hover:border-cyan-400/50 hover:shadow-[0_16px_50px_rgba(6,182,212,0.15)]">
           {/* Cyan Glowing / Pulsing Dot */}
           <div className="relative flex items-center justify-center pl-0.5">
             {timerRunning && (
-              <span className="w-2.5 h-2.5 rounded-full bg-[#4f91b0] animate-ping opacity-75 absolute" />
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping opacity-75 absolute" />
             )}
-            <span className="w-2.5 h-2.5 rounded-full bg-[#4f91b0] shadow-[0_0_8px_#4f91b0]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
           </div>
 
           {/* Live Countdown in Bold Crisp White Text */}
@@ -255,13 +255,13 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
           </span>
 
           {/* Subtle Vertical Divider */}
-          <span className="h-3.5 w-[1px] bg-slate-700/80 mx-0.5 shrink-0" />
+          <span className="h-3.5 w-[1px] bg-white/20 mx-0.5 shrink-0" />
 
-          {/* Quick Play/Pause (Cyan Accent) */}
+          {/* Quick Play/Pause */}
           <button
             type="button"
             onClick={toggleTimer}
-            className="p-1 rounded-md text-[#4f91b0] hover:text-[#72a7c0] hover:bg-white/10 transition cursor-pointer"
+            className="p-1 rounded-md text-cyan-300 hover:text-cyan-200 hover:bg-white/10 transition cursor-pointer"
             title={timerRunning ? 'Pause timer' : 'Resume timer'}
           >
             {timerRunning ? (
@@ -271,11 +271,11 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
             )}
           </button>
 
-          {/* Expand / Maximize (Diagonal Double Arrow matching reference) */}
+          {/* Expand / Maximize */}
           <button
             type="button"
             onClick={() => setIsMinimized(false)}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+            className="p-1 rounded-md text-white/40 hover:text-white hover:bg-white/10 transition cursor-pointer"
             title="Expand timer pod"
           >
             <svg
@@ -298,22 +298,22 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
           <button
             type="button"
             onClick={() => setFloatingWidgetOpen(false)}
-            className="p-1 rounded-md text-slate-400 hover:text-rose-400 hover:bg-white/10 transition cursor-pointer"
+            className="p-1 rounded-md text-white/40 hover:text-rose-400 hover:bg-white/10 transition cursor-pointer"
             title="Close popup"
           >
             <X className="w-3.5 h-3.5 stroke-[2.2]" />
           </button>
         </div>
       ) : (
-        /* Aesthetic Studio Focus Pod (100% Solid, Glassmorphism Glow, Zero Bleed-Through) */
-        <div className="w-[340px] rounded-3xl bg-white dark:bg-[#0c1a20] border border-slate-200 dark:border-[#1f3d47] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.9)] ring-1 ring-black/5 dark:ring-white/10 overflow-hidden transition-all duration-300">
+        /* Obsidian Dark Glass Focus Pod */
+        <div className="w-[340px] rounded-3xl bg-[#0c0c14]/95 backdrop-blur-2xl border border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.9)] ring-1 ring-white/10 overflow-hidden transition-all duration-300">
           {/* Glowing Ambient Top Highlight Bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-[#3895c7] via-[#4f91b0] to-[#7650af]" />
+          <div className="h-1 w-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-cyan-400" />
 
           {/* Top Header Row */}
           <div
             onDoubleClick={() => setIsMinimized(true)}
-            className="px-4 py-3 bg-slate-50/90 dark:bg-[#0f2129]/90 border-b border-slate-100 dark:border-[#172e38] flex items-center justify-between cursor-default"
+            className="px-4 py-3 bg-white/[0.02] border-b border-white/10 flex items-center justify-between cursor-default"
             title="Double click to minimize"
           >
             {/* Status Aura Badge */}
@@ -322,22 +322,22 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 {timerRunning && (
                   <span
                     className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                      mode === 'focus' ? 'bg-[#4f91b0]' : 'bg-amber-500'
+                      mode === 'focus' ? 'bg-cyan-400' : 'bg-amber-400'
                     }`}
                   />
                 )}
                 <span
                   className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    mode === 'focus' ? 'bg-[#4f91b0]' : 'bg-amber-500'
+                    mode === 'focus' ? 'bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'bg-amber-400 shadow-[0_0_8px_#fbbf24]'
                   }`}
                 />
               </span>
 
-              <span className="text-[11px] font-headline font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                 {mode === 'focus' ? 'Deep Focus' : 'Rest Break'}
               </span>
 
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#4f91b0]/15 text-[#3895c7] dark:text-[#90c7d5]">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-400/30">
                 {totalDuration}m
               </span>
             </div>
@@ -350,8 +350,8 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 onClick={toggleAmbientSound}
                 className={`p-1.5 rounded-xl transition cursor-pointer ${
                   ambientSoundActive
-                    ? 'bg-[#4f91b0] text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-[#1a3440]'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-sm'
+                    : 'text-white/40 hover:text-white hover:bg-white/10'
                 }`}
                 title={ambientSoundActive ? 'Turn off ambient sound' : 'Turn on relaxing study white noise'}
               >
@@ -362,7 +362,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               <button
                 type="button"
                 onClick={triggerPictureInPicture}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-[#4f91b0] hover:bg-slate-200/50 dark:hover:bg-[#1a3440] transition cursor-pointer"
+                className="p-1.5 rounded-xl text-white/40 hover:text-cyan-300 hover:bg-white/10 transition cursor-pointer"
                 title="Pop out desktop Picture-in-Picture (Always on top)"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -372,7 +372,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               <button
                 type="button"
                 onClick={() => setIsMinimized(true)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-200/50 dark:hover:bg-[#1a3440] transition cursor-pointer"
+                className="p-1.5 rounded-xl text-white/40 hover:text-white hover:bg-white/10 transition cursor-pointer"
                 title="Minimize to capsule pill"
               >
                 <Minus className="w-4 h-4 stroke-[2.5]" />
@@ -382,7 +382,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               <button
                 type="button"
                 onClick={() => setFloatingWidgetOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition cursor-pointer"
+                className="p-1.5 rounded-xl text-white/40 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
                 title="Close floating pod"
               >
                 <X className="w-4 h-4" />
@@ -391,14 +391,14 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
           </div>
 
           {/* Main Body */}
-          <div className="p-4 space-y-4 bg-white dark:bg-[#0c1a20]">
+          <div className="p-4 space-y-4">
             {/* Subject / Task Information Pill */}
-            <div className="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-slate-50 dark:bg-[#13252d] border border-slate-100 dark:border-[#1f3d47]">
+            <div className="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-white/[0.04] border border-white/10">
               <div className="min-w-0 flex-1">
-                <div className="font-headline text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                <div className="text-xs font-bold text-white truncate">
                   {focusTitle || selectedCourse || 'Academic Study Session'}
                 </div>
-                <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                <div className="text-[10px] font-mono text-white/50 truncate mt-0.5">
                   {focusTitle ? selectedCourse : 'Active Pomodoro Interval'}
                 </div>
               </div>
@@ -407,7 +407,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 <button
                   type="button"
                   onClick={onNavigateToPlanner}
-                  className="px-2.5 py-1 rounded-xl text-[10px] font-headline font-bold text-[#3895c7] dark:text-[#90c7d5] hover:bg-[#4f91b0]/15 transition flex items-center space-x-1 shrink-0 cursor-pointer"
+                  className="px-2.5 py-1 rounded-full text-[10px] font-bold text-cyan-300 bg-white/[0.05] border border-white/10 hover:border-cyan-400/40 hover:text-white transition flex items-center space-x-1 shrink-0 cursor-pointer"
                 >
                   <span>Planner</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -425,7 +425,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                       cx="32"
                       cy="32"
                       r={radius}
-                      className="stroke-slate-100 dark:stroke-slate-800"
+                      className="stroke-white/10"
                       strokeWidth="5"
                       fill="transparent"
                     />
@@ -434,7 +434,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                       cy="32"
                       r={radius}
                       className="transition-all duration-700 ease-out"
-                      stroke={mode === 'focus' ? '#4f91b0' : '#d97706'}
+                      stroke={mode === 'focus' ? '#06b6d4' : '#f59e0b'}
                       strokeWidth="5"
                       strokeDasharray={circumference}
                       strokeDashoffset={strokeDashoffset}
@@ -443,7 +443,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                     />
                   </svg>
                   <div className="absolute flex flex-col items-center">
-                    <span className="text-[10px] font-mono font-bold text-slate-400">
+                    <span className="text-[10px] font-mono font-bold text-white/50">
                       {Math.round(progressPct)}%
                     </span>
                   </div>
@@ -451,11 +451,11 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
 
                 {/* Live Countdown Numbers */}
                 <div>
-                  <div className="font-mono text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+                  <div className="font-mono text-3xl font-black tracking-tight text-white drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     {formatTime(secondsRemaining)}
                   </div>
-                  <div className="text-[10px] font-headline font-medium text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-                    <Flame className="w-3 h-3 text-amber-500" />
+                  <div className="text-[10px] font-medium text-white/50 flex items-center space-x-1">
+                    <Flame className="w-3 h-3 text-amber-400" />
                     <span>{mode === 'focus' ? (timerRunning ? 'Keep momentum' : 'Paused') : 'Breathe & relax'}</span>
                   </div>
                 </div>
@@ -466,11 +466,11 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 <button
                   type="button"
                   onClick={toggleTimer}
-                  className={`px-3.5 py-2.5 rounded-2xl font-headline text-xs font-bold text-white transition-all transform hover:scale-105 active:scale-95 shadow-md flex items-center space-x-1.5 cursor-pointer ${
-                    timerRunning
-                      ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-600/25'
-                      : 'bg-gradient-to-r from-[#3895c7] to-[#4f91b0] hover:from-[#2d779f] hover:to-[#3895c7] shadow-[#4f91b0]/30'
-                  }`}
+                  style={{
+                    background: timerRunning ? 'linear-gradient(to bottom, #d97706, #92400e)' : 'linear-gradient(to bottom, #2B2B2B, #101010)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                  }}
+                  className="px-4 py-2.5 rounded-full text-xs font-bold text-white transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center space-x-1.5 cursor-pointer"
                 >
                   {timerRunning ? (
                     <>
@@ -488,7 +488,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 <button
                   type="button"
                   onClick={resetTimer}
-                  className="p-2.5 rounded-2xl bg-slate-100 dark:bg-[#13252d] text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-200/70 dark:hover:bg-[#1c3642] transition cursor-pointer border border-transparent dark:border-[#1f3d47]"
+                  className="p-2.5 rounded-full bg-white/[0.05] border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition cursor-pointer"
                   title="Reset Timer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -497,12 +497,12 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
             </div>
 
             {/* Quick footer with minimize toggle */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-[#172e38] text-[10px] text-slate-400">
+            <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] text-white/40">
               <span className="font-mono">StudyMate Studio Pod</span>
               <button
                 type="button"
                 onClick={() => setIsMinimized(true)}
-                className="hover:text-[#4f91b0] transition flex items-center space-x-1 cursor-pointer font-headline font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-[#90c7d5]"
+                className="transition flex items-center space-x-1 cursor-pointer font-semibold text-white/50 hover:text-cyan-300"
                 title="Minimize into compact floating pill"
               >
                 <span>Minimize to pill</span>
@@ -511,13 +511,13 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
             </div>
           </div>
 
-          {/* Aesthetic Segmented Bottom Glow Bar */}
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 overflow-hidden">
+          {/* Segmented Bottom Glow Bar */}
+          <div className="w-full bg-white/5 h-1 overflow-hidden">
             <div
-              className={`h-1.5 transition-all duration-500 ease-out ${
+              className={`h-1 transition-all duration-500 ease-out ${
                 mode === 'focus'
-                  ? 'bg-gradient-to-r from-[#3895c7] to-[#4f91b0]'
-                  : 'bg-gradient-to-r from-amber-500 to-amber-600'
+                  ? 'bg-gradient-to-r from-cyan-400 to-indigo-500'
+                  : 'bg-gradient-to-r from-amber-400 to-amber-600'
               }`}
               style={{ width: `${progressPct}%` }}
             />

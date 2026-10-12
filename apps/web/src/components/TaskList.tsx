@@ -57,19 +57,19 @@ export const TaskList: React.FC<TaskListProps> = ({
     switch (priority) {
       case 'high':
         return (
-          <span className="font-mono px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20">
+          <span className="font-mono px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
             HIGH
           </span>
         );
       case 'medium':
         return (
-          <span className="font-mono px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+          <span className="font-mono px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
             MED
           </span>
         );
       case 'low':
         return (
-          <span className="font-mono px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-app-border">
+          <span className="font-mono px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-white/[0.05] text-white/60 border border-white/10">
             LOW
           </span>
         );
@@ -97,23 +97,27 @@ export const TaskList: React.FC<TaskListProps> = ({
   };
 
   return (
-    <div className="rounded-2xl p-6 bg-app-card border border-app-border shadow-sm space-y-4 transition-colors duration-200">
+    <div className="rounded-3xl p-6 bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-5 transition-colors duration-200">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-app-border gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/10 gap-3">
         <div>
-          <h2 className="font-headline text-lg font-bold text-app-text tracking-tight">
+          <h2 className="text-lg font-bold text-white tracking-tight">
             Academic Tasks & Assignments
           </h2>
-          <p className="text-xs text-app-muted mt-0.5">
+          <p className="text-xs text-white/50 mt-0.5">
             Prioritize coursework, track deadlines, and launch focus sessions
           </p>
         </div>
 
         <button
           onClick={onOpenAddModal}
-          className="px-4 py-2.5 rounded-xl font-headline font-bold text-xs text-white bg-[#4f91b0] hover:bg-[#3f748d] transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 shrink-0 cursor-pointer"
+          style={{
+            background: 'linear-gradient(to bottom, #2B2B2B, #101010)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+          }}
+          className="px-5 py-2.5 rounded-full font-bold text-xs text-white hover:opacity-90 active:scale-95 transition-all flex items-center space-x-1.5 shadow-lg shrink-0 cursor-pointer"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-white" />
           <span>Add Task</span>
         </button>
       </div>
@@ -124,8 +128,8 @@ export const TaskList: React.FC<TaskListProps> = ({
           onClick={() => setSelectedStatus('all')}
           className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
             selectedStatus === 'all'
-              ? 'bg-[#4f91b0] text-white font-bold shadow-sm'
-              : 'bg-app-subtle text-app-muted hover:text-slate-900 dark:hover:text-white border border-app-border'
+              ? 'bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/30 text-white font-bold shadow-md'
+              : 'bg-white/[0.03] text-white/60 hover:text-white border border-white/10 hover:border-white/20'
           }`}
         >
           All ({allCount})
@@ -134,8 +138,8 @@ export const TaskList: React.FC<TaskListProps> = ({
           onClick={() => setSelectedStatus('pending')}
           className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
             selectedStatus === 'pending'
-              ? 'bg-[#4f91b0] text-white font-bold shadow-sm'
-              : 'bg-app-subtle text-app-muted hover:text-slate-900 dark:hover:text-white border border-app-border'
+              ? 'bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/30 text-white font-bold shadow-md'
+              : 'bg-white/[0.03] text-white/60 hover:text-white border border-white/10 hover:border-white/20'
           }`}
         >
           Pending ({pendingCount})
@@ -144,8 +148,8 @@ export const TaskList: React.FC<TaskListProps> = ({
           onClick={() => setSelectedStatus('in_progress')}
           className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
             selectedStatus === 'in_progress'
-              ? 'bg-[#4f91b0] text-white font-bold shadow-sm'
-              : 'bg-app-subtle text-app-muted hover:text-slate-900 dark:hover:text-white border border-app-border'
+              ? 'bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/30 text-white font-bold shadow-md'
+              : 'bg-white/[0.03] text-white/60 hover:text-white border border-white/10 hover:border-white/20'
           }`}
         >
           In Progress ({inProgressCount})
@@ -154,8 +158,8 @@ export const TaskList: React.FC<TaskListProps> = ({
           onClick={() => setSelectedStatus('done')}
           className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
             selectedStatus === 'done'
-              ? 'bg-[#4f91b0] text-white font-bold shadow-sm'
-              : 'bg-app-subtle text-app-muted hover:text-slate-900 dark:hover:text-white border border-app-border'
+              ? 'bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/30 text-white font-bold shadow-md'
+              : 'bg-white/[0.03] text-white/60 hover:text-white border border-white/10 hover:border-white/20'
           }`}
         >
           Done ({doneCount})
@@ -168,11 +172,11 @@ export const TaskList: React.FC<TaskListProps> = ({
         <select
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
-          className="bg-app-subtle border border-app-border text-app-text rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-indigo-500 shrink-0"
+          className="bg-[#0c0c14] border border-white/15 text-white/80 rounded-xl px-3.5 py-2 text-xs font-mono focus:outline-none focus:border-cyan-400 shrink-0 cursor-pointer"
         >
-          <option value="all">Filter Course (All)</option>
+          <option value="all" className="bg-[#0c0c14] text-white/60">Filter Course (All)</option>
           {courses.map((c) => (
-            <option key={c.id} value={c.name}>
+            <option key={c.id} value={c.name} className="bg-[#0c0c14] text-white">
               {c.code ? `${c.code}: ${c.name}` : c.name}
             </option>
           ))}
@@ -180,13 +184,13 @@ export const TaskList: React.FC<TaskListProps> = ({
 
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+          <Search className="w-3.5 h-3.5 text-white/40 absolute left-3 top-3 pointer-events-none" />
           <input
             type="text"
             placeholder="Search assignments or topics..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-app-subtle border border-app-border rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-500 transition font-mono"
+            className="w-full bg-white/[0.04] border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-white/30 focus:outline-none focus:border-cyan-400 focus:bg-white/[0.07] transition font-mono"
           />
         </div>
       </div>
@@ -194,8 +198,8 @@ export const TaskList: React.FC<TaskListProps> = ({
       {/* Task Rows List */}
       <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
         {filteredTasks.length === 0 ? (
-          <div className="text-center py-10 rounded-xl bg-app-subtle/40 border border-dashed border-app-border">
-            <p className="text-xs text-app-muted font-mono">
+          <div className="text-center py-10 rounded-2xl bg-white/[0.02] border border-dashed border-white/10">
+            <p className="text-xs text-white/40 font-mono">
               No tasks found matching your filter criteria
             </p>
           </div>
@@ -205,20 +209,20 @@ export const TaskList: React.FC<TaskListProps> = ({
             return (
               <div
                 key={task.id}
-                className={`p-3.5 rounded-xl transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 border ${
+                className={`p-3.5 rounded-2xl transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 border ${
                   isDone
-                    ? 'bg-slate-50/50 dark:bg-[#1e293b]/30 border-slate-200/50 dark:border-slate-800/50 opacity-60'
-                    : 'bg-white dark:bg-[#1e293b]/70 border-app-border hover:border-indigo-300 dark:hover:border-slate-700 shadow-sm'
+                    ? 'bg-white/[0.01] border-white/5 opacity-50'
+                    : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.06] hover:border-white/20 shadow-md'
                 }`}
               >
                 {/* Left Task Checkbox & Info */}
                 <div className="flex items-start space-x-3 min-w-0">
                   <button
                     onClick={() => onToggleStatus(task.id, task.status)}
-                    className="mt-0.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition shrink-0 cursor-pointer"
+                    className="mt-0.5 text-white/40 hover:text-cyan-300 transition shrink-0 cursor-pointer"
                   >
                     {isDone ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/15" />
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-500/20" />
                     ) : (
                       <Circle className="w-5 h-5" />
                     )}
@@ -227,28 +231,28 @@ export const TaskList: React.FC<TaskListProps> = ({
                   <div className="min-w-0">
                     <div className="flex items-center space-x-2">
                       <span
-                        className={`font-headline text-sm font-semibold tracking-tight ${
+                        className={`text-sm font-semibold tracking-tight ${
                           isDone
-                            ? 'line-through text-slate-400 dark:text-slate-500'
-                            : 'text-slate-900 dark:text-slate-100'
+                            ? 'line-through text-white/40'
+                            : 'text-white'
                         }`}
                       >
                         {task.title}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] font-mono text-app-muted">
-                      <span className="font-semibold text-[#4f91b0]">
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] font-mono text-white/50">
+                      <span className="font-semibold text-cyan-300">
                         {task.course_code || task.course_name}
                       </span>
                       <span>•</span>
                       <span className="flex items-center space-x-1">
-                        <Calendar className="w-3 h-3 text-slate-400" />
+                        <Calendar className="w-3.5 h-3.5 text-white/40" />
                         <span>{formatDue(task.due_date)}</span>
                       </span>
                       <span>•</span>
                       <span className="flex items-center space-x-1">
-                        <Clock className="w-3 h-3 text-slate-400" />
+                        <Clock className="w-3.5 h-3.5 text-white/40" />
                         <span>{task.est_minutes}m est</span>
                       </span>
                     </div>
@@ -262,10 +266,10 @@ export const TaskList: React.FC<TaskListProps> = ({
                   {!isDone && (
                     <button
                       onClick={() => onFocusTask(task)}
-                      className="px-2.5 py-1 text-[11px] font-headline font-semibold text-[#4f91b0] hover:bg-indigo-50 dark:hover:bg-indigo-500/15 rounded-lg border border-indigo-200 dark:border-indigo-500/30 transition flex items-center space-x-1 cursor-pointer"
+                      className="px-3 py-1.5 text-[11px] font-bold text-cyan-300 bg-white/[0.05] hover:bg-white/10 rounded-full border border-white/15 hover:border-cyan-400/40 hover:text-white transition flex items-center space-x-1.5 cursor-pointer"
                       title="Launch focus Pomodoro session"
                     >
-                      <Sparkles className="w-3 h-3" />
+                      <Sparkles className="w-3 h-3 text-cyan-400" />
                       <span>Focus</span>
                     </button>
                   )}
@@ -279,19 +283,23 @@ export const TaskList: React.FC<TaskListProps> = ({
       {/* NLP Quick Add Form */}
       <form
         onSubmit={handleNlpSubmit}
-        className="p-2.5 rounded-xl bg-app-subtle/70 border border-app-border flex items-center space-x-2"
+        className="p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center space-x-2"
       >
-        <Sparkles className="w-4 h-4 text-indigo-500 shrink-0 ml-1" />
+        <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 ml-1.5" />
         <input
           type="text"
           placeholder='Natural language task: e.g. "Read Chapter 4 for CS 420 by Thursday"'
           value={nlpInput}
           onChange={(e) => setNlpInput(e.target.value)}
-          className="flex-1 bg-transparent border-none text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-mono"
+          className="flex-1 bg-transparent border-none text-xs text-white placeholder-white/30 focus:outline-none font-mono"
         />
         <button
           type="submit"
-          className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shrink-0 cursor-pointer"
+          style={{
+            background: 'linear-gradient(to bottom, #2B2B2B, #101010)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+          }}
+          className="px-4 py-2 rounded-full text-xs font-mono font-bold text-white hover:opacity-90 active:scale-95 transition shrink-0 cursor-pointer shadow-md"
         >
           Add via AI
         </button>

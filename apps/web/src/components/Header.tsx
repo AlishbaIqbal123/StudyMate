@@ -99,27 +99,27 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-app-card/90 border-b border-app-border backdrop-blur-md transition-colors duration-200">
+    <header className="sticky top-0 z-30 w-full bg-[#07070b]/80 backdrop-blur-2xl border-b border-white/10 text-white transition-colors duration-200">
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Left: Mobile Menu Toggle & Current Screen Title */}
         <div className="flex items-center space-x-3 min-w-0">
           <button
             onClick={onToggleMobileMenu}
-            className="lg:hidden p-2 rounded-xl text-app-muted hover:text-app-text hover:bg-app-subtle transition cursor-pointer"
+            className="lg:hidden p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition cursor-pointer"
             aria-label="Open Navigation Menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           <div className="flex items-center space-x-2.5 min-w-0">
-            <div className="hidden sm:flex w-8 h-8 rounded-lg bg-themePrimary-500/10 text-[#4f91b0] items-center justify-center shrink-0">
+            <div className="hidden sm:flex w-8 h-8 rounded-lg bg-white/10 border border-white/15 text-white items-center justify-center shrink-0">
               <Icon className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h1 className="font-headline text-sm sm:text-base font-bold text-app-text truncate">
+              <h1 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">
                 {screenInfo.title}
               </h1>
-              <p className="hidden md:block text-[11px] text-app-muted truncate">
+              <p className="hidden md:block text-[11px] text-white/50 truncate">
                 {screenInfo.subtitle}
               </p>
             </div>
@@ -132,70 +132,70 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative">
             <button
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-              className="flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-app-subtle border border-app-border hover:border-cyan-500/40 text-app-text transition cursor-pointer text-xs"
+              className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 text-white transition cursor-pointer text-xs"
             >
-              <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center shrink-0 border border-cyan-500/30 overflow-hidden">
+              <div className="w-5 h-5 rounded-md bg-cyan-500/20 text-cyan-300 font-mono font-bold text-[10px] flex items-center justify-center shrink-0 border border-cyan-500/30 overflow-hidden">
                 {user?.avatar && user.avatar.startsWith('http') ? (
                   <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
                   user?.avatar || 'SP'
                 )}
               </div>
-              <span className="hidden sm:inline font-headline font-semibold text-xs truncate max-w-[110px]">
+              <span className="hidden sm:inline font-semibold text-xs truncate max-w-[110px] text-white">
                 {isAuthenticated ? user.name.split(' ')[0] : 'Scholar Preview'}
               </span>
               {isAuthenticated ? (
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" title="Verified Scholar" />
               ) : (
-                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
                   Preview
                 </span>
               )}
-              <ChevronDown className={`w-3.5 h-3.5 text-app-muted transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-white/50 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {profileDropdownOpen && (
-              <div className="absolute top-full right-0 mt-1.5 z-40 w-72 bg-app-card border border-app-border rounded-xl shadow-xl p-2 space-y-2 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full right-0 mt-2 z-40 w-72 bg-black/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-3 space-y-2 animate-in fade-in zoom-in-95 duration-150">
                 {/* User Info Header */}
-                <div className="px-2 py-1.5 border-b border-app-border">
+                <div className="px-2 py-1.5 border-b border-white/10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-1.5 min-w-0">
-                      <span className="font-bold text-xs text-app-text truncate">
+                      <span className="font-bold text-xs text-white truncate">
                         {isAuthenticated ? user.name : 'Academic Preview Pass'}
                       </span>
                     </div>
-                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 shrink-0">
                       {user.studentId}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between mt-1">
-                    <p className="text-[10px] text-app-muted truncate">{user.major}</p>
+                    <p className="text-[10px] text-white/50 truncate">{user.major}</p>
                     {isAuthenticated ? (
                       <span className="text-[9px] font-mono text-emerald-400 flex items-center space-x-0.5 shrink-0">
                         <Check className="w-2.5 h-2.5" />
                         <span>Clerk Verified</span>
                       </span>
                     ) : (
-                      <span className="text-[9px] font-mono text-cyan-400 shrink-0">
+                      <span className="text-[9px] font-mono text-cyan-300 shrink-0">
                         Sandbox Tier
                       </span>
                     )}
                   </div>
-                  <p className="text-[10px] text-app-muted truncate mt-0.5">{user.email}</p>
+                  <p className="text-[10px] text-white/40 truncate mt-0.5">{user.email}</p>
 
                   {/* Alexa Linked Status */}
-                  <div className="mt-2 flex items-center justify-between px-2 py-1.5 rounded-lg bg-app-subtle border border-app-border text-[10px]">
+                  <div className="mt-2 flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/10 text-[10px]">
                     <div className="flex items-center space-x-1.5">
                       <Radio className={`w-3 h-3 ${user.alexaLinked ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
-                      <span className="font-medium text-app-text">Alexa+ Voice Link</span>
+                      <span className="font-medium text-white">Alexa+ Voice Link</span>
                     </div>
                     <button
                       onClick={toggleAlexaAccountLinking}
-                      className={`text-[9px] font-semibold px-1.5 py-0.5 rounded cursor-pointer transition ${
+                      className={`text-[9px] font-semibold px-2 py-0.5 rounded cursor-pointer transition ${
                         user.alexaLinked
                           ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                          : 'bg-app-card text-app-muted hover:text-cyan-400 border border-app-border'
+                          : 'bg-white/10 text-white/70 hover:text-cyan-300 border border-white/10'
                       }`}
                     >
                       {user.alexaLinked ? 'Linked (OAuth 2.1)' : 'Pair Device'}
@@ -205,28 +205,29 @@ export const Header: React.FC<HeaderProps> = ({
 
                 {/* Preview Tier Sandbox Info */}
                 {!isAuthenticated && (
-                  <div className="px-2 py-1.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-[11px] space-y-1">
-                    <div className="flex items-center justify-between text-cyan-400 font-semibold text-[10px]">
+                  <div className="px-2.5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-[11px] space-y-1">
+                    <div className="flex items-center justify-between text-cyan-300 font-semibold text-[10px]">
                       <span>SANDBOX LIMIT</span>
                       <span>{getPreviewTasksRemaining()} / 5 tasks left</span>
                     </div>
-                    <p className="text-[10px] text-app-muted">
+                    <p className="text-[10px] text-white/60">
                       Full persistent cloud sync & hardware pairing unlock with a free student account.
                     </p>
                   </div>
                 )}
 
                 {/* Account & Clerk Actions */}
-                <div className="pt-1.5 border-t border-app-border space-y-1">
+                <div className="pt-1.5 border-t border-white/10 space-y-1">
                   {!isAuthenticated ? (
                     <button
                       onClick={() => {
                         setProfileDropdownOpen(false);
                         openClerkSignIn();
                       }}
-                      className="w-full flex items-center justify-center space-x-1.5 py-2 px-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
+                      className="w-full flex items-center justify-center space-x-1.5 py-2 px-3 rounded-xl text-white font-semibold text-xs transition cursor-pointer shadow-xl border border-white/20 active:scale-95"
+                      style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
                     >
-                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
                       <span>Sign In with Clerk</span>
                     </button>
                   ) : (
@@ -235,7 +236,7 @@ export const Header: React.FC<HeaderProps> = ({
                         setProfileDropdownOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
+                      className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
                     >
                       <LogOut className="w-3 h-3" />
                       <span>Sign Out</span>
@@ -250,7 +251,8 @@ export const Header: React.FC<HeaderProps> = ({
           {onOpenAddModal && (
             <button
               onClick={onOpenAddModal}
-              className="px-3 py-1.5 rounded-xl text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-sm shadow-[#4f91b0]/20 flex items-center space-x-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-xl flex items-center space-x-1.5 cursor-pointer border border-white/20 active:scale-95 hover:opacity-90"
+              style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
             >
               <Plus className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Add Task</span>
@@ -258,13 +260,13 @@ export const Header: React.FC<HeaderProps> = ({
           )}
 
           {/* Server Status Indicator */}
-          <div className="flex items-center space-x-2 px-2.5 py-1 rounded-full bg-app-subtle border border-app-border text-xs font-mono">
+          <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono">
             <span
               className={`w-2 h-2 rounded-full ${
                 serverHealthy ? 'bg-emerald-400 animate-pulse' : 'bg-emerald-400'
               }`}
             />
-            <span className="hidden sm:inline text-[11px] font-semibold text-cyan-400">
+            <span className="hidden sm:inline text-[11px] font-semibold text-emerald-300">
               Alexa+ MCP Online
             </span>
           </div>
@@ -273,20 +275,20 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-app-subtle hover:bg-app-border/40 text-app-text border border-app-border transition cursor-pointer"
+            className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white border border-white/10 transition cursor-pointer"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
           >
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400" />
             ) : (
-              <Moon className="w-4 h-4 text-[#4f91b0]" />
+              <Moon className="w-4 h-4 text-cyan-300" />
             )}
           </button>
 
           {/* Quick Refresh */}
           <button
             onClick={onRefresh}
-            className="p-2 rounded-xl bg-app-subtle hover:bg-app-border/40 text-app-muted hover:text-app-text border border-app-border transition cursor-pointer"
+            className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white border border-white/10 transition cursor-pointer"
             title="Refresh database records"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -296,10 +298,10 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onResetDb}
             disabled={isResetting}
-            className="px-2.5 py-1.5 text-xs font-headline font-semibold rounded-xl bg-app-subtle hover:bg-app-border/40 text-app-muted hover:text-app-text border border-app-border transition flex items-center space-x-1 cursor-pointer"
+            className="px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white border border-white/10 transition flex items-center space-x-1 cursor-pointer"
             title="Restore sample demo data"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden xl:inline text-[11px]">
               {isResetting ? 'Resetting...' : 'Reset'}
             </span>

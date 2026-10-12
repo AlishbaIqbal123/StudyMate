@@ -108,19 +108,19 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
     switch (p) {
       case 'high':
         return (
-          <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25">
+          <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
             HIGH
           </span>
         );
       case 'medium':
         return (
-          <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25">
+          <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
             MED
           </span>
         );
       case 'low':
         return (
-          <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-app-subtle text-app-muted border border-app-border">
+          <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white/[0.06] text-white/60 border border-white/10">
             LOW
           </span>
         );
@@ -130,44 +130,44 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner with Stats & Controls */}
-      <div className="p-6 rounded-2xl bg-app-card border border-app-border shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-2xl border border-white/15 text-white shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+        <div className="relative z-10">
           <div className="flex items-center space-x-3">
-            <h1 className="font-headline text-2xl font-bold tracking-tight text-app-text">
+            <h1 className="text-2xl font-bold tracking-tight text-white">
               Assignments
             </h1>
-            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#4f91b0]/15 text-[#4f91b0] border border-[#4f91b0]/25">
+            <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 uppercase tracking-wider">
               {tasks.length} Total
             </span>
           </div>
-          <p className="text-xs text-app-muted mt-1">
+          <p className="text-xs text-white/60 mt-1 max-w-xl">
             Drag and drop cards between columns or use quick buttons to update assignment progress.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3 relative z-10">
           {/* View Mode Toggle */}
-          <div className="flex items-center p-1 rounded-xl bg-app-subtle border border-app-border text-xs font-headline">
+          <div className="flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10 text-xs">
             <button
               onClick={() => setViewMode('kanban')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
+              className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full transition cursor-pointer ${
                 viewMode === 'kanban'
-                  ? 'bg-app-card text-app-text shadow-sm font-bold border border-app-border'
-                  : 'text-app-muted hover:text-app-text'
+                  ? 'bg-white/15 text-white shadow-md font-semibold border border-white/20'
+                  : 'text-white/60 hover:text-white'
               }`}
             >
-              <Kanban className="w-3.5 h-3.5" />
+              <Kanban className="w-3.5 h-3.5 text-cyan-300" />
               <span>Kanban</span>
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition cursor-pointer ${
+              className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full transition cursor-pointer ${
                 viewMode === 'list'
-                  ? 'bg-app-card text-app-text shadow-sm font-bold border border-app-border'
-                  : 'text-app-muted hover:text-app-text'
+                  ? 'bg-white/15 text-white shadow-md font-semibold border border-white/20'
+                  : 'text-white/60 hover:text-white'
               }`}
             >
-              <List className="w-3.5 h-3.5" />
+              <List className="w-3.5 h-3.5 text-cyan-300" />
               <span>List View</span>
             </button>
           </div>
@@ -175,7 +175,8 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
           {/* Add Assignment Button */}
           <button
             onClick={onOpenAddModal}
-            className="px-4 py-2 rounded-xl text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-md shadow-[#4f91b0]/20 flex items-center space-x-1.5 cursor-pointer"
+            className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer"
+            style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
           >
             <Plus className="w-4 h-4" />
             <span>Add Assignment</span>
@@ -184,19 +185,19 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl bg-app-card border border-app-border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-        <div className="flex flex-wrap items-center gap-2.5">
+      <div className="p-4 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Course filter */}
-          <div className="flex items-center space-x-1.5 font-mono text-app-muted">
+          <div className="flex items-center space-x-2 font-mono text-white/50">
             <span>Course:</span>
             <select
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
-              className="bg-app-subtle border border-app-border text-app-text rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#4f91b0]"
+              className="bg-white/[0.06] border border-white/15 text-white rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-400"
             >
-              <option value="all">All Courses</option>
+              <option value="all" className="bg-[#0c0c12] text-white">All Courses</option>
               {courses.map((c) => (
-                <option key={c.id} value={c.name}>
+                <option key={c.id} value={c.name} className="bg-[#0c0c12] text-white">
                   {c.code ? `${c.code}: ${c.name}` : c.name}
                 </option>
               ))}
@@ -204,16 +205,16 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
           </div>
 
           {/* Priority filter */}
-          <div className="flex items-center space-x-1 font-mono text-app-muted">
+          <div className="flex items-center space-x-1 font-mono text-white/50">
             <span>Priority:</span>
             {(['all', 'high', 'medium', 'low'] as const).map((p) => (
               <button
                 key={p}
                 onClick={() => setSelectedPriority(p)}
-                className={`px-2.5 py-1 rounded-lg uppercase text-[10px] font-bold transition cursor-pointer ${
+                className={`px-3 py-1 rounded-full uppercase text-[10px] font-semibold transition cursor-pointer ${
                   selectedPriority === p
-                    ? 'bg-[#4f91b0] text-white shadow-sm'
-                    : 'bg-app-subtle text-app-muted border border-app-border hover:text-app-text'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                    : 'bg-white/[0.04] text-white/60 border border-white/10 hover:text-white hover:bg-white/[0.08]'
                 }`}
               >
                 {p}
@@ -224,13 +225,13 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
 
         {/* Search */}
         <div className="relative">
-          <Search className="w-3.5 h-3.5 text-app-muted absolute left-3 top-2.5" />
+          <Search className="w-3.5 h-3.5 text-white/40 absolute left-3.5 top-2.5" />
           <input
             type="text"
             placeholder="Search assignments..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-60 bg-app-subtle border border-app-border rounded-lg pl-8 pr-3 py-1.5 text-xs text-app-text placeholder-app-muted focus:outline-none focus:border-[#4f91b0]"
+            className="w-full md:w-64 bg-white/[0.06] border border-white/15 rounded-full pl-9 pr-4 py-1.5 text-xs text-white placeholder-white/40 focus:outline-none focus:border-cyan-400"
           />
         </div>
       </div>
@@ -243,25 +244,25 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
             onDragOver={(e) => handleDragOverCol(e, 'pending')}
             onDragLeave={handleDragLeaveCol}
             onDrop={(e) => handleDropOnCol(e, 'pending')}
-            className={`rounded-2xl p-4 transition-all duration-200 min-h-[400px] flex flex-col space-y-3 ${
+            className={`rounded-3xl p-4 transition-all duration-200 min-h-[440px] flex flex-col space-y-3 bg-white/[0.03] backdrop-blur-xl border ${
               dragOverCol === 'pending'
-                ? 'bg-[#4f91b0]/10 border-2 border-dashed border-[#4f91b0] ring-4 ring-[#4f91b0]/10'
-                : 'bg-app-subtle/50 border border-app-border'
+                ? 'border-cyan-400/80 ring-4 ring-cyan-500/10 bg-cyan-500/5'
+                : 'border-white/10'
             }`}
           >
-            <div className="flex items-center justify-between p-3 rounded-xl bg-app-card border border-app-border shadow-sm">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.05] border border-white/10 shadow-sm">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-                <h3 className="font-headline text-xs font-bold uppercase tracking-wider text-app-text">
+                <span className="w-2 h-2 rounded-full bg-slate-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-white">
                   To Do ({pendingTasks.length})
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-app-muted font-semibold">Ready</span>
+              <span className="text-[10px] font-mono text-white/50 font-medium">Ready</span>
             </div>
 
             {/* Drop Placeholder if dragging over */}
             {dragOverCol === 'pending' && (
-              <div className="p-3 rounded-xl border-2 border-dashed border-[#4f91b0] bg-[#4f91b0]/15 text-center text-xs font-bold text-[#4f91b0] animate-pulse">
+              <div className="p-3 rounded-2xl border-2 border-dashed border-cyan-400/80 bg-cyan-500/10 text-center text-xs font-semibold text-cyan-300 animate-pulse">
                 Drop to move to To Do
               </div>
             )}
@@ -273,31 +274,31 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   draggable
                   onDragStart={(e) => handleDragStart(e, task.id)}
                   onDragEnd={handleDragEnd}
-                  className={`p-4 rounded-xl bg-app-card border border-app-border shadow-sm space-y-3 transition group cursor-grab active:cursor-grabbing hover:border-[#4f91b0]/60 ${
-                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-[#4f91b0]' : ''
+                  className={`p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 shadow-lg space-y-3 transition-all group cursor-grab active:cursor-grabbing ${
+                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-cyan-400' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-1.5 min-w-0">
-                      <GripVertical className="w-3.5 h-3.5 text-app-muted group-hover:text-[#4f91b0] shrink-0" />
-                      <span className="font-mono text-[10px] font-bold text-[#4f91b0] truncate max-w-[160px]">
+                      <GripVertical className="w-3.5 h-3.5 text-white/30 group-hover:text-cyan-400 shrink-0" />
+                      <span className="font-mono text-[10px] font-semibold text-cyan-300 truncate max-w-[160px]">
                         {task.course_name}
                       </span>
                     </div>
                     {getPriorityChip(task.priority)}
                   </div>
 
-                  <h4 className="font-headline text-sm font-bold text-app-text">
+                  <h4 className="text-sm font-semibold text-white tracking-tight leading-snug">
                     {task.title}
                   </h4>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-app-border text-[11px] font-mono text-app-muted">
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px] font-mono text-white/50">
                     <span className="flex items-center space-x-1">
-                      <Calendar className="w-3 h-3" />
+                      <Calendar className="w-3 h-3 text-white/40" />
                       <span>{task.due_date || 'No deadline'}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <Clock className="w-3 h-3" />
+                      <Clock className="w-3 h-3 text-white/40" />
                       <span>{task.est_minutes}m</span>
                     </span>
                   </div>
@@ -306,7 +307,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   <div className="flex items-center justify-between pt-1 gap-2">
                     <button
                       onClick={() => updateStatusDirect(task.id, 'in_progress')}
-                      className="text-xs font-headline font-semibold text-amber-600 dark:text-amber-400 hover:underline flex items-center space-x-1 cursor-pointer"
+                      className="text-xs font-medium text-amber-300 hover:text-amber-200 hover:underline flex items-center space-x-1 cursor-pointer"
                       title="Move to In Progress"
                     >
                       <PlayCircle className="w-3.5 h-3.5" />
@@ -316,14 +317,15 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                     <div className="flex items-center space-x-1.5">
                       <button
                         onClick={() => onFocusTask(task)}
-                        className="px-2 py-1 rounded-lg text-[10px] font-mono font-bold bg-app-subtle hover:bg-[#4f91b0]/15 text-app-text transition cursor-pointer"
+                        className="px-2.5 py-1 rounded-full text-[10px] font-mono font-medium text-white transition cursor-pointer hover:opacity-90 border border-white/20"
+                        style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
                         title="Start Pomodoro focus timer"
                       >
                         Focus
                       </button>
                       <button
                         onClick={() => updateStatusDirect(task.id, 'done')}
-                        className="p-1 rounded-lg text-app-muted hover:text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+                        className="p-1 rounded-lg text-white/40 hover:text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer"
                         title="Mark Complete"
                       >
                         <CheckCircle2 className="w-4 h-4" />
@@ -334,7 +336,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
               ))}
 
               {pendingTasks.length === 0 && dragOverCol !== 'pending' && (
-                <div className="p-6 rounded-xl border border-dashed border-app-border text-center text-xs text-app-muted">
+                <div className="p-6 rounded-2xl border border-dashed border-white/15 text-center text-xs text-white/40">
                   No tasks in queue. Drag a task here or add a new assignment.
                 </div>
               )}
@@ -346,25 +348,25 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
             onDragOver={(e) => handleDragOverCol(e, 'in_progress')}
             onDragLeave={handleDragLeaveCol}
             onDrop={(e) => handleDropOnCol(e, 'in_progress')}
-            className={`rounded-2xl p-4 transition-all duration-200 min-h-[400px] flex flex-col space-y-3 ${
+            className={`rounded-3xl p-4 transition-all duration-200 min-h-[440px] flex flex-col space-y-3 bg-white/[0.03] backdrop-blur-xl border ${
               dragOverCol === 'in_progress'
-                ? 'bg-amber-500/10 border-2 border-dashed border-amber-500 ring-4 ring-amber-500/10'
-                : 'bg-app-subtle/50 border border-app-border'
+                ? 'border-amber-400/80 ring-4 ring-amber-500/10 bg-amber-500/5'
+                : 'border-white/10'
             }`}
           >
-            <div className="flex items-center justify-between p-3 rounded-xl bg-app-card border border-amber-500/30 shadow-sm">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.05] border border-amber-500/30 shadow-sm">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                <h3 className="font-headline text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-amber-300">
                   In Progress ({inProgressTasks.length})
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-semibold">Active</span>
+              <span className="text-[10px] font-mono text-amber-300/80 font-medium">Active</span>
             </div>
 
             {/* Drop Placeholder if dragging over */}
             {dragOverCol === 'in_progress' && (
-              <div className="p-3 rounded-xl border-2 border-dashed border-amber-500 bg-amber-500/15 text-center text-xs font-bold text-amber-700 dark:text-amber-300 animate-pulse">
+              <div className="p-3 rounded-2xl border-2 border-dashed border-amber-400/80 bg-amber-500/15 text-center text-xs font-semibold text-amber-300 animate-pulse">
                 Drop to move to In Progress
               </div>
             )}
@@ -376,31 +378,31 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   draggable
                   onDragStart={(e) => handleDragStart(e, task.id)}
                   onDragEnd={handleDragEnd}
-                  className={`p-4 rounded-xl bg-app-card border border-amber-500/40 shadow-sm space-y-3 transition group cursor-grab active:cursor-grabbing hover:border-amber-500 ${
-                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-amber-500' : ''
+                  className={`p-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-amber-500/30 hover:border-amber-400/60 shadow-lg space-y-3 transition-all group cursor-grab active:cursor-grabbing ${
+                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-amber-400' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-1.5 min-w-0">
-                      <GripVertical className="w-3.5 h-3.5 text-amber-500 group-hover:text-amber-600 shrink-0" />
-                      <span className="font-mono text-[10px] font-bold text-amber-600 dark:text-amber-400 truncate max-w-[160px]">
+                      <GripVertical className="w-3.5 h-3.5 text-amber-400/60 group-hover:text-amber-400 shrink-0" />
+                      <span className="font-mono text-[10px] font-semibold text-amber-300 truncate max-w-[160px]">
                         {task.course_name}
                       </span>
                     </div>
                     {getPriorityChip(task.priority)}
                   </div>
 
-                  <h4 className="font-headline text-sm font-bold text-app-text">
+                  <h4 className="text-sm font-semibold text-white tracking-tight leading-snug">
                     {task.title}
                   </h4>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-app-border text-[11px] font-mono text-app-muted">
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px] font-mono text-white/50">
                     <span className="flex items-center space-x-1">
-                      <Calendar className="w-3 h-3" />
+                      <Calendar className="w-3 h-3 text-white/40" />
                       <span>{task.due_date || 'No deadline'}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <Clock className="w-3 h-3" />
+                      <Clock className="w-3 h-3 text-white/40" />
                       <span>{task.est_minutes}m</span>
                     </span>
                   </div>
@@ -408,7 +410,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   <div className="flex items-center justify-between pt-1 gap-2">
                     <button
                       onClick={() => updateStatusDirect(task.id, 'done')}
-                      className="text-xs font-headline font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center space-x-1 cursor-pointer"
+                      className="text-xs font-medium text-emerald-300 hover:text-emerald-200 hover:underline flex items-center space-x-1 cursor-pointer"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Mark Done</span>
@@ -417,13 +419,13 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                     <div className="flex items-center space-x-1.5">
                       <button
                         onClick={() => onFocusTask(task)}
-                        className="px-2 py-1 rounded-lg text-[10px] font-mono font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 transition cursor-pointer"
+                        className="px-2.5 py-1 rounded-full text-[10px] font-mono font-medium text-amber-300 bg-amber-500/15 border border-amber-500/30 hover:bg-amber-500/25 transition cursor-pointer"
                       >
                         Continue
                       </button>
                       <button
                         onClick={() => updateStatusDirect(task.id, 'pending')}
-                        className="p-1 rounded-lg text-app-muted hover:text-app-text hover:bg-app-subtle transition cursor-pointer"
+                        className="p-1 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition cursor-pointer"
                         title="Move back to To Do"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
@@ -434,7 +436,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
               ))}
 
               {inProgressTasks.length === 0 && dragOverCol !== 'in_progress' && (
-                <div className="p-6 rounded-xl border border-dashed border-app-border text-center text-xs text-app-muted">
+                <div className="p-6 rounded-2xl border border-dashed border-white/15 text-center text-xs text-white/40">
                   Drag any task here when you start working on it.
                 </div>
               )}
@@ -446,25 +448,25 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
             onDragOver={(e) => handleDragOverCol(e, 'done')}
             onDragLeave={handleDragLeaveCol}
             onDrop={(e) => handleDropOnCol(e, 'done')}
-            className={`rounded-2xl p-4 transition-all duration-200 min-h-[400px] flex flex-col space-y-3 ${
+            className={`rounded-3xl p-4 transition-all duration-200 min-h-[440px] flex flex-col space-y-3 bg-white/[0.03] backdrop-blur-xl border ${
               dragOverCol === 'done'
-                ? 'bg-emerald-500/10 border-2 border-dashed border-emerald-500 ring-4 ring-emerald-500/10'
-                : 'bg-app-subtle/50 border border-app-border'
+                ? 'border-emerald-400/80 ring-4 ring-emerald-500/10 bg-emerald-500/5'
+                : 'border-white/10'
             }`}
           >
-            <div className="flex items-center justify-between p-3 rounded-xl bg-app-card border border-emerald-500/30 shadow-sm">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.05] border border-emerald-500/30 shadow-sm">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <h3 className="font-headline text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
                   Completed ({doneTasks.length})
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">Done</span>
+              <span className="text-[10px] font-mono text-emerald-300/80 font-medium">Done</span>
             </div>
 
             {/* Drop Placeholder if dragging over */}
             {dragOverCol === 'done' && (
-              <div className="p-3 rounded-xl border-2 border-dashed border-emerald-500 bg-emerald-500/15 text-center text-xs font-bold text-emerald-700 dark:text-emerald-300 animate-pulse">
+              <div className="p-3 rounded-2xl border-2 border-dashed border-emerald-400/80 bg-emerald-500/15 text-center text-xs font-semibold text-emerald-300 animate-pulse">
                 Drop to mark as Completed
               </div>
             )}
@@ -476,31 +478,31 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   draggable
                   onDragStart={(e) => handleDragStart(e, task.id)}
                   onDragEnd={handleDragEnd}
-                  className={`p-4 rounded-xl bg-app-card border border-app-border opacity-75 hover:opacity-100 space-y-2 transition group cursor-grab active:cursor-grabbing hover:border-emerald-500/50 ${
-                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-emerald-500' : ''
+                  className={`p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-emerald-500/40 opacity-75 hover:opacity-100 space-y-2 transition-all group cursor-grab active:cursor-grabbing ${
+                    draggedTaskId === task.id ? 'opacity-40 scale-95 border-dashed border-emerald-400' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-1.5 min-w-0">
-                      <GripVertical className="w-3.5 h-3.5 text-emerald-500/60 group-hover:text-emerald-500 shrink-0" />
-                      <span className="font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400 truncate max-w-[160px]">
+                      <GripVertical className="w-3.5 h-3.5 text-emerald-400/60 group-hover:text-emerald-400 shrink-0" />
+                      <span className="font-mono text-[10px] font-semibold text-emerald-300 truncate max-w-[160px]">
                         {task.course_name}
                       </span>
                     </div>
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                    <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                       DONE
                     </span>
                   </div>
 
-                  <h4 className="font-headline text-sm font-medium line-through text-app-muted">
+                  <h4 className="text-sm font-medium line-through text-white/50">
                     {task.title}
                   </h4>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-app-border text-[11px] font-mono text-app-muted">
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Completed</span>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px] font-mono text-white/50">
+                    <span className="text-emerald-300 font-medium">Completed</span>
                     <button
                       onClick={() => updateStatusDirect(task.id, 'pending')}
-                      className="text-xs text-app-muted hover:text-app-text hover:underline flex items-center space-x-1 cursor-pointer"
+                      className="text-xs text-white/50 hover:text-white hover:underline flex items-center space-x-1 cursor-pointer"
                       title="Reopen task and move to To Do"
                     >
                       <RotateCcw className="w-3 h-3" />
@@ -511,7 +513,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
               ))}
 
               {doneTasks.length === 0 && dragOverCol !== 'done' && (
-                <div className="p-6 rounded-xl border border-dashed border-app-border text-center text-xs text-app-muted">
+                <div className="p-6 rounded-2xl border border-dashed border-white/15 text-center text-xs text-white/40">
                   Completed tasks will show up here. Drag finished tasks into this column.
                 </div>
               )}
@@ -520,13 +522,14 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
         </div>
       ) : (
         /* List View */
-        <div className="p-6 rounded-2xl bg-app-card border border-app-border shadow-sm space-y-3">
+        <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-3">
           {filtered.length === 0 ? (
             <div className="py-12 px-4 text-center space-y-3">
-              <p className="text-xs text-app-muted font-mono">No assignments found in workspace</p>
+              <p className="text-xs text-white/50 font-mono">No assignments found in workspace</p>
               <button
                 onClick={onOpenAddModal}
-                className="px-3.5 py-1.5 rounded-lg text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-sm inline-flex items-center space-x-1 cursor-pointer"
+                className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-lg border border-white/20 inline-flex items-center space-x-1 cursor-pointer hover:opacity-90"
+                style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Assignment</span>
@@ -538,28 +541,28 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
             return (
               <div
                 key={task.id}
-                className="p-3.5 rounded-xl bg-app-subtle border border-app-border flex items-center justify-between gap-4 hover:border-[#4f91b0]/40 transition"
+                className="p-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 flex items-center justify-between gap-4 transition shadow-md"
               >
                 <div className="flex items-center space-x-3 min-w-0">
                   <button
                     onClick={() => updateStatusDirect(task.id, isDone ? 'pending' : 'done')}
-                    className="text-app-muted hover:text-[#4f91b0] transition cursor-pointer"
+                    className="text-white/40 hover:text-cyan-300 transition cursor-pointer"
                   >
                     {isDone ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                     ) : (
                       <Circle className="w-5 h-5" />
                     )}
                   </button>
                   <div className="min-w-0">
                     <h4
-                      className={`font-headline text-sm font-semibold truncate ${
-                        isDone ? 'line-through text-app-muted' : 'text-app-text'
+                      className={`text-sm font-semibold truncate ${
+                        isDone ? 'line-through text-white/40' : 'text-white'
                       }`}
                     >
                       {task.title}
                     </h4>
-                    <p className="text-[11px] font-mono text-app-muted">
+                    <p className="text-[11px] font-mono text-white/50">
                       {task.course_name} • Due: {task.due_date || 'None'}
                     </p>
                   </div>
@@ -572,17 +575,17 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   <select
                     value={task.status}
                     onChange={(e) => updateStatusDirect(task.id, e.target.value as TaskStatus)}
-                    className={`font-mono text-[10px] px-2 py-1 rounded uppercase font-bold border transition cursor-pointer ${
+                    className={`font-mono text-[10px] px-3 py-1 rounded-full uppercase font-semibold border transition cursor-pointer ${
                       task.status === 'done'
-                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                         : task.status === 'in_progress'
-                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
-                        : 'bg-app-card text-app-muted border-app-border'
+                        ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                        : 'bg-white/[0.06] text-white/70 border-white/10'
                     }`}
                   >
-                    <option value="pending">To Do</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="done">Completed</option>
+                    <option value="pending" className="bg-[#0c0c12] text-white">To Do</option>
+                    <option value="in_progress" className="bg-[#0c0c12] text-white">In Progress</option>
+                    <option value="done" className="bg-[#0c0c12] text-white">Completed</option>
                   </select>
                 </div>
               </div>

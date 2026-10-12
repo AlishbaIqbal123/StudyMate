@@ -124,26 +124,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Main Sidebar */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-app-card border-r border-app-border flex flex-col justify-between p-4 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#07070b]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between p-4 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
         <div className="space-y-6">
           {/* Top Logo / Brand */}
-          <div className="flex items-center justify-between pb-4 border-b border-app-border">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <button
               onClick={() => handleSelectScreen('home')}
               className="flex items-center space-x-3 text-left group"
             >
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#4f91b0] to-cyan-400 text-white flex items-center justify-center shadow-md shadow-[#4f91b0]/25 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 text-white flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform backdrop-blur-md">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="font-headline font-bold text-base text-app-text block leading-none">
-                  StudyMate
-                </span>
-                <span className="font-mono text-[10px] text-app-muted block mt-1">
-                  Alexa+ MCP Assistant
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-base text-white block leading-none">
+                    studymate
+                  </span>
+                  <span className="rounded-full bg-cyan-500/20 px-1.5 py-0.2 text-[9px] font-semibold tracking-wider text-cyan-300 uppercase border border-cyan-500/30">
+                    MCP
+                  </span>
+                </div>
+                <span className="text-[10px] text-white/50 block mt-1 tracking-wide">
+                  Alexa+ Add-on · 2026
                 </span>
               </div>
             </button>
@@ -151,7 +156,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {onCloseMobile && (
               <button
                 onClick={onCloseMobile}
-                className="lg:hidden p-1.5 rounded-lg text-app-muted hover:text-app-text hover:bg-app-subtle transition"
+                className="lg:hidden p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -178,10 +183,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               type="button"
               onClick={() => setStudentDropdownOpen(!studentDropdownOpen)}
-              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-app-subtle border border-app-border text-left hover:border-cyan-500/40 transition cursor-pointer"
+              className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-left hover:border-white/20 hover:bg-white/[0.06] transition cursor-pointer"
             >
               <div className="flex items-center space-x-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
                   {user?.avatar && user.avatar.startsWith('http') ? (
                     <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                   ) : (
@@ -189,24 +194,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </div>
                 <div className="min-w-0">
-                  <span className="font-headline font-bold text-xs text-app-text block truncate">
+                  <span className="font-bold text-xs text-white block truncate">
                     {isAuthenticated ? user.name : 'Scholar Preview'}
                   </span>
-                  <span className="text-[10px] text-cyan-400 block truncate font-medium">
+                  <span className="text-[10px] text-cyan-300 block truncate font-medium">
                     {isAuthenticated ? user.major : 'Academic Preview Pass'}
                   </span>
                 </div>
               </div>
               <ChevronDown
-                className={`w-4 h-4 text-app-muted transition-transform shrink-0 ${
+                className={`w-4 h-4 text-white/50 transition-transform shrink-0 ${
                   studentDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
 
             {studentDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-2.5 space-y-2 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-app-muted font-semibold flex items-center justify-between">
+              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-black/95 border border-white/15 rounded-2xl shadow-2xl p-3 space-y-2 animate-in fade-in zoom-in-95 duration-150 backdrop-blur-2xl">
+                <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-white/50 font-semibold flex items-center justify-between">
                   <span>{isAuthenticated ? 'Active Profile' : 'Evaluation Sandbox'}</span>
                   <span className="text-cyan-400">{user.studentId}</span>
                 </div>
@@ -259,7 +264,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Nav Items */}
           <div className="space-y-1">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-app-muted block mb-2 px-1 font-semibold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-white/40 block mb-2 px-1 font-semibold">
               Navigation
             </span>
             <nav className="space-y-1">
@@ -270,23 +275,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => handleSelectScreen(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-headline text-xs font-semibold transition cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition cursor-pointer ${
                       isActive
-                        ? 'bg-gradient-to-r from-[#4f91b0] to-cyan-600 text-white shadow-md shadow-[#4f91b0]/20'
-                        : 'text-app-muted hover:text-app-text hover:bg-app-subtle'
+                        ? 'bg-white/10 text-white border border-white/15 shadow-lg backdrop-blur-xl font-semibold'
+                        : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <Icon className="w-4 h-4 shrink-0" />
+                      <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-cyan-300' : 'text-white/60'}`} />
                       <span>{item.label}</span>
                     </div>
 
                     {item.badge && (
                       <span
-                        className={`font-mono text-[10px] px-2 py-0.5 rounded-md font-bold ${
+                        className={`font-mono text-[9px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider ${
                           isActive
-                            ? 'bg-white/20 text-white'
-                            : item.badgeColor || 'bg-app-subtle text-app-text'
+                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                            : 'bg-white/10 text-white/60 border border-white/10'
                         }`}
                       >
                         {item.badge}
@@ -300,16 +305,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Bottom Section */}
-        <div className="space-y-3 pt-4 border-t border-app-border">
+        <div className="space-y-3 pt-4 border-t border-white/10">
           {/* Quick Voice Trigger */}
           <button
             onClick={() => {
               onTriggerVoice();
               if (onCloseMobile) onCloseMobile();
             }}
-            className="w-full py-2.5 px-3 rounded-xl text-xs font-headline font-bold text-white bg-[#4f91b0] hover:bg-[#3f748d] transition shadow-md shadow-[#4f91b0]/20 flex items-center justify-center space-x-2 cursor-pointer"
+            className="w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-white transition shadow-xl flex items-center justify-center space-x-2 cursor-pointer border border-white/20 active:scale-95 hover:opacity-90"
+            style={{
+              background: 'linear-gradient(to bottom, #2B2B2B, #101010)',
+            }}
           >
-            <Mic className="w-3.5 h-3.5" />
+            <Mic className="w-3.5 h-3.5 text-cyan-400" />
             <span>Voice Console</span>
           </button>
 
@@ -317,17 +325,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-headline font-semibold bg-app-subtle border border-app-border text-app-text hover:bg-app-border/40 transition cursor-pointer"
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium bg-white/[0.04] border border-white/10 text-white/90 hover:bg-white/[0.08] transition cursor-pointer"
           >
             <div className="flex items-center space-x-2.5">
               {theme === 'dark' ? (
-                <Moon className="w-4 h-4 text-themePrimary-400" />
+                <Moon className="w-4 h-4 text-cyan-300" />
               ) : (
-                <Sun className="w-4 h-4 text-amber-500" />
+                <Sun className="w-4 h-4 text-amber-400" />
               )}
               <span>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
             </div>
-            <span className="font-mono text-[10px] uppercase font-bold text-app-muted px-1.5 py-0.5 rounded bg-app-card border border-app-border">
+            <span className="font-mono text-[10px] uppercase font-bold text-white/60 px-1.5 py-0.5 rounded-md bg-white/10 border border-white/10">
               {theme === 'dark' ? 'ON' : 'OFF'}
             </span>
           </button>
@@ -338,7 +346,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               toggleAlexaAccountLinking();
               if (onCloseMobile) onCloseMobile();
             }}
-            className="w-full flex items-center justify-between p-2 rounded-xl bg-app-subtle border border-app-border text-[11px] text-app-text hover:border-cyan-500/40 transition cursor-pointer"
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/[0.04] border border-white/10 text-[11px] text-white hover:border-white/20 transition cursor-pointer"
           >
             <div className="flex items-center space-x-2">
               <Radio className={`w-3.5 h-3.5 ${user?.alexaLinked ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
@@ -350,7 +358,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
 
           {/* System Footnote */}
-          <div className="px-2 pt-1 font-mono text-[10px] text-app-muted flex items-center justify-between">
+          <div className="px-2 pt-1 font-mono text-[10px] text-white/40 flex items-center justify-between">
             <span>StudyMate Assistant</span>
             <span>v1.0.0</span>
           </div>
