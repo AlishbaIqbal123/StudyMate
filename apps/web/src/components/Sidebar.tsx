@@ -45,7 +45,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const [studentDropdownOpen, setStudentDropdownOpen] = useState(false);
-  const { user, openAuthModal, logout, loginWithDemoAccount } = useAuth();
+  const {
+    user,
+    isAuthenticated,
+    openAuthModal,
+    logout,
+    loginWithDemoAccount,
+    openClerkSignIn,
+    toggleAlexaAccountLinking,
+  } = useAuth();
 
   const navItems = [
     {
@@ -154,12 +162,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="relative">
             <div className="flex items-center justify-between mb-1.5 px-1">
               <label className="text-[10px] font-mono uppercase tracking-wider text-app-muted font-semibold">
-                Student Profile
+                {isAuthenticated ? 'Student Profile' : 'Access Mode'}
               </label>
-              {user?.alexaLinked && (
+              {user?.alexaLinked ? (
                 <span className="inline-flex items-center space-x-1 text-[9px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
                   <Radio className="w-2.5 h-2.5 animate-pulse" />
                   <span>Alexa+</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center text-[9px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
+                  {isAuthenticated ? 'Verified' : 'Preview'}
                 </span>
               )}
             </div>
@@ -169,15 +181,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className="w-full flex items-center justify-between p-2.5 rounded-xl bg-app-subtle border border-app-border text-left hover:border-cyan-500/40 transition cursor-pointer"
             >
               <div className="flex items-center space-x-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
-                  {user?.avatar || 'ST'}
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
+                  {user?.avatar && user.avatar.startsWith('http') ? (
+                    <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                  ) : (
+                    user?.avatar || 'SP'
+                  )}
                 </div>
                 <div className="min-w-0">
                   <span className="font-headline font-bold text-xs text-app-text block truncate">
-                    {user?.name || 'Guest Student'}
+                    {isAuthenticated ? user.name : 'Scholar Preview'}
                   </span>
                   <span className="text-[10px] text-cyan-400 block truncate font-medium">
-                    {user?.major || 'Academic Portal'}
+                    {isAuthenticated ? user.major : 'Academic Preview Pass'}
                   </span>
                 </div>
               </div>
@@ -189,57 +205,53 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
 
             {studentDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-2 space-y-2 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-app-muted">
-                  Account Switcher
-                </div>
-                <div className="space-y-1">
-                  <button
-                    onClick={handleSelectDemo}
-                    className={`w-full flex items-center justify-between p-2 rounded-lg text-left text-xs transition cursor-pointer border ${
-                      user?.id === 1 || user?.isDemo
-                        ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 font-bold'
-                        : 'bg-app-subtle border-app-border text-app-text hover:border-cyan-500/30'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-2 min-w-0">
-                      <div className="w-5 h-5 rounded-md bg-cyan-500/20 text-cyan-400 font-mono font-bold text-[9px] flex items-center justify-center shrink-0">
-                        AI
-                      </div>
-                      <div className="min-w-0">
-                        <div className="truncate text-xs font-semibold">Alishba Iqbal</div>
-                        <div className="text-[9px] text-app-muted truncate">Sample Demo Account</div>
-                      </div>
-                    </div>
-                    {user?.id === 1 || user?.isDemo ? (
-                      <span className="text-[9px] font-mono text-emerald-400 font-semibold shrink-0">Active</span>
-                    ) : (
-                      <span className="text-[9px] font-mono text-cyan-400 shrink-0">Load</span>
-                    )}
-                  </button>
+              <div className="absolute top-full left-0 right-0 mt-1.5 z-20 bg-app-card border border-app-border rounded-xl shadow-xl p-2.5 space-y-2 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-1 text-[10px] font-mono uppercase tracking-wider text-app-muted font-semibold flex items-center justify-between">
+                  <span>{isAuthenticated ? 'Active Profile' : 'Evaluation Sandbox'}</span>
+                  <span className="text-cyan-400">{user.studentId}</span>
                 </div>
 
+                {!isAuthenticated ? (
+                  <div className="p-2 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-[11px] text-app-muted space-y-1">
+                    <p className="font-semibold text-cyan-400 text-xs">Academic Preview Mode</p>
+                    <p className="text-[10px]">
+                      Explore courses, test the Alexa+ voice console, and run focus timers with pre-seeded coursework.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-2 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-[11px] space-y-0.5">
+                    <p className="font-semibold text-emerald-400 text-xs flex items-center space-x-1">
+                      <UserCheck className="w-3.5 h-3.5" />
+                      <span>{user.name}</span>
+                    </p>
+                    <p className="text-[10px] text-app-muted truncate">{user.email}</p>
+                  </div>
+                )}
+
                 <div className="pt-1.5 border-t border-app-border space-y-1">
-                  <button
-                    onClick={() => {
-                      setStudentDropdownOpen(false);
-                      openAuthModal();
-                    }}
-                    className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Supabase Auth & Alexa</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setStudentDropdownOpen(false);
-                      logout();
-                    }}
-                    className="w-full flex items-center justify-center space-x-1.5 py-1 px-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
-                  >
-                    <LogOut className="w-3 h-3" />
-                    <span>Sign Out</span>
-                  </button>
+                  {!isAuthenticated ? (
+                    <button
+                      onClick={() => {
+                        setStudentDropdownOpen(false);
+                        openClerkSignIn();
+                      }}
+                      className="w-full flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs transition cursor-pointer shadow-sm shadow-cyan-500/20"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>Sign In with Clerk</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setStudentDropdownOpen(false);
+                        logout();
+                      }}
+                      className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 text-xs transition cursor-pointer"
+                    >
+                      <LogOut className="w-3 h-3" />
+                      <span>Sign Out</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -323,7 +335,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Alexa+ Device Linking Status */}
           <button
             onClick={() => {
-              openAuthModal();
+              toggleAlexaAccountLinking();
               if (onCloseMobile) onCloseMobile();
             }}
             className="w-full flex items-center justify-between p-2 rounded-xl bg-app-subtle border border-app-border text-[11px] text-app-text hover:border-cyan-500/40 transition cursor-pointer"

@@ -26,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, openAuthModal } = useAuth();
+  const { user, isAuthenticated, openClerkSignIn } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,18 +108,26 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="hidden sm:flex items-center space-x-3">
           {/* Active Profile Pill / Auth Modal Trigger */}
           <button
-            onClick={openAuthModal}
+            onClick={openClerkSignIn}
             className="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 text-xs text-slate-300 transition cursor-pointer"
-            title="Manage Student Account & Alexa+ Linking"
+            title="Sign in with Clerk to access full cloud sync"
           >
-            <div className="w-5 h-5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center">
-              {user?.avatar || 'ST'}
+            <div className="w-5 h-5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center overflow-hidden">
+              {user?.avatar && user.avatar.startsWith('http') ? (
+                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                user?.avatar || 'SP'
+              )}
             </div>
-            <span className="font-semibold text-white">{user?.name ? user.name.split(' ')[0] : 'Sign In'}</span>
-            {user?.alexaLinked ? (
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50" title="Alexa+ Linked" />
+            <span className="font-semibold text-white">
+              {isAuthenticated ? user.name.split(' ')[0] : 'Sign In'}
+            </span>
+            {isAuthenticated ? (
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" title="Verified Scholar" />
             ) : (
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" title="Alexa+ Not Linked" />
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                Preview
+              </span>
             )}
           </button>
 
@@ -189,12 +197,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                openAuthModal();
+                openClerkSignIn();
               }}
               className="w-full py-3 rounded-xl bg-slate-900 border border-cyan-500/30 text-cyan-300 text-sm font-medium text-center flex items-center justify-center space-x-2"
             >
               <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>Student Account & Alexa OAuth</span>
+              <span>{isAuthenticated ? 'Manage Student Account' : 'Sign In with Clerk'}</span>
             </button>
             <button
               onClick={() => {

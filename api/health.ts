@@ -10,7 +10,12 @@ export default function handler(req: any, res: any) {
   return res.status(200).json({
     status: 'ok',
     service: 'StudyMate MCP Server',
-    version: '1.0.0',
+    version: '1.1.0',
+    mcp: {
+      protocolVersion: '2025-11-25',
+      transport: 'streamable-http',
+      endpoint: '/mcp',
+    },
     uptime_seconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
     features: [

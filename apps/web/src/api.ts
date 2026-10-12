@@ -212,6 +212,40 @@ export async function fetchTasks(filters?: {
   return list;
 }
 
+// ---- Preview Access limits (see PREVIEW_LIMITS in AuthContext) ----
+const PREVIEW_MAX_ADDED_TASKS = 5;
+const PREVIEW_ADDED_KEY = 'studymate_preview_tasks_added';
+
+export class PreviewLimitError extends Error {
+  constructor() {
+    super(
+      `Preview Access includes up to ${PREVIEW_MAX_ADDED_TASKS} new tasks. Create a free account to add unlimited tasks.`
+    );
+    this.name = 'PreviewLimitError';
+  }
+}
+
+export function isPreviewSession(): boolean {
+  const session = getActiveAuthSession() as { tier?: string } | null;
+  return !session || session.tier !== 'member';
+}
+
+export function getPreviewTasksRemaining(): number {
+  if (typeof window === 'undefined') return PREVIEW_MAX_ADDED_TASKS;
+  const used = Number(localStorage.getItem(PREVIEW_ADDED_KEY) || '0');
+  return Math.max(0, PREVIEW_MAX_ADDED_TASKS - used);
+}
+
+function consumePreviewTaskSlot(): void {
+  if (!isPreviewSession() || typeof window === 'undefined') return;
+  if (getPreviewTasksRemaining() <= 0) {
+    window.dispatchEvent(new CustomEvent('studymate:upgrade-required', { detail: 'task-limit' }));
+    throw new PreviewLimitError();
+  }
+  const used = Number(localStorage.getItem(PREVIEW_ADDED_KEY) || '0');
+  localStorage.setItem(PREVIEW_ADDED_KEY, String(used + 1));
+}
+
 export async function createTask(task: {
   title: string;
   course: string;
@@ -219,6 +253,7 @@ export async function createTask(task: {
   est_minutes?: number;
   priority?: TaskPriority;
 }): Promise<Task> {
+  consumePreviewTaskSlot();
   const isDemo = isDemoSession();
   if (isDemo) {
     try {
@@ -1029,7 +1064,7 @@ export async function executeMcpJsonRpc(
 }
 
 // ==========================================
-// Academic Email OTP Authentication API
+// Auth result types (email codes are sent & verified by Supabase Auth in AuthContext)
 // ==========================================
 
 export interface SendOtpResult {
@@ -1053,161 +1088,6 @@ export interface VerifyOtpResult {
     major?: string;
     year?: string;
     verified: boolean;
-  };
-}
-
-const CLIENT_OTP_CACHE_KEY = 'studymate_client_otp_cache';
-
-export async function sendOtpApi(
-  email: string,
-  purpose: 'signin' | 'signup' | 'verification' = 'signin'
-): Promise<SendOtpResult> {
-  const normalizedEmail = email.trim().toLowerCase();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(normalizedEmail)) {
-    return { success: false, message: '', error: 'Please enter a valid university or academic email.' };
-  }
-
-  // 1. Try backend API endpoint
-  try {
-    const res = await fetch(`${API_BASE}/auth/send-otp`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: normalizedEmail, purpose }),
-    });
-    const data = await res.json();
-    if (res.ok && data.success) {
-      return data;
-    }
-    if (data.error) {
-      return { success: false, message: '', error: data.error };
-    }
-  } catch (err) {
-    // If backend is unreachable, continue to resilient local OTP generator
-    console.warn('Backend send-otp unreachable, activating client OTP fallback', err);
-  }
-
-  // 2. Resilient Client Fallback: Generate secure 6-digit code for local evaluation
-  const fallbackCode = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = Date.now() + 300 * 1000; // 5 minutes
-  if (typeof window !== 'undefined') {
-    try {
-      const cache = JSON.parse(sessionStorage.getItem(CLIENT_OTP_CACHE_KEY) || '{}');
-      cache[normalizedEmail] = { code: fallbackCode, expiresAt, attempts: 0 };
-      sessionStorage.setItem(CLIENT_OTP_CACHE_KEY, JSON.stringify(cache));
-    } catch {
-      // ignore
-    }
-  }
-
-  return {
-    success: true,
-    message: `Verification code sent to ${normalizedEmail}`,
-    code: fallbackCode,
-    expiresIn: 300,
-  };
-}
-
-export async function verifyOtpApi(
-  email: string,
-  code: string
-): Promise<VerifyOtpResult> {
-  const normalizedEmail = email.trim().toLowerCase();
-  const cleanCode = String(code).trim().replace(/\D/g, '');
-
-  if (cleanCode.length !== 6) {
-    return { success: false, verified: false, error: 'Verification code must be exactly 6 digits.' };
-  }
-
-  // 1. Try backend API endpoint
-  try {
-    const res = await fetch(`${API_BASE}/auth/verify-otp`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: normalizedEmail, code: cleanCode }),
-    });
-    const data = await res.json();
-    if (res.ok && data.success) {
-      return data;
-    }
-    if (data.error && res.status !== 500 && res.status !== 404) {
-      return { success: false, verified: false, error: data.error };
-    }
-  } catch (err) {
-    console.warn('Backend verify-otp unreachable, checking client OTP fallback', err);
-  }
-
-  // 2. Check Client Fallback Cache
-  if (typeof window !== 'undefined') {
-    try {
-      const cache = JSON.parse(sessionStorage.getItem(CLIENT_OTP_CACHE_KEY) || '{}');
-      const entry = cache[normalizedEmail];
-      if (entry) {
-        if (Date.now() > entry.expiresAt) {
-          delete cache[normalizedEmail];
-          sessionStorage.setItem(CLIENT_OTP_CACHE_KEY, JSON.stringify(cache));
-          return {
-            success: false,
-            verified: false,
-            error: 'Verification code has expired. Please request a new code.',
-          };
-        }
-
-        if (entry.attempts >= 5) {
-          delete cache[normalizedEmail];
-          sessionStorage.setItem(CLIENT_OTP_CACHE_KEY, JSON.stringify(cache));
-          return {
-            success: false,
-            verified: false,
-            error: 'Maximum verification attempts exceeded. Please request a new code.',
-          };
-        }
-
-        if (entry.code !== cleanCode) {
-          entry.attempts += 1;
-          const remaining = 5 - entry.attempts;
-          sessionStorage.setItem(CLIENT_OTP_CACHE_KEY, JSON.stringify(cache));
-          return {
-            success: false,
-            verified: false,
-            error: `Incorrect verification code. ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`,
-          };
-        }
-
-        // Matched! Clean up
-        delete cache[normalizedEmail];
-        sessionStorage.setItem(CLIENT_OTP_CACHE_KEY, JSON.stringify(cache));
-
-        const nameFromEmail = normalizedEmail.split('@')[0].replace(/[._-]/g, ' ');
-        const formattedName = nameFromEmail
-          .split(' ')
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(' ') || 'Enrolled Student';
-
-        return {
-          success: true,
-          verified: true,
-          message: 'Email successfully verified!',
-          token: `studymate_verified_${Date.now()}`,
-          user: {
-            id: `stu-${Date.now().toString().slice(-4)}`,
-            email: normalizedEmail,
-            name: formattedName,
-            major: 'Computer Science & AI',
-            year: 'Enrolled Scholar',
-            verified: true,
-          },
-        };
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  return {
-    success: false,
-    verified: false,
-    error: 'Invalid or expired verification code. Please request a new code.',
   };
 }
 

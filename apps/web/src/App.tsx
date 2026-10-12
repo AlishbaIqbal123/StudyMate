@@ -17,7 +17,6 @@ import { Sidebar } from './components/Sidebar.js';
 import { AddTaskModal } from './components/AddTaskModal.js';
 import { MiniPomodoroWidget } from './components/MiniPomodoroWidget.js';
 import { AuthModal } from './components/AuthModal.js';
-import { GoogleAccountModal } from './components/GoogleAccountModal.js';
 import { NexumHero } from './NexumHero.js';
 import { useAuth } from './context/AuthContext.js';
 
@@ -278,9 +277,6 @@ export function App() {
 
       {/* University Authentication & Alexa Linking Modal */}
       <AuthModal />
-
-      {/* Google OAuth & Account Selector Modal */}
-      <GoogleAccountModal />
     </div>
   );
 }
