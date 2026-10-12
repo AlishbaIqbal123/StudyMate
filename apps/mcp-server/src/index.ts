@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  handleJsonRpc,
+  handleStreamableHttp,
   handleSseConnect,
   handleSseMessage,
+  MCP_PROTOCOL_VERSION,
 } from './mcp/server.js';
 import { apiRouter } from './api/routes.js';
 import { ensureDefaultStudent } from '@studymate/database';
@@ -33,7 +34,15 @@ app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'Mcp-Session-Id',
+      'MCP-Protocol-Version',
+      'Last-Event-ID',
+    ],
+    exposedHeaders: ['Mcp-Session-Id'],
   })
 );
 
@@ -44,7 +53,12 @@ app.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
     service: 'StudyMate MCP Server',
-    version: '1.0.0',
+    version: '1.1.0',
+    mcp: {
+      protocolVersion: MCP_PROTOCOL_VERSION,
+      transport: 'streamable-http',
+      endpoint: '/mcp',
+    },
     uptime_seconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
     features: [
@@ -81,11 +95,10 @@ app.post('/auth/token', (_req, res) => {
 });
 
 // 3. MCP Protocol Endpoints
-// Standard JSON-RPC POST endpoint (inspectors, direct test, curl)
-app.post('/mcp', handleJsonRpc);
+// Streamable HTTP transport, MCP spec 2025-11-25 (Alexa+ connects here)
+app.all('/mcp', handleStreamableHttp);
 
-// Streamable HTTP / SSE transport (Alexa+ Streamable HTTP connection)
-app.get('/mcp', handleSseConnect);
+// Legacy HTTP+SSE transport (2024-11-05) for older MCP clients only
 app.get('/mcp/sse', handleSseConnect);
 app.post('/mcp/messages', handleSseMessage);
 
@@ -101,8 +114,8 @@ if (process.env.NODE_ENV !== 'test') {
 ╠═══════════════════════════════════════════════════════════════════╣
 ║  • Server listening on:  http://localhost:${PORT}                    ║
 ║  • Health check:         http://localhost:${PORT}/health             ║
-║  • MCP Endpoint:         http://localhost:${PORT}/mcp                ║
-║  • Streamable SSE:       http://localhost:${PORT}/mcp/sse            ║
+║  • MCP (Streamable HTTP): http://localhost:${PORT}/mcp               ║
+║  • Legacy SSE (2024-11):  http://localhost:${PORT}/mcp/sse           ║
 ║  • REST API:             http://localhost:${PORT}/api/tasks          ║
 ║  • Tools: get_tasks, add_task, create_study_plan,                 ║
 ║           update_progress, get_course_progress                    ║

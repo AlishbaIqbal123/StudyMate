@@ -997,7 +997,11 @@ export async function executeMcpJsonRpc(
     };
     const res = await fetch(`${API_HOST}/mcp`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json, text/event-stream',
+        'MCP-Protocol-Version': '2025-11-25',
+      },
       body: JSON.stringify(payload),
     });
     if (res.ok) return await res.json();

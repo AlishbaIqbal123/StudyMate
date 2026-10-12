@@ -14,7 +14,7 @@
     "dev:all": "node scripts/dev.js",
     "dev": "node scripts/dev.js",
     "start": "npm run start --workspace=apps/mcp-server",
-    "build": "npm run build --workspaces",
+    "build": "npm run build --workspace=@studymate/types && npm run build --workspace=@studymate/database && npm run build --workspace=@studymate/mcp-server && npm run build --workspace=@studymate/web",
     "db:init": "npm run init --workspace=packages/database",
     "db:seed": "npm run seed --workspace=packages/database",
     "db:reset": "npm run reset --workspace=packages/database",

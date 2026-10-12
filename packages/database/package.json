@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prebuild": "npm run build --workspace=@studymate/types",
     "build": "tsc",
     "init": "tsx src/init.ts",
     "seed": "tsx src/seed.ts",
