@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Main Sidebar */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#07070b]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between p-4 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#07070b]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between p-4 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${
           mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
