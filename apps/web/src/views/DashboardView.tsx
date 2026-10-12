@@ -132,20 +132,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. Welcoming Hero Banner */}
-      <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-2xl border border-white/15 text-white shadow-2xl relative overflow-hidden">
+      <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl relative overflow-hidden">
         {/* Ambient subtle glow mesh */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 bg-cyan-400/20 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div>
-            <span className="font-mono text-[10px] font-semibold px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/15 uppercase tracking-wider">
+            <span className="font-mono text-[10px] font-semibold px-3 py-1 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider">
               Student Workspace
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mt-3 flex items-center gap-2 text-white">
               <span>Welcome back, {studentFirstName}!</span>
               <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
             </h1>
-            <p className="text-sm text-white/70 mt-1.5 max-w-xl leading-relaxed">
+            <p className="text-sm text-blue-100/90 dark:text-white/70 mt-1.5 max-w-xl leading-relaxed">
               {pendingTasks.length > 0 ? (
                 <>
                   You have <span className="font-semibold text-white underline decoration-cyan-400/50">{pendingTasks.length} active assignments</span>. Let's make today productive and stress-free.
@@ -161,15 +161,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={onOpenAddModal}
-              className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer"
-              style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+              className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
             >
               <Plus className="w-4 h-4" />
               <span>Add Assignment</span>
             </button>
             <button
               onClick={() => onNavigateToScreen('planner')}
-              className="px-5 py-2.5 rounded-full text-xs font-medium text-white/90 bg-white/10 hover:bg-white/15 border border-white/15 transition flex items-center space-x-1.5 cursor-pointer backdrop-blur-md"
+              className="px-5 py-2.5 rounded-full text-xs font-medium text-white bg-white/15 hover:bg-white/20 border border-white/20 transition flex items-center space-x-1.5 cursor-pointer backdrop-blur-md"
             >
               <Clock className="w-4 h-4 text-cyan-300" />
               <span>Pomodoro Timer</span>
@@ -182,19 +181,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <KpiCards tasks={tasks} courses={courses} progressList={progressList} />
 
       {/* 3. Clean Alexa+ Assistant Command Box */}
-      <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4">
+      <div className="rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 dark:bg-cyan-500/10 dark:border-cyan-500/20 dark:text-cyan-300 flex items-center justify-center">
               <Sparkles className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-bold text-white tracking-tight">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
               Alexa+ Academic Assistant
             </h3>
           </div>
           <button
             onClick={() => onNavigateToScreen('voice')}
-            className="text-xs font-medium text-cyan-300 hover:text-cyan-200 hover:underline flex items-center space-x-1 cursor-pointer transition-colors"
+            className="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-cyan-300 dark:hover:text-cyan-200 hover:underline flex items-center space-x-1 cursor-pointer transition-colors"
           >
             <span>Full Voice Console</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -203,19 +202,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
         {/* Natural Language Prompt Input */}
         <form onSubmit={handleVoiceSubmit} className="relative flex items-center">
-          <Mic className="w-4 h-4 text-cyan-400 absolute left-4 pointer-events-none" />
+          <Mic className="w-4 h-4 text-blue-600 dark:text-cyan-400 absolute left-4 pointer-events-none" />
           <input
             type="text"
             value={voiceQuery}
             onChange={(e) => setVoiceQuery(e.target.value)}
             placeholder="Ask Alexa+ anything... (e.g. 'What is due this week?' or 'Add a task: Lab 3 for CS 420')"
-            className="w-full pl-11 pr-28 py-3 text-xs rounded-full bg-white/[0.06] border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-cyan-400/60 focus:bg-white/[0.09] transition"
+            className="w-full pl-11 pr-28 py-3 text-xs rounded-full bg-slate-50 dark:bg-white/[0.06] border border-slate-200 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400/60 focus:bg-white dark:focus:bg-white/[0.09] transition"
           />
           <button
             type="submit"
             disabled={voiceLoading}
-            className="absolute right-1.5 px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-lg border border-white/20 active:scale-95 disabled:opacity-50 cursor-pointer"
-            style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+            className="absolute right-1.5 px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-sm active:scale-95 disabled:opacity-50 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010] border border-transparent dark:border-white/20"
           >
             {voiceLoading ? 'Thinking...' : 'Ask AI'}
           </button>
@@ -223,7 +221,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
         {/* Quick Suggestion Chips */}
         <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-          <span className="text-[11px] font-mono text-white/40">Suggestions:</span>
+          <span className="text-[11px] font-mono text-slate-400 dark:text-white/40">Suggestions:</span>
           {[
             "What's due this week?",
             "I have 60 minutes tonight, help me study",
@@ -232,7 +230,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               key={i}
               onClick={() => handleQuickPrompt(prompt)}
-              className="text-[11px] px-3 py-1 rounded-full bg-white/[0.04] text-white/70 hover:text-white border border-white/10 hover:border-white/20 hover:bg-white/[0.08] transition cursor-pointer"
+              className="text-[11px] px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 hover:text-slate-900 border border-slate-200 dark:bg-white/[0.04] dark:text-white/70 dark:hover:text-white dark:border-white/10 dark:hover:border-white/20 dark:hover:bg-white/[0.08] transition cursor-pointer"
             >
               {prompt}
             </button>
@@ -241,10 +239,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
         {/* AI Voice Response Notification */}
         {voiceResponse && (
-          <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-xs flex items-start space-x-3 mt-2 animate-in fade-in duration-200">
-            <Volume2 className="w-4 h-4 text-cyan-300 shrink-0 mt-0.5" />
-            <div className="flex-1 text-white/90 leading-relaxed">
-              <span className="font-semibold text-cyan-300">Alexa+: </span>
+          <div className="p-4 rounded-xl bg-blue-50 dark:bg-cyan-500/10 border border-blue-200 dark:border-cyan-500/20 text-xs flex items-start space-x-3 mt-2 animate-in fade-in duration-200">
+            <Volume2 className="w-4 h-4 text-blue-600 dark:text-cyan-300 shrink-0 mt-0.5" />
+            <div className="flex-1 text-slate-800 dark:text-white/90 leading-relaxed">
+              <span className="font-semibold text-blue-700 dark:text-cyan-300">Alexa+: </span>
               {voiceResponse}
             </div>
           </div>
@@ -254,19 +252,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* 4. Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Priority Assignments (7 cols) */}
-        <div className="lg:col-span-7 rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="lg:col-span-7 rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                 Upcoming Coursework
               </h2>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-slate-500 dark:text-white/50">
                 Top assignments awaiting completion
               </p>
             </div>
             <button
               onClick={() => onNavigateToScreen('assignments')}
-              className="text-xs font-semibold text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer"
             >
               <span>View All ({tasks.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -275,18 +273,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <div className="space-y-2.5">
             {recentTasks.length === 0 ? (
-              <div className="text-center py-10 px-4 rounded-xl bg-white/[0.02] border border-dashed border-white/10 flex flex-col items-center justify-center space-y-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center border border-white/15">
-                  <CheckCircle2 className="w-5 h-5 text-cyan-300" />
+              <div className="text-center py-10 px-4 rounded-xl bg-slate-50/60 dark:bg-white/[0.02] border border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center space-y-3">
+                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-white flex items-center justify-center border border-slate-200 dark:border-white/15">
+                  <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-cyan-300" />
                 </div>
                 <div className="space-y-1 text-center">
-                  <p className="text-xs font-semibold text-white">No assignments recorded yet</p>
-                  <p className="text-[11px] text-white/50">Create your first task or syllabus topic to get started</p>
+                  <p className="text-xs font-semibold text-slate-800 dark:text-white">No assignments recorded yet</p>
+                  <p className="text-[11px] text-slate-500 dark:text-white/50">Create your first task or syllabus topic to get started</p>
                 </div>
                 <button
                   onClick={onOpenAddModal}
-                  className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer"
-                  style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+                  className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-md border border-transparent dark:border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add First Task</span>
@@ -296,21 +293,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               recentTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] transition flex items-center justify-between gap-3 group"
+                  className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-100/80 dark:hover:bg-white/[0.06] transition flex items-center justify-between gap-3 group"
                 >
                   <div className="flex items-center space-x-3 min-w-0">
                     <button
                       onClick={() => onToggleStatus(task.id, task.status)}
-                      className="text-white/40 hover:text-cyan-300 transition shrink-0 cursor-pointer"
+                      className="text-slate-400 hover:text-blue-600 dark:text-white/40 dark:hover:text-cyan-300 transition shrink-0 cursor-pointer"
                     >
                       <Circle className="w-4 h-4" />
                     </button>
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold text-white truncate">
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">
                         {task.title}
                       </div>
-                      <div className="text-[10px] font-mono text-white/50 flex items-center space-x-2 mt-0.5">
-                        <span className="font-semibold text-cyan-300">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-white/50 flex items-center space-x-2 mt-0.5">
+                        <span className="font-semibold text-blue-600 dark:text-cyan-300">
                           {task.course_code || task.course_name}
                         </span>
                         <span>•</span>
@@ -323,7 +320,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     {getPriorityBadge(task.priority)}
                     <button
                       onClick={() => onFocusTask(task)}
-                      className="px-3 py-1 text-[10px] font-semibold text-cyan-300 hover:bg-cyan-500/20 rounded-full border border-cyan-500/30 transition cursor-pointer"
+                      className="px-3 py-1 text-[10px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 dark:text-cyan-300 dark:bg-transparent dark:hover:bg-cyan-500/20 dark:border-cyan-500/30 rounded-full transition cursor-pointer"
                     >
                       Focus
                     </button>
@@ -337,17 +334,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Right Column: Focus Timer & Course Progress (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Quick Focus Pomodoro Card */}
-          <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div className="rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
               <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-cyan-300" />
-                <h3 className="text-sm font-bold text-white tracking-tight">
+                <Clock className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
                   Quick Focus Session
                 </h3>
               </div>
               <button
                 onClick={() => onNavigateToScreen('planner')}
-                className="text-xs font-semibold text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer"
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer"
               >
                 <span>Planner</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -355,10 +352,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <div className="text-center py-4 space-y-3">
-              <div className="font-mono text-5xl font-extralight text-white tracking-widest drop-shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+              <div className="font-mono text-5xl font-extralight text-slate-900 dark:text-white tracking-widest drop-shadow-[0_0_15px_rgba(37,99,235,0.1)] dark:drop-shadow-[0_0_15px_rgba(6,182,212,0.15)]">
                 {formatTime(secondsRemaining)}
               </div>
-              <p className="text-[11px] text-white/50 uppercase tracking-wider font-mono">
+              <p className="text-[11px] text-slate-500 dark:text-white/50 uppercase tracking-wider font-mono">
                 Pomodoro Focus Sprint
               </p>
 
@@ -366,8 +363,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <button
                   type="button"
                   onClick={toggleTimer}
-                  className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer"
-                  style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+                  className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-md border border-transparent dark:border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
                 >
                   {timerRunning ? (
                     <>
@@ -384,7 +380,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <button
                   type="button"
                   onClick={resetTimer}
-                  className="p-2.5 rounded-full bg-white/10 text-white/70 hover:text-white border border-white/15 transition cursor-pointer"
+                  className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 dark:bg-white/10 dark:text-white/70 dark:hover:text-white dark:border-white/15 transition cursor-pointer"
                   title="Reset"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -394,36 +390,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           {/* Course Syllabus Progress */}
-          <div className="rounded-2xl p-6 bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-2xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-white/10">
+          <div className="rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-white/10">
               <div className="flex items-center space-x-2">
-                <BookOpen className="w-4 h-4 text-cyan-300" />
-                <h3 className="text-sm font-bold text-white tracking-tight">
+                <BookOpen className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
                   Course Pacing
                 </h3>
               </div>
-              <span className="text-[11px] font-mono text-white/50">Semester 1</span>
+              <span className="text-[11px] font-mono text-slate-400 dark:text-white/50">Semester 1</span>
             </div>
 
             <div className="space-y-3 pt-1">
               {progressList.length === 0 ? (
-                <div className="py-6 text-center text-xs text-white/50 font-mono">
+                <div className="py-6 text-center text-xs text-slate-500 dark:text-white/50 font-mono">
                   No courses enrolled yet. Add an assignment above to track your course progress!
                 </div>
               ) : (
                 progressList.slice(0, 4).map((p) => (
                   <div key={p.course_id} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-white">
+                      <span className="font-semibold text-slate-800 dark:text-white">
                         {p.course_code || p.course_name}
                       </span>
-                      <span className="font-mono font-bold text-cyan-300">
+                      <span className="font-mono font-bold text-blue-600 dark:text-cyan-300">
                         {p.completed_pct}%
                       </span>
                     </div>
-                    <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden border border-white/10">
+                    <div className="w-full bg-slate-100 dark:bg-white/10 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-white/10">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-indigo-500 transition-all duration-300"
+                        className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-indigo-500 transition-all duration-300"
                         style={{ width: `${p.completed_pct}%` }}
                       />
                     </div>

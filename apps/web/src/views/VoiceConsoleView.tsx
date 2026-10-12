@@ -253,25 +253,25 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
   return (
     <div className="space-y-6 animate-fadeIn max-w-[1400px] mx-auto">
       {/* Top Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-2xl border border-white/15 text-white shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center space-x-3">
             <h1 className="text-2xl font-bold tracking-tight text-white">
               Voice Assistant Console
             </h1>
-            <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 uppercase tracking-wider flex items-center space-x-1.5">
-              <Radio className="w-3 h-3 animate-pulse text-cyan-400" />
+            <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider flex items-center space-x-1.5">
+              <Radio className="w-3 h-3 animate-pulse text-cyan-300" />
               <span>Multi-Turn Dialogue</span>
             </span>
           </div>
-          <p className="text-xs text-white/60 mt-1">
+          <p className="text-xs text-blue-100/90 dark:text-white/60 mt-1">
             Real-time conversational intelligence for {currentStudent.name} ({currentStudent.major})
           </p>
         </div>
 
         {/* Audio & Session Controls */}
         <div className="flex flex-wrap items-center gap-3 relative z-10">
-          <div className="flex items-center space-x-2 text-xs font-mono text-white/60 bg-white/[0.04] px-3.5 py-1.5 rounded-full border border-white/10">
+          <div className="flex items-center space-x-2 text-xs font-mono text-white/80 bg-white/15 px-3.5 py-1.5 rounded-full border border-white/20">
             <span>Speed:</span>
             <input
               type="range"
@@ -282,24 +282,24 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
               onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
               className="w-16 accent-cyan-400"
             />
-            <span className="text-white/80">{speechRate}x</span>
+            <span className="text-white font-semibold">{speechRate}x</span>
           </div>
 
           <button
             onClick={() => setTtsEnabled(!ttsEnabled)}
             className={`px-3.5 py-1.5 rounded-full text-xs border transition flex items-center space-x-1.5 cursor-pointer font-semibold font-mono ${
               ttsEnabled
-                ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
-                : 'bg-white/[0.04] text-white/60 border-white/10'
+                ? 'bg-white text-slate-900 border-white shadow-sm'
+                : 'bg-white/15 text-white/70 border-white/20'
             }`}
           >
-            {ttsEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            {ttsEnabled ? <Volume2 className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" /> : <VolumeX className="w-3.5 h-3.5" />}
             <span>{ttsEnabled ? 'Readback ON' : 'Readback OFF'}</span>
           </button>
 
           <button
             onClick={handleClearChat}
-            className="p-2 rounded-full border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition cursor-pointer"
+            className="p-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:bg-white/15 transition cursor-pointer"
             title="Clear conversation history"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -310,7 +310,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       {/* Main Conversation Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Chat Feed & Input (8 cols) */}
-        <div className="lg:col-span-8 p-6 sm:p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-4 flex flex-col justify-between min-h-[620px]">
+        <div className="lg:col-span-8 p-6 sm:p-8 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4 flex flex-col justify-between min-h-[620px]">
           {/* Chat Messages Feed */}
           <div className="space-y-5 min-h-[440px] max-h-[560px] overflow-y-auto pr-2">
             {messages.map((msg, i) => (
@@ -322,7 +322,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
               >
                 {/* Assistant Avatar */}
                 {msg.role === 'assistant' && (
-                  <div className="w-9 h-9 rounded-2xl bg-white/[0.08] border border-white/15 text-cyan-300 flex items-center justify-center shrink-0 shadow-lg">
+                  <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 dark:bg-white/[0.08] dark:border-white/15 dark:text-cyan-300 flex items-center justify-center shrink-0 shadow-sm dark:shadow-lg">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
@@ -331,10 +331,9 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
                 <div
                   className={`rounded-2xl p-4 transition-all ${
                     msg.role === 'user'
-                      ? 'max-w-[80%] text-white border border-white/20 shadow-xl'
-                      : 'w-full max-w-[88%] bg-white/[0.04] border border-white/10 text-white shadow-lg'
+                      ? 'max-w-[80%] text-white border border-transparent dark:border-white/20 shadow-md bg-slate-900 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]'
+                      : 'w-full max-w-[88%] bg-slate-50 dark:bg-white/[0.04] border border-slate-200/90 dark:border-white/10 text-slate-800 dark:text-white shadow-sm dark:shadow-lg'
                   }`}
-                  style={msg.role === 'user' ? { background: 'linear-gradient(to bottom, #2B2B2B, #101010)' } : undefined}
                 >
                   {msg.role === 'user' ? (
                     <div>
@@ -352,10 +351,10 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
                     />
                   ) : (
                     <div>
-                      <p className="text-sm font-sans leading-relaxed text-white">
+                      <p className="text-sm font-sans leading-relaxed text-slate-900 dark:text-white">
                         {msg.content}
                       </p>
-                      <span className="text-[10px] font-mono text-white/50 block mt-1.5">
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-white/50 block mt-1.5">
                         {msg.timestamp}
                       </span>
                     </div>
@@ -364,7 +363,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
 
                 {/* User Avatar with Student Initials */}
                 {msg.role === 'user' && (
-                  <div className="w-9 h-9 rounded-2xl bg-white/15 border border-white/20 text-white flex items-center justify-center shrink-0 shadow-md text-xs font-bold font-mono">
+                  <div className="w-9 h-9 rounded-2xl bg-slate-200 text-slate-800 dark:bg-white/15 dark:border dark:border-white/20 dark:text-white flex items-center justify-center shrink-0 shadow-sm text-xs font-bold font-mono">
                     {studentInitials}
                   </div>
                 )}
@@ -374,11 +373,11 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
             {/* Loading Indicator */}
             {loading && (
               <div className="flex items-start space-x-3">
-                <div className="w-9 h-9 rounded-2xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center justify-center shrink-0 animate-pulse">
+                <div className="w-9 h-9 rounded-2xl bg-blue-100 text-blue-700 dark:bg-cyan-500/20 dark:text-cyan-300 border border-blue-200 dark:border-cyan-500/30 flex items-center justify-center shrink-0 animate-pulse">
                   <Bot className="w-4 h-4" />
                 </div>
-                <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center space-x-3 text-xs text-white/60">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center space-x-3 text-xs text-slate-600 dark:text-white/60">
+                  <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping" />
                   <span>Processing natural language & executing MCP tools...</span>
                 </div>
               </div>
@@ -389,7 +388,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
 
           {/* Voice Microphone Error Notification */}
           {speechError && (
-            <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center space-x-2">
+            <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/30 dark:text-rose-300 text-xs flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{speechError}</span>
             </div>
@@ -397,7 +396,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
 
           {/* Voice Listening Active Waveform Banner */}
           {isListening && (
-            <div className="p-3.5 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs flex items-center justify-between animate-pulse">
+            <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 dark:bg-cyan-500/15 dark:border-cyan-500/30 dark:text-cyan-300 text-xs flex items-center justify-between animate-pulse">
               <div className="flex items-center space-x-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
                 <span className="font-semibold">Listening to your voice... Speak now!</span>
@@ -418,7 +417,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
               e.preventDefault();
               handleSend(inputUtterance);
             }}
-            className="flex items-center space-x-2.5 pt-3 border-t border-white/10"
+            className="flex items-center space-x-2.5 pt-3 border-t border-slate-200/80 dark:border-white/10"
           >
             {/* Live Microphone Toggle Button */}
             <button
@@ -426,8 +425,8 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
               onClick={handleToggleListening}
               className={`p-3 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
                 isListening
-                  ? 'bg-rose-500 text-white border-rose-600 animate-bounce shadow-lg shadow-rose-500/30'
-                  : 'bg-white/[0.06] border-white/10 text-cyan-300 hover:bg-white/[0.12] hover:text-white'
+                  ? 'bg-rose-500 text-white border-rose-600 animate-bounce shadow-md shadow-rose-500/30'
+                  : 'bg-slate-100 dark:bg-white/[0.06] border-slate-200 dark:border-white/10 text-slate-700 dark:text-cyan-300 hover:bg-slate-200 dark:hover:bg-white/[0.12] hover:text-slate-900 dark:hover:text-white'
               }`}
               title={isListening ? 'Stop listening' : 'Start voice input (speak via microphone)'}
             >
@@ -440,15 +439,14 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
               value={inputUtterance}
               onChange={(e) => setInputUtterance(e.target.value)}
               placeholder="Talk to StudyMate (e.g. 'What's due this week?', '45 min study plan', 'yes'...)"
-              className="flex-1 bg-white/[0.05] border border-white/15 rounded-full px-5 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-cyan-400 transition-colors font-sans"
+              className="flex-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/15 rounded-full px-5 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400 transition-colors font-sans"
             />
 
             {/* Send Button */}
             <button
               type="submit"
               disabled={loading || !inputUtterance.trim()}
-              className="px-6 py-3 rounded-full text-white font-semibold text-xs transition flex items-center space-x-1.5 shadow-xl border border-white/20 disabled:opacity-40 cursor-pointer hover:opacity-90 active:scale-95"
-              style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+              className="px-6 py-3 rounded-full text-white font-semibold text-xs transition flex items-center space-x-1.5 shadow-md border border-transparent dark:border-white/20 disabled:opacity-40 cursor-pointer hover:opacity-90 active:scale-95 bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Send</span>
@@ -458,12 +456,12 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
 
         {/* Right Column: 1-Click Conversational Prompt Scenarios (4 cols) */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-3">
-            <div className="flex items-center space-x-2 text-xs font-bold text-white">
-              <Sparkles className="w-4 h-4 text-cyan-300" />
+          <div className="p-6 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-3">
+            <div className="flex items-center space-x-2 text-xs font-bold text-slate-900 dark:text-white">
+              <Sparkles className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
               <span>Interactive Voice Scenarios</span>
             </div>
-            <p className="text-xs text-white/50 leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-white/50 leading-relaxed">
               Click any scenario or test multi-turn flow: ask for a study plan, then click "yes" to launch the session!
             </p>
 
@@ -473,13 +471,13 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
                   key={idx}
                   onClick={() => handleSend(prompt)}
                   disabled={loading}
-                  className="w-full text-left p-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-400/40 transition-all text-xs text-white flex items-center justify-between group cursor-pointer shadow-md"
+                  className="w-full text-left p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200 hover:border-blue-400 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:border-white/10 dark:hover:border-cyan-400/40 transition-all text-xs text-slate-900 dark:text-white flex items-center justify-between group cursor-pointer shadow-sm"
                 >
                   <div className="flex items-center space-x-2 min-w-0">
-                    <Mic className="w-3.5 h-3.5 text-cyan-400 shrink-0 group-hover:scale-110 transition-transform" />
+                    <Mic className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0 group-hover:scale-110 transition-transform" />
                     <span className="font-sans font-medium truncate">"{prompt}"</span>
                   </div>
-                  <span className="text-[10px] font-mono text-cyan-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <span className="text-[10px] font-mono text-blue-600 dark:text-cyan-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                     Run →
                   </span>
                 </button>
@@ -488,12 +486,12 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
           </div>
 
           {/* Multi-Turn Memory Callout Card */}
-          <div className="p-6 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl space-y-2 text-xs">
-            <div className="flex items-center space-x-2 font-bold text-white">
-              <Clock className="w-4 h-4 text-cyan-300" />
+          <div className="p-6 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-2 text-xs">
+            <div className="flex items-center space-x-2 font-bold text-slate-900 dark:text-white">
+              <Clock className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
               <span>Contextual State Memory</span>
             </div>
-            <p className="text-white/50 leading-relaxed">
+            <p className="text-slate-500 dark:text-white/50 leading-relaxed">
               StudyMate tracks your pending questions across conversational turns. Saying "yes", "sure", or "start" after requesting a study plan will seamlessly initiate your Pomodoro timer.
             </p>
           </div>
