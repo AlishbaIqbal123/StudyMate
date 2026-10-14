@@ -19,6 +19,8 @@ import {
 import { KpiCards } from '../components/KpiCards.js';
 import { simulateVoice, getActiveStudent } from '../api.js';
 import { usePomodoro } from '../context/PomodoroContext.js';
+import { useAuth } from '../context/AuthContext.js';
+import { AuthGate } from '../components/AuthGate.js';
 import type { Course, CourseProgress, Task, TaskPriority, TaskStatus } from '@studymate/types';
 
 interface DashboardViewProps {
@@ -44,6 +46,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onDataChanged,
   onNavigateToScreen,
 }) => {
+  const { isPreview, openClerkSignIn, openClerkSignUp } = useAuth();
   const [voiceQuery, setVoiceQuery] = useState('');
   const [voiceLoading, setVoiceLoading] = useState(false);
   const [voiceResponse, setVoiceResponse] = useState<string | null>(null);
@@ -131,6 +134,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Guest Mode Notification Banner */}
+      {isPreview && (
+        <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/80 dark:from-white/[0.05] dark:via-white/[0.03] dark:to-transparent border border-blue-200/70 dark:border-white/10 shadow-sm animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 uppercase tracking-wider shrink-0">
+              Preview Mode
+            </span>
+            <p className="text-xs text-slate-700 dark:text-white/70 leading-relaxed">
+              You are exploring StudyMate with <strong className="text-slate-900 dark:text-white">0 preloaded dummy data</strong>. You can test Pomodoro and create temporary tasks, but history is not saved. <strong className="text-slate-900 dark:text-white">Sign in</strong> to persist your academic workspace.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={openClerkSignIn}
+              className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-sm active:scale-95 bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010] border border-transparent dark:border-white/20 cursor-pointer"
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={openClerkSignUp}
+              className="px-4 py-2 rounded-full text-xs font-semibold text-slate-700 dark:text-white/80 bg-white dark:bg-white/[0.06] hover:bg-slate-100 dark:hover:bg-white/[0.12] border border-slate-300 dark:border-white/20 transition cursor-pointer"
+            >
+              Sign Up Free
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. Welcoming Hero Banner */}
       <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl relative overflow-hidden">
         {/* Ambient subtle glow mesh */}
@@ -139,10 +172,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div>
             <span className="font-mono text-[10px] font-semibold px-3 py-1 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider">
-              Student Workspace
+              {isPreview ? 'Guest Workspace' : 'Student Workspace'}
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mt-3 flex items-center gap-2 text-white">
-              <span>Welcome back, {studentFirstName}!</span>
+              <span>{isPreview ? 'Welcome to StudyMate!' : `Welcome back, ${studentFirstName}!`}</span>
               <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
             </h1>
             <p className="text-sm text-blue-100/90 dark:text-white/70 mt-1.5 max-w-xl leading-relaxed">
@@ -152,7 +185,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </>
               ) : (
                 <>
-                  Welcome to StudyMate! Your workspace is fresh and ready. Click <span className="font-semibold text-white underline decoration-cyan-400/50">+ Add Assignment</span> to begin.
+                  {isPreview
+                    ? "Your guest workspace is clean and ready. Add an assignment or start a Pomodoro focus sprint."
+                    : "Welcome to StudyMate! Your workspace is fresh and ready. Click + Add Assignment to begin."}
                 </>
               )}
             </p>
@@ -389,45 +424,52 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Course Syllabus Progress */}
-          <div className="rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-white/10">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
-                  Course Pacing
-                </h3>
-              </div>
-              <span className="text-[11px] font-mono text-slate-400 dark:text-white/50">Semester 1</span>
-            </div>
-
-            <div className="space-y-3 pt-1">
-              {progressList.length === 0 ? (
-                <div className="py-6 text-center text-xs text-slate-500 dark:text-white/50 font-mono">
-                  No courses enrolled yet. Add an assignment above to track your course progress!
+          {/* Course Syllabus Progress (Protected by AuthGate for Guests) */}
+          <AuthGate
+            title="Course Pacing Locked"
+            description="Sign in or create a free account to track your syllabus completion, weekly hours, and pacing benchmarks."
+            compact
+            feature="Course Progress"
+          >
+            <div className="rounded-2xl p-6 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-white/10">
+                <div className="flex items-center space-x-2">
+                  <BookOpen className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
+                    Course Pacing
+                  </h3>
                 </div>
-              ) : (
-                progressList.slice(0, 4).map((p) => (
-                  <div key={p.course_id} className="space-y-1.5">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-800 dark:text-white">
-                        {p.course_code || p.course_name}
-                      </span>
-                      <span className="font-mono font-bold text-blue-600 dark:text-cyan-300">
-                        {p.completed_pct}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-slate-100 dark:bg-white/10 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-white/10">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-indigo-500 transition-all duration-300"
-                        style={{ width: `${p.completed_pct}%` }}
-                      />
-                    </div>
+                <span className="text-[11px] font-mono text-slate-400 dark:text-white/50">Semester 1</span>
+              </div>
+
+              <div className="space-y-3 pt-1">
+                {progressList.length === 0 ? (
+                  <div className="py-6 text-center text-xs text-slate-500 dark:text-white/50 font-mono">
+                    No courses enrolled yet. Add an assignment above to track your course progress!
                   </div>
-                ))
-              )}
+                ) : (
+                  progressList.slice(0, 4).map((p) => (
+                    <div key={p.course_id} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-800 dark:text-white">
+                          {p.course_code || p.course_name}
+                        </span>
+                        <span className="font-mono font-bold text-blue-600 dark:text-cyan-300">
+                          {p.completed_pct}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-100 dark:bg-white/10 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-white/10">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-indigo-500 transition-all duration-300"
+                          style={{ width: `${p.completed_pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          </AuthGate>
         </div>
       </div>
     </div>

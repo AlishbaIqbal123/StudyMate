@@ -74,21 +74,43 @@ function initials(name: string): string {
   );
 }
 
-function buildPreviewUser(studentId = DEMO_STUDENTS[0].id): AuthUser {
-  const s = DEMO_STUDENTS.find((d) => d.id === studentId) || DEMO_STUDENTS[0];
+function buildPreviewUser(studentId?: number | null): AuthUser {
+  if (studentId) {
+    const s = DEMO_STUDENTS.find((d) => d.id === studentId);
+    if (s) {
+      return {
+        id: s.id,
+        email: s.email,
+        name: s.name,
+        avatar: s.avatar,
+        major: s.major,
+        year: s.year,
+        studentId: `PREVIEW-${s.id.toString().padStart(4, '0')}`,
+        alexaLinked: false,
+        role: 'student',
+        createdAt: new Date().toISOString(),
+        tier: 'preview',
+        isDemo: true,
+        authProvider: 'preview',
+        emailVerified: false,
+      };
+    }
+  }
+
+  // Pure Guest User (0 dummy data, no history)
   return {
-    id: s.id,
-    email: s.email,
-    name: s.name,
-    avatar: s.avatar,
-    major: s.major,
-    year: s.year,
-    studentId: `PREVIEW-${s.id.toString().padStart(4, '0')}`,
+    id: 'guest',
+    email: '',
+    name: 'Guest Scholar',
+    avatar: 'GS',
+    major: 'General Studies',
+    year: 'Guest Explorer',
+    studentId: 'GUEST-0001',
     alexaLinked: false,
     role: 'student',
     createdAt: new Date().toISOString(),
     tier: 'preview',
-    isDemo: s.id === DEMO_STUDENTS[0].id,
+    isDemo: false,
     authProvider: 'preview',
     emailVerified: false,
   };
@@ -100,7 +122,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [upgradeReason, setUpgradeReason] = useState<UpgradeReason | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [previewStudentId, setPreviewStudentId] = useState<number>(DEMO_STUDENTS[0].id);
+  const [previewStudentId, setPreviewStudentId] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const raw = localStorage.getItem('studymate_active_persona_id');
+      if (raw) return parseInt(raw, 10);
+    }
+    return null;
+  });
   const [alexaLinkedState, setAlexaLinkedState] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('studymate_alexa_linked') === 'true';
@@ -207,6 +235,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setPreviewStudentId(DEMO_STUDENTS[0].id);
     setActiveStudent(DEMO_STUDENTS[0].id);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('studymate_active_persona_id', String(DEMO_STUDENTS[0].id));
+    }
     setIsAuthModalOpen(false);
   }, [isClerkSignedIn, clerk]);
 
@@ -217,6 +248,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       setPreviewStudentId(studentId);
       setActiveStudent(studentId);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('studymate_active_persona_id', String(studentId));
+      }
       setIsAuthModalOpen(false);
     },
     [isClerkSignedIn, clerk]
@@ -293,11 +327,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = useCallback(() => {
     clerk.signOut().catch(() => {});
-    setPreviewStudentId(DEMO_STUDENTS[0].id);
-    setActiveStudent(DEMO_STUDENTS[0].id);
+    setPreviewStudentId(null);
     setAlexaLinkedState(false);
     if (typeof window !== 'undefined') {
+      localStorage.removeItem('studymate_active_persona_id');
       localStorage.removeItem('studymate_alexa_linked');
+      localStorage.removeItem(STORAGE_KEY);
     }
   }, [clerk]);
 

@@ -28,6 +28,7 @@ import {
   executeMcpJsonRpc,
   type ServerHealthDetails,
 } from '../api.js';
+import { AuthGate } from '../components/AuthGate.js';
 import type { Course, CourseProgress, Task } from '@studymate/types';
 
 interface TelemetryViewProps {
@@ -802,8 +803,14 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
         {/* Right Column: Saved Records Explorer & Alexa Remote Access (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          {/* Saved Academic Records Card */}
-          <div className="rounded-3xl p-6 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-xl space-y-4">
+          {/* Saved Academic Records Card (Protected by AuthGate for Guests) */}
+          <AuthGate
+            title="Saved Academic Records Locked"
+            description="Sign in or create a free account to persist your courses, assignments, and study logs across devices."
+            compact
+            feature="Database Sync"
+          >
+            <div className="rounded-3xl p-6 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
@@ -943,8 +950,9 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                 ))}
             </div>
           </div>
+        </AuthGate>
 
-          {/* Connect with Alexa / Phone Guide */}
+        {/* Connect with Alexa / Phone Guide */}
           <div className="rounded-3xl p-6 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-xl space-y-4">
             <div className="flex items-center space-x-2 pb-3 border-b border-slate-200/80 dark:border-white/10">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />

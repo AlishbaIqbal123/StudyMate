@@ -58,6 +58,7 @@ export function getActiveAuthSession(): {
   year?: string;
   avatar?: string;
   isDemo?: boolean;
+  tier?: string;
 } | null {
   if (typeof window !== 'undefined') {
     try {
@@ -72,8 +73,8 @@ export function getActiveAuthSession(): {
 
 export function isDemoSession(): boolean {
   const session = getActiveAuthSession();
-  if (!session) return true; // Default fallback to demo student if no session exists
-  return Boolean(session.isDemo || session.id === 1 || session.email === 'alishba@university.edu');
+  if (!session) return false;
+  return Boolean(session.isDemo && (session.id === 1 || session.email === 'alishba@university.edu'));
 }
 
 export function getCurrentUserStoreKey(): string {
@@ -81,12 +82,15 @@ export function getCurrentUserStoreKey(): string {
   if (isDemoSession()) {
     return 'studymate_data_v2_demo_1';
   }
-  return `studymate_data_v2_user_${session?.id || 'guest'}`;
+  if (session && session.tier === 'member') {
+    return `studymate_data_v2_user_${session.id}`;
+  }
+  return 'studymate_data_v2_guest';
 }
 
 export function getActiveStudent(): StudentProfile {
   const session = getActiveAuthSession();
-  if (session && !session.isDemo && session.id !== 1 && session.email !== 'alishba@university.edu') {
+  if (session && session.tier === 'member') {
     return {
       id: typeof session.id === 'number' ? session.id : 999,
       name: session.name || 'Enrolled Student',
@@ -96,7 +100,17 @@ export function getActiveStudent(): StudentProfile {
       email: session.email || 'student@university.edu',
     };
   }
-  return DEMO_STUDENT;
+  if (isDemoSession()) {
+    return DEMO_STUDENT;
+  }
+  return {
+    id: 0,
+    name: 'Guest Scholar',
+    major: 'General Studies',
+    year: 'Guest Explorer',
+    avatar: 'GS',
+    email: '',
+  };
 }
 
 export function setActiveStudent(studentId: number): void {
@@ -931,7 +945,12 @@ export async function logStudySession(params: {
   };
 
   const isDemo = isDemoSession();
-  if (!isDemo && typeof window !== 'undefined') {
+  const session = getActiveAuthSession();
+  const isMember = session?.tier === 'member';
+
+  // Only persist study sessions and stats for authenticated members or demo session!
+  // For guests, no history is recorded.
+  if ((isMember || isDemo) && typeof window !== 'undefined') {
     const statsKey = `${getCurrentUserStoreKey()}_stats`;
     const curStats = await fetchStudyStats();
 

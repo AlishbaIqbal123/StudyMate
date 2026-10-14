@@ -16,6 +16,7 @@ import type { Course, CourseProgress, StudyPlan } from '@studymate/types';
 import { generateStudyPlan } from '../api.js';
 import { usePomodoro, type PomodoroMode } from '../context/PomodoroContext.js';
 import { StudyStatsTracker } from '../components/StudyStatsTracker.js';
+import { AuthGate } from '../components/AuthGate.js';
 
 interface PlannerViewProps {
   courses: Course[];
@@ -329,7 +330,13 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
       </div>
 
       {/* 2. Comprehensive Daily/Weekly/Monthly Study Time Tracker */}
-      <StudyStatsTracker courses={courses} />
+      <AuthGate
+        title="Study Analytics & History Locked"
+        description="Sign in or create a free account to track your study sessions, view interactive velocity graphs, and calculate study streaks across devices."
+        feature="Focus Analytics"
+      >
+        <StudyStatsTracker courses={courses} />
+      </AuthGate>
     </div>
   );
 };
