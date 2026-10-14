@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronDown,
   Menu,
@@ -39,6 +39,36 @@ export interface StudyMateHeroProps {
   onOpenAssignments?: () => void;
 }
 
+// Reusable Scroll-Reveal Hook for continuous reveal animations on scroll
+function useOnScreen(
+  ref: React.RefObject<HTMLDivElement | null>,
+  threshold = 0.05,
+  initialVisible = false
+) {
+  const [isIntersecting, setIntersecting] = useState(initialVisible);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIntersecting(true);
+        }
+      },
+      { threshold, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    const current = ref.current;
+    if (current) {
+      observer.observe(current);
+    }
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [ref, threshold]);
+
+  return isIntersecting;
+}
+
 export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   onOpenDashboard,
   onOpenVoice,
@@ -56,14 +86,93 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     response: string;
   } | null>(null);
 
+  // Real-Time Continuous Scroll Tracker & Active Chapter
+  const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeChapter, setActiveChapter] = useState('hero');
+
+  // Interactive Live Timer in Focus Flow Section
+  const [heroTimerRunning, setHeroTimerRunning] = useState(false);
+  const [heroTimerSeconds, setHeroTimerSeconds] = useState(25 * 60);
+
   // Interactive Story Turn Simulator
   const [activeStoryTurn, setActiveStoryTurn] = useState<number>(1);
   const [activeMcpTab, setActiveMcpTab] = useState<string>('get_tasks');
 
-  // Set document title according to project concept
+  // Section Refs for Scroll Animations
+  const heroRef = useRef<HTMLDivElement>(null);
+  const storyRef = useRef<HTMLDivElement>(null);
+  const voiceRef = useRef<HTMLDivElement>(null);
+  const mcpRef = useRef<HTMLDivElement>(null);
+  const focusRef = useRef<HTMLDivElement>(null);
+  const privacyRef = useRef<HTMLDivElement>(null);
+  const launchRef = useRef<HTMLDivElement>(null);
+
+  // Hero is visible by default so it never starts blank on mount
+  const heroVisible = useOnScreen(heroRef, 0.05, true);
+  const storyVisible = useOnScreen(storyRef, 0.05);
+  const voiceVisible = useOnScreen(voiceRef, 0.05);
+  const mcpVisible = useOnScreen(mcpRef, 0.05);
+  const focusVisible = useOnScreen(focusRef, 0.05);
+  const privacyVisible = useOnScreen(privacyRef, 0.05);
+  const launchVisible = useOnScreen(launchRef, 0.05);
+
+  // Set document title
   useEffect(() => {
     document.title = 'StudyMate — Alexa+ Conversational Academic Co-Pilot';
   }, []);
+
+  // Continuous Scroll Listener with requestAnimationFrame for 60fps parallax animations
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY;
+          setScrollY(y);
+          const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const currentProgress = totalScroll > 0 ? (y / totalScroll) * 100 : 0;
+          setScrollProgress(currentProgress);
+
+          const sections = [
+            { id: 'hero', offset: heroRef.current?.offsetTop || 0 },
+            { id: 'story', offset: (storyRef.current?.offsetTop || 0) - 250 },
+            { id: 'voice-studio', offset: (voiceRef.current?.offsetTop || 0) - 250 },
+            { id: 'mcp-architecture', offset: (mcpRef.current?.offsetTop || 0) - 250 },
+            { id: 'focus-flow', offset: (focusRef.current?.offsetTop || 0) - 250 },
+            { id: 'privacy', offset: (privacyRef.current?.offsetTop || 0) - 250 },
+            { id: 'launch', offset: (launchRef.current?.offsetTop || 0) - 250 },
+          ];
+
+          for (let i = sections.length - 1; i >= 0; i--) {
+            if (y >= sections[i].offset) {
+              setActiveChapter(sections[i].id);
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Live Focus Sprint Timer Tick
+  useEffect(() => {
+    let interval: any = null;
+    if (heroTimerRunning && heroTimerSeconds > 0) {
+      interval = setInterval(() => {
+        setHeroTimerSeconds((prev) => Math.max(0, prev - 1));
+      }, 1000);
+    } else if (heroTimerSeconds === 0) {
+      setHeroTimerRunning(false);
+    }
+    return () => clearInterval(interval);
+  }, [heroTimerRunning, heroTimerSeconds]);
 
   // Lock body scroll only when mobile menu or architecture modal is open
   useEffect(() => {
@@ -166,27 +275,130 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     }
   };
 
+  const formatTimer = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="relative min-h-screen w-full bg-[#030712] text-white selection:bg-cyan-500/20 selection:text-cyan-200 font-sans antialiased overflow-x-hidden">
-      {/* 1. FIXED BACKGROUND VIDEO: New cinematic high-definition fluid motion loop */}
-      <div className="fixed inset-0 h-full w-full pointer-events-none z-0 overflow-hidden">
-        <video
-          className="h-full w-full object-cover scale-[1.03] transition-transform duration-1000"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260302_085640_276ea93b-d7da-4418-a09b-2aa5b490e838.mp4"
+      {/* ============================================================== */}
+      {/* 1. REAL-TIME CONTINUOUS SCROLL PROGRESS BAR                     */}
+      {/* ============================================================== */}
+      <div className="fixed top-0 left-0 right-0 h-1.5 z-[70] bg-white/[0.04] pointer-events-none">
+        <div
+          className="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 transition-all duration-150 ease-out shadow-[0_0_12px_rgba(34,211,238,0.7)]"
+          style={{ width: `${scrollProgress}%` }}
         />
-        {/* Soft, deep atmospheric overlay to make bubbly glass cards pop with contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#030712]/95 pointer-events-none" />
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 -right-40 w-96 h-96 rounded-full bg-indigo-500/10 blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-10 left-1/3 w-[500px] h-[300px] rounded-full bg-blue-600/[0.08] blur-[150px] pointer-events-none" />
       </div>
 
-      {/* 2. STICKY GLASS BUBBLE NAVIGATION BAR */}
+      {/* ============================================================== */}
+      {/* 2. FIXED BACKGROUND VIDEO: Continuous Parallax Cinematic Canvas*/}
+      {/* ============================================================== */}
+      <div className="fixed inset-0 h-full w-full pointer-events-none z-0 overflow-hidden">
+        <div
+          className="h-full w-full will-change-transform"
+          style={{
+            transform: `scale(${1.03 + scrollProgress * 0.0008}) translateY(${scrollY * 0.04}px)`,
+          }}
+        >
+          <video
+            className="h-full w-full object-cover transition-opacity duration-700"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260302_085640_276ea93b-d7da-4418-a09b-2aa5b490e838.mp4"
+          />
+        </div>
+        {/* Soft, deep atmospheric overlay to make bubbly glass cards pop with contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-[#030712]/95 pointer-events-none" />
+
+        {/* Continuous Dynamic Parallax Floating Glowing Bubbles */}
+        <div
+          className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-cyan-500/15 blur-[130px] pointer-events-none will-change-transform transition-transform duration-75"
+          style={{
+            transform: `translate3d(0, ${scrollY * 0.16}px, 0) rotate(${scrollY * 0.03}deg)`,
+          }}
+        />
+        <div
+          className="absolute top-[40%] -right-40 w-[38rem] h-[38rem] rounded-full bg-indigo-500/15 blur-[140px] pointer-events-none will-change-transform transition-transform duration-75"
+          style={{
+            transform: `translate3d(0, ${-scrollY * 0.12}px, 0) rotate(${-scrollY * 0.04}deg)`,
+          }}
+        />
+        <div
+          className="absolute bottom-20 left-1/4 w-[42rem] h-[28rem] rounded-full bg-blue-600/10 blur-[150px] pointer-events-none will-change-transform transition-transform duration-75"
+          style={{
+            transform: `translate3d(0, ${scrollY * 0.08}px, 0)`,
+          }}
+        />
+      </div>
+
+      {/* ============================================================== */}
+      {/* 2.5 CONTINUOUS VERTICAL STORY SPINE (Desktop Glowing Laser)    */}
+      {/* ============================================================== */}
+      <div className="fixed left-6 top-32 bottom-20 w-1 hidden 2xl:flex flex-col items-center pointer-events-none z-30">
+        <div className="w-[3px] h-full bg-white/10 relative rounded-full overflow-hidden backdrop-blur-sm">
+          {/* Glowing laser track advancing with scroll progress */}
+          <div
+            className="w-full bg-gradient-to-b from-cyan-400 via-sky-400 to-indigo-500 shadow-[0_0_14px_rgba(34,211,238,0.9)] transition-all duration-150 rounded-full"
+            style={{ height: `${scrollProgress}%` }}
+          />
+        </div>
+        {/* Glowing Head Particle */}
+        <div
+          className="absolute -left-1 w-3.5 h-3.5 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,1)] border-2 border-white transition-all duration-150"
+          style={{ top: `${Math.min(99, Math.max(1, scrollProgress))}%` }}
+        />
+      </div>
+
+      {/* ============================================================== */}
+      {/* 3. FLOATING CHAPTER STORY NAVIGATOR (Continuous Scroll Guide)  */}
+      {/* ============================================================== */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 p-2.5 rounded-full bg-black/60 backdrop-blur-2xl border border-white/15 shadow-2xl">
+        {[
+          { id: 'hero', label: 'Awakening', num: '01' },
+          { id: 'story', label: 'The Dilemma', num: '02' },
+          { id: 'voice-studio', label: 'Voice AI', num: '03' },
+          { id: 'mcp-architecture', label: 'MCP Tools', num: '04' },
+          { id: 'focus-flow', label: 'Focus Flow', num: '05' },
+          { id: 'privacy', label: 'Privacy', num: '06' },
+          { id: 'launch', label: 'Launch', num: '07' },
+        ].map((chap) => {
+          const isActive = activeChapter === chap.id;
+          return (
+            <button
+              key={chap.id}
+              onClick={() => scrollToSection(chap.id)}
+              className="group relative flex items-center justify-end cursor-pointer"
+              title={chap.label}
+            >
+              {/* Tooltip on Hover */}
+              <span className="absolute right-8 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-black/80 text-cyan-300 border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg">
+                {chap.num} · {chap.label}
+              </span>
+
+              {/* Indicator Dot Pill */}
+              <div
+                className={`w-3.5 h-3.5 rounded-full transition-all duration-300 flex items-center justify-center ${
+                  isActive
+                    ? 'w-7 h-7 bg-cyan-400/20 border border-cyan-400 text-cyan-300 font-mono text-[9px] font-bold shadow-[0_0_12px_rgba(34,211,238,0.5)]'
+                    : 'bg-white/20 hover:bg-white/50 border border-transparent'
+                }`}
+              >
+                {isActive && chap.num}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ============================================================== */}
+      {/* 4. STICKY GLASS BUBBLE NAVIGATION BAR                          */}
+      {/* ============================================================== */}
       <header className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <nav className="flex items-center justify-between p-2 rounded-full bg-black/60 dark:bg-white/[0.04] backdrop-blur-2xl border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           {/* Logo & Brand Identity */}
@@ -214,14 +426,22 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <button
               type="button"
               onClick={() => scrollToSection('story')}
-              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer"
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
+                activeChapter === 'story'
+                  ? 'bg-white/20 text-white font-semibold'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
             >
               The Story
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('voice-studio')}
-              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer flex items-center gap-1.5"
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
+                activeChapter === 'voice-studio'
+                  ? 'bg-white/20 text-white font-semibold'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
             >
               <Mic className="h-3 w-3 text-cyan-400" />
               <span>Voice AI</span>
@@ -232,7 +452,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <button
                 type="button"
                 onClick={() => setIsToolsDropdownOpen((prev) => !prev)}
-                className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer flex items-center gap-1"
+                className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1 ${
+                  activeChapter === 'mcp-architecture'
+                    ? 'bg-white/20 text-white font-semibold'
+                    : 'text-white/80 hover:text-white hover:bg-white/10'
+                }`}
               >
                 <span>5 MCP Tools</span>
                 <ChevronDown
@@ -245,7 +469,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {isToolsDropdownOpen && (
                 <div
                   onMouseLeave={() => setIsToolsDropdownOpen(false)}
-                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-black/90 p-4 backdrop-blur-3xl border border-white/15 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5"
+                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-black/95 p-4 backdrop-blur-3xl border border-white/15 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5"
                 >
                   <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-cyan-300/80">
                     Model Context Protocol Registry
@@ -281,7 +505,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <button
               type="button"
               onClick={() => scrollToSection('focus-flow')}
-              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer"
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
+                activeChapter === 'focus-flow'
+                  ? 'bg-white/20 text-white font-semibold'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
             >
               Focus Flow
             </button>
@@ -396,29 +624,40 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         </div>
       )}
 
-      {/* 3. MAIN STORY-TELLING SCROLLABLE BODY */}
-      <main className="relative z-10 space-y-24 sm:space-y-36 pb-28 pt-8">
+      {/* ============================================================== */}
+      {/* 5. MAIN STORY-TELLING SCROLLABLE BODY WITH CONTINUOUS REVEALS  */}
+      {/* ============================================================== */}
+      <main className="relative z-10 space-y-28 sm:space-y-40 pb-28 pt-8">
         {/* ============================================================== */}
         {/* ACT 1: HERO AWAKENING — BUBBLY INTRO                           */}
         {/* ============================================================== */}
-        <section id="hero" className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-6 sm:pt-12">
+        <section
+          id="hero"
+          ref={heroRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-6 sm:pt-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            heroVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
+          }`}
+        >
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
             {/* Left Narrative Column */}
             <div className="max-w-2xl space-y-6">
               {/* Bubbly Track Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-1.5 backdrop-blur-2xl border border-white/20 text-xs font-semibold text-white shadow-xl">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-1.5 backdrop-blur-2xl border border-white/20 text-xs font-semibold text-white shadow-xl hover:border-cyan-400/40 transition-colors">
                 <span className="flex h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping" />
                 <span>Alexa+ Model Context Protocol (MCP) Add-on</span>
               </div>
 
               {/* Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-[4.2rem] font-bold tracking-tight leading-[1.08] text-white">
-                Your academic life, organized through <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300">conversation.</span>
+                Your academic life, organized through{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300">
+                  conversation.
+                </span>
               </h1>
 
               {/* Sub-lead Narrative */}
               <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-xl">
-                An autonomous voice-first co-pilot for college students. Triage syllabus deadlines, launch calibrated Pomodoro focus sprints, and update course mastery by talking to Alexa.
+                An autonomous voice-first co-pilot for college students. Triage syllabus deadlines, launch calibrated Pomodoro focus sprints, and update course mastery simply by talking to Alexa.
               </p>
 
               {/* Interactive Voice Capsule Bubble Form */}
@@ -432,7 +671,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       handleRunVoiceCommand("Alexa, what's due this week?");
                     }
                   }}
-                  className="flex flex-col sm:flex-row items-center gap-2 p-2 rounded-[2.5rem] bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl"
+                  className="flex flex-col sm:flex-row items-center gap-2 p-2 rounded-[2.5rem] bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl hover:border-cyan-400/40 transition-all"
                 >
                   <div className="flex items-center pl-4 pr-2 w-full sm:w-auto flex-1">
                     <Mic className="h-4 w-4 text-cyan-400 shrink-0 mr-2.5 animate-pulse" />
@@ -558,7 +797,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   <span>Student Companion</span>
                   <button
                     onClick={() => scrollToSection('voice-studio')}
-                    className="text-cyan-300 hover:underline flex items-center gap-1"
+                    className="text-cyan-300 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <span>Test speech</span>
                     <ArrowRight className="h-3 w-3" />
@@ -574,7 +813,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('story')}
               className="flex flex-col items-center gap-2 text-white/50 hover:text-white transition group cursor-pointer"
             >
-              <span className="text-[11px] font-mono tracking-widest uppercase">The Story Unfolds</span>
+              <span className="text-[11px] font-mono tracking-widest uppercase">Scroll To Explore The Story</span>
               <div className="w-8 h-12 rounded-full border border-white/20 flex items-center justify-center p-1 group-hover:border-cyan-400 transition-colors">
                 <div className="w-1.5 h-3 bg-cyan-400 rounded-full animate-bounce" />
               </div>
@@ -585,7 +824,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 2: THE STUDENT DILEMMA — CHAOS VS STUDYMATE FLOW            */}
         {/* ============================================================== */}
-        <section id="story" className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12">
+        <section
+          id="story"
+          ref={storyRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            storyVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 uppercase tracking-wider">
               Act I · The Academic Friction
@@ -601,7 +846,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           {/* Two Bubbly Contrast Pods */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* The Chaotic Way */}
-            <div className="rounded-[3rem] p-8 sm:p-10 bg-rose-950/20 backdrop-blur-2xl border border-rose-500/25 shadow-2xl space-y-6 flex flex-col justify-between relative overflow-hidden">
+            <div className="rounded-[3rem] p-8 sm:p-10 bg-rose-950/20 backdrop-blur-2xl border border-rose-500/25 shadow-2xl space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-rose-400/40 transition-all">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3.5 py-1 text-xs font-semibold text-rose-300 border border-rose-500/30">
                   <X className="w-3.5 h-3.5" />
@@ -630,9 +875,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             </div>
 
             {/* The StudyMate Way */}
-            <div className="rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-cyan-950/30 via-blue-950/20 to-black/60 backdrop-blur-2xl border border-cyan-500/30 shadow-2xl space-y-6 flex flex-col justify-between relative overflow-hidden">
+            <div className="rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-cyan-950/35 via-blue-950/25 to-black/70 backdrop-blur-3xl border border-cyan-500/40 shadow-[0_15px_50px_rgba(6,182,212,0.15)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-cyan-400/60 hover:shadow-[0_20px_60px_rgba(6,182,212,0.25)] transition-all duration-500 animate-float-slow">
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/20 px-3.5 py-1 text-xs font-semibold text-cyan-300 border border-cyan-500/30">
+                <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/20 px-3.5 py-1 text-xs font-semibold text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>The StudyMate Flow</span>
                 </div>
@@ -664,7 +909,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 3: VOICE STUDIO — MULTI-TURN CONVERSATION SCENARIO         */}
         {/* ============================================================== */}
-        <section id="voice-studio" className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12">
+        <section
+          id="voice-studio"
+          ref={voiceRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            voiceVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-blue-500/10 text-cyan-300 border border-blue-500/20 uppercase tracking-wider">
               Act II · Spoken Dialogue
@@ -715,6 +966,21 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 </div>
               </div>
 
+              {/* Animated Soundwave Visualizer Bubble */}
+              <div className="flex items-center justify-center gap-1.5 py-3 px-6 rounded-full bg-white/[0.04] border border-white/10 max-w-sm mx-auto shadow-inner">
+                <Mic className="w-3.5 h-3.5 text-cyan-400 mr-2 animate-pulse" />
+                {[10, 22, 34, 16, 40, 26, 14, 30, 42, 20, 12].map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-gradient-to-t from-cyan-400 to-sky-300 rounded-full eq-anim-bar shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                    style={{
+                      height: `${h}px`,
+                      animationDelay: `${(i * 0.12).toFixed(2)}s`,
+                    }}
+                  />
+                ))}
+              </div>
+
               {/* StudyMate Voice Response */}
               <div className="flex items-start justify-start gap-3">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-black font-bold text-xs shrink-0 shadow-lg">
@@ -760,7 +1026,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 4: 5 NATIVE MCP TOOLS ARCHITECTURE                         */}
         {/* ============================================================== */}
-        <section id="mcp-architecture" className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12">
+        <section
+          id="mcp-architecture"
+          ref={mcpRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            mcpVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 uppercase tracking-wider">
               Act III · The Native Engine
@@ -834,7 +1106,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 5: FOCUS FLOW & HABIT VELOCITY                             */}
         {/* ============================================================== */}
-        <section id="focus-flow" className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12">
+        <section
+          id="focus-flow"
+          ref={focusRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            focusVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 uppercase tracking-wider">
               Act IV · Deep Work Velocity
@@ -849,14 +1127,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
           {/* Bubbly Focus Dashboard Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left: Pomodoro Timer Visualizer (5 cols) */}
-            <div className="lg:col-span-5 p-8 rounded-[3rem] bg-white/[0.05] backdrop-blur-3xl border border-white/15 shadow-2xl text-center space-y-5">
+            {/* Left: Pomodoro Timer Visualizer (5 cols) with Interactive Ticking Clock */}
+            <div className="lg:col-span-5 p-8 rounded-[3rem] bg-white/[0.05] backdrop-blur-3xl border border-white/15 shadow-2xl text-center space-y-5 hover:border-cyan-400/50 hover:shadow-[0_15px_50px_rgba(6,182,212,0.18)] transition-all duration-500 animate-float-slow">
               <span className="font-mono text-[11px] font-semibold text-cyan-300 uppercase tracking-wider">
                 Autonomous Focus Sprint
               </span>
 
               <div className="font-mono text-6xl font-light text-white tracking-widest py-2">
-                25:00
+                {formatTimer(heroTimerSeconds)}
               </div>
 
               <p className="text-xs text-white/60">
@@ -866,12 +1144,31 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <div className="flex items-center justify-center gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (onOpenPlanner) onOpenPlanner();
-                  }}
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
+                  onClick={() => setHeroTimerRunning(!heroTimerRunning)}
+                  className="px-6 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
                 >
-                  Start Deep Focus
+                  {heroTimerRunning ? (
+                    <>
+                      <Pause className="w-3.5 h-3.5 fill-current" />
+                      <span>Pause Sprint</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <span>{heroTimerSeconds < 25 * 60 ? 'Resume Sprint' : 'Start Focus'}</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHeroTimerRunning(false);
+                    setHeroTimerSeconds(25 * 60);
+                  }}
+                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 transition cursor-pointer"
+                  title="Reset Timer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -924,10 +1221,10 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   onClick={() => {
                     if (onOpenPlanner) onOpenPlanner();
                   }}
-                  className="text-cyan-300 hover:underline flex items-center gap-1 font-semibold"
+                  className="text-cyan-300 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
                 >
                   <span>Open Full Tracker</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             </div>
@@ -937,7 +1234,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 6: DATA SOVEREIGNTY & PRIVACY                              */}
         {/* ============================================================== */}
-        <section className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+        <section
+          id="privacy"
+          ref={privacyRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            privacyVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
           <div className="p-8 sm:p-12 rounded-[3.5rem] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-3xl border border-white/15 shadow-2xl space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
               <div className="flex items-center gap-3">
@@ -974,8 +1277,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* ACT 7: THE GRAND FINALE CALL TO ACTION BUBBLE                  */}
         {/* ============================================================== */}
-        <section className="px-5 sm:px-8 lg:px-12 max-w-5xl mx-auto text-center space-y-8">
-          <div className="p-10 sm:p-16 rounded-[4rem] bg-gradient-to-b from-blue-900/40 via-black/80 to-black/90 backdrop-blur-3xl border border-white/20 shadow-[0_0_60px_rgba(6,182,212,0.15)] space-y-6">
+        <section
+          id="launch"
+          ref={launchRef}
+          className={`px-5 sm:px-8 lg:px-12 max-w-5xl mx-auto text-center space-y-8 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            launchVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-16 scale-[0.97]'
+          }`}
+        >
+          <div className="p-10 sm:p-16 rounded-[4rem] bg-gradient-to-b from-blue-900/40 via-black/80 to-black/95 backdrop-blur-3xl border border-white/25 shadow-[0_0_70px_rgba(6,182,212,0.2)] hover:shadow-[0_0_100px_rgba(6,182,212,0.35)] transition-all duration-700 space-y-6">
             <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase tracking-widest">
               Ready to Upgrade Your Academic Life?
             </span>
