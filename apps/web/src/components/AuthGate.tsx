@@ -61,7 +61,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({
             <button
               type="button"
               onClick={openClerkSignIn}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-lg border border-transparent dark:border-white/20 active:scale-95 hover:opacity-90 flex items-center justify-center space-x-1.5 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-lg border border-transparent dark:border-white/20 active:scale-95 hover:opacity-90 flex items-center justify-center space-x-1.5 cursor-pointer bg-[#E5A952] text-[#0E1117] hover:bg-[#F2BC66]"
             >
               <span>Sign In</span>
               <ArrowRight className="w-3.5 h-3.5" />

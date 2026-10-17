@@ -182,11 +182,11 @@ export function App() {
 
   // 2. Inner App Views (Dashboard, Assignments, Planner, Voice, Telemetry)
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#080d1a] text-slate-900 dark:text-white font-sans antialiased selection:bg-blue-500/20 selection:text-blue-600 dark:selection:bg-cyan-500/20 dark:selection:text-cyan-200 relative overflow-x-hidden transition-colors duration-200">
+    <div className="min-h-screen bg-[#F7F4EE] dark:bg-[#0B0D13] text-[#1C1917] dark:text-[#F5EFE6] font-sans antialiased selection:bg-[#E5A952]/25 selection:text-[#E5A952] relative overflow-x-hidden transition-colors duration-200">
       {/* Subtle Ambient Radial Glow Mesh */}
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(37,99,235,0.05),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(56,189,248,0.08),rgba(255,255,255,0))] z-0" />
-      <div className="fixed top-1/3 -right-48 w-96 h-96 rounded-full bg-blue-500/[0.04] dark:bg-cyan-500/[0.03] blur-3xl pointer-events-none" />
-      <div className="fixed bottom-10 -left-48 w-96 h-96 rounded-full bg-indigo-500/[0.04] dark:bg-indigo-500/[0.03] blur-3xl pointer-events-none" />
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(229,169,82,0.06),transparent)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(229,169,82,0.08),transparent)] z-0" />
+      <div className="fixed top-1/3 -right-48 w-96 h-96 rounded-full bg-[#E5A952]/[0.05] dark:bg-[#E5A952]/[0.04] blur-3xl pointer-events-none" />
+      <div className="fixed bottom-10 -left-48 w-96 h-96 rounded-full bg-[#4E7A68]/[0.05] dark:bg-[#4E7A68]/[0.04] blur-3xl pointer-events-none" />
       {/* Sidebar Navigation */}
       <Sidebar
         activeScreen={activeScreen}

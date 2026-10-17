@@ -244,9 +244,9 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
           {/* Cyan/Blue Glowing / Pulsing Dot */}
           <div className="relative flex items-center justify-center pl-0.5">
             {timerRunning && (
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping opacity-75 absolute" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 animate-ping opacity-75 absolute" />
             )}
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
           </div>
 
           {/* Live Countdown in Bold Crisp Text */}
@@ -261,7 +261,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
           <button
             type="button"
             onClick={toggleTimer}
-            className="p-1 rounded-md text-blue-600 hover:text-blue-700 dark:text-cyan-300 dark:hover:text-cyan-200 hover:bg-slate-100 dark:hover:bg-white/10 transition cursor-pointer"
+            className="p-1 rounded-md text-blue-600 hover:text-blue-700 dark:text-[#E5A952] dark:hover:text-cyan-200 hover:bg-slate-100 dark:hover:bg-white/10 transition cursor-pointer"
             title={timerRunning ? 'Pause timer' : 'Resume timer'}
           >
             {timerRunning ? (
@@ -322,13 +322,13 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 {timerRunning && (
                   <span
                     className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                      mode === 'focus' ? 'bg-blue-600 dark:bg-cyan-400' : 'bg-amber-500 dark:bg-amber-400'
+                      mode === 'focus' ? 'bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400' : 'bg-amber-500 dark:bg-amber-400'
                     }`}
                   />
                 )}
                 <span
                   className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    mode === 'focus' ? 'bg-blue-600 dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'bg-amber-500 dark:bg-amber-400 shadow-[0_0_8px_#fbbf24]'
+                    mode === 'focus' ? 'bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'bg-amber-500 dark:bg-amber-400 shadow-[0_0_8px_#fbbf24]'
                   }`}
                 />
               </span>
@@ -337,7 +337,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 {mode === 'focus' ? 'Deep Focus' : 'Rest Break'}
               </span>
 
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-cyan-500/15 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-cyan-400/30">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-cyan-500/15 text-blue-700 dark:text-[#E5A952] border border-blue-200 dark:border-cyan-400/30">
                 {totalDuration}m
               </span>
             </div>
@@ -350,7 +350,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 onClick={toggleAmbientSound}
                 className={`p-1.5 rounded-xl transition cursor-pointer ${
                   ambientSoundActive
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-400/40 shadow-sm'
+                    ? 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-400/40 shadow-sm'
                     : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100 dark:text-white/40 dark:hover:text-white dark:hover:bg-white/10'
                 }`}
                 title={ambientSoundActive ? 'Turn off ambient sound' : 'Turn on relaxing study white noise'}
@@ -362,7 +362,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               <button
                 type="button"
                 onClick={triggerPictureInPicture}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:text-white/40 dark:hover:text-cyan-300 dark:hover:bg-white/10 transition cursor-pointer"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:text-white/40 dark:hover:text-[#E5A952] dark:hover:bg-white/10 transition cursor-pointer"
                 title="Pop out desktop Picture-in-Picture (Always on top)"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -407,7 +407,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 <button
                   type="button"
                   onClick={onNavigateToPlanner}
-                  className="px-2.5 py-1 rounded-full text-[10px] font-bold text-blue-600 dark:text-cyan-300 bg-blue-50 dark:bg-white/[0.05] border border-blue-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-cyan-400/40 hover:text-blue-700 dark:hover:text-white transition flex items-center space-x-1 shrink-0 cursor-pointer"
+                  className="px-2.5 py-1 rounded-full text-[10px] font-bold text-blue-600 dark:text-[#E5A952] bg-blue-50 dark:bg-white/[0.05] border border-blue-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-cyan-400/40 hover:text-blue-700 dark:hover:text-white transition flex items-center space-x-1 shrink-0 cursor-pointer"
                 >
                   <span>Planner</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -502,7 +502,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               <button
                 type="button"
                 onClick={() => setIsMinimized(true)}
-                className="transition flex items-center space-x-1 cursor-pointer font-semibold text-slate-600 dark:text-white/50 hover:text-blue-600 dark:hover:text-cyan-300"
+                className="transition flex items-center space-x-1 cursor-pointer font-semibold text-slate-600 dark:text-white/50 hover:text-blue-600 dark:hover:text-[#E5A952]"
                 title="Minimize into compact floating pill"
               >
                 <span>Minimize to pill</span>

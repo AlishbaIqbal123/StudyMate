@@ -290,11 +290,11 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* 1. Welcoming & Simple Status Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#121520] border border-white/[0.08] dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
           {/* Assistant Info */}
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-cyan-300 shadow-md shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-[#E5A952] shadow-md shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
@@ -352,7 +352,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
         {/* Left Column: Try Assistant Actions (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Action Tester Card */}
-          <div className="rounded-3xl p-6 sm:p-7 bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-5">
+          <div className="rounded-3xl p-6 sm:p-7 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] shadow-sm dark:shadow-2xl space-y-5">
             <div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 Try Assistant Actions
@@ -382,7 +382,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                     }`}
                   >
                     <div className="flex items-center space-x-2">
-                      <Icon className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-300' : 'text-slate-400 dark:text-white/50'}`} />
+                      <Icon className={`w-4 h-4 ${isSelected ? 'text-[#E5A952] dark:text-[#E5A952]' : 'text-slate-400 dark:text-white/50'}`} />
                       <span className="text-xs font-semibold truncate">
                         {action.label}
                       </span>
@@ -470,7 +470,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                           onClick={() => setPlanMinutes(mins)}
                           className={`px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer ${
                             planMinutes === mins
-                              ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/40 shadow-sm'
+                              ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-500/40 shadow-sm'
                               : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 dark:bg-white/[0.04] dark:text-white/60 dark:hover:text-white dark:border-white/10'
                           }`}
                         >
@@ -655,7 +655,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
               {latency !== null && (
                 <div className="text-xs text-slate-500 dark:text-white/50 flex items-center space-x-1.5 font-mono">
-                  <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-300" />
+                  <Clock className="w-3.5 h-3.5 text-[#E5A952] dark:text-[#E5A952]" />
                   <span>Response: {latency}ms</span>
                 </div>
               )}
@@ -671,7 +671,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   </span>
                   <button
                     onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-                    className="text-[11px] font-semibold text-blue-600 dark:text-cyan-300 hover:text-blue-700 dark:hover:text-cyan-200 transition flex items-center space-x-1 cursor-pointer"
+                    className="text-[11px] font-semibold text-[#E5A952] dark:text-[#E5A952] hover:text-blue-700 dark:hover:text-cyan-200 transition flex items-center space-x-1 cursor-pointer"
                   >
                     <span>{showTechnicalDetails ? 'Hide Raw Details' : 'Show Raw Data'}</span>
                   </button>
@@ -710,7 +710,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   </div>
                 ) : resultData?.intervals ? (
                   <div className="space-y-2">
-                    <div className="text-xs font-bold text-blue-600 dark:text-cyan-300">
+                    <div className="text-xs font-bold text-[#E5A952] dark:text-[#E5A952]">
                       {resultData.course} — {resultData.total_time_minutes} Minute Study Plan
                     </div>
                     <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1">
@@ -720,7 +720,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                           className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10 text-xs flex items-center justify-between hover:bg-slate-100/80 dark:hover:bg-white/[0.05] transition"
                         >
                           <div className="flex items-center space-x-2">
-                            <span className="w-5 h-5 rounded-full bg-blue-500/10 dark:bg-cyan-500/15 border border-blue-500/30 dark:border-cyan-400/30 text-blue-600 dark:text-cyan-300 text-[10px] font-bold flex items-center justify-center">
+                            <span className="w-5 h-5 rounded-full bg-blue-500/10 dark:bg-cyan-500/15 border border-blue-500/30 dark:border-cyan-400/30 text-[#E5A952] dark:text-[#E5A952] text-[10px] font-bold flex items-center justify-center">
                               {step.step || idx + 1}
                             </span>
                             <span className="font-semibold text-slate-900 dark:text-white">{step.activity || step.topic}</span>
@@ -751,7 +751,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                       </span>
                       <button
                         onClick={handleCopyRaw}
-                        className="text-[11px] text-blue-600 dark:text-cyan-300 hover:text-blue-700 dark:hover:text-cyan-200 transition flex items-center space-x-1 cursor-pointer"
+                        className="text-[11px] text-[#E5A952] dark:text-[#E5A952] hover:text-blue-700 dark:hover:text-cyan-200 transition flex items-center space-x-1 cursor-pointer"
                       >
                         {copiedRaw ? <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
                         <span>{copiedRaw ? 'Copied' : 'Copy'}</span>
@@ -772,7 +772,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
                 Recent Assistant Activity
               </h3>
-              <span className="text-[11px] font-mono text-blue-600 dark:text-cyan-300">Live Sync</span>
+              <span className="text-[11px] font-mono text-[#E5A952] dark:text-[#E5A952]">Live Sync</span>
             </div>
 
             <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
@@ -907,7 +907,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                         <span className="font-bold text-slate-900 dark:text-white">
                           {c.code || c.name}
                         </span>
-                        <span className="text-[10px] text-blue-600 dark:text-cyan-300 font-mono">{c.instructor || 'Faculty'}</span>
+                        <span className="text-[10px] text-[#E5A952] dark:text-[#E5A952] font-mono">{c.instructor || 'Faculty'}</span>
                       </div>
                       <div className="text-[11px] text-slate-600 dark:text-white/60">
                         {c.name}
@@ -931,7 +931,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                         <span className="font-bold text-slate-900 dark:text-white">
                           {p.course_code || p.course_name}
                         </span>
-                        <span className="text-blue-600 dark:text-cyan-300 font-bold font-mono">
+                        <span className="text-[#E5A952] dark:text-[#E5A952] font-bold font-mono">
                           {p.completed_pct}% Completed
                         </span>
                       </div>
@@ -965,7 +965,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               Want to speak to StudyMate from a physical Amazon Echo or mobile phone? Run this command to create a free secure link:
             </p>
 
-            <div className="p-3 rounded-2xl bg-slate-900 dark:bg-[#07070b] border border-slate-700 dark:border-white/15 text-cyan-300 dark:text-cyan-200 font-mono text-[11px] flex items-center justify-between shadow-inner">
+            <div className="p-3 rounded-2xl bg-slate-900 dark:bg-[#07070b] border border-slate-700 dark:border-white/15 text-[#E5A952] dark:text-cyan-200 font-mono text-[11px] flex items-center justify-between shadow-inner">
               <span className="truncate">./bin/cloudflared.exe tunnel --url http://localhost:3000</span>
               <button
                 onClick={handleCopyTunnel}

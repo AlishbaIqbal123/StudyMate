@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white/90 dark:bg-[#07070b]/80 backdrop-blur-2xl border-b border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-white transition-colors duration-200">
+    <header className="sticky top-0 z-30 w-full bg-[#FAF7F2] dark:bg-[#0B0D13] border-b border-[#E6DFD3] dark:border-white/[0.06] text-slate-800 dark:text-white transition-colors duration-200">
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Left: Mobile Menu Toggle & Current Screen Title */}
         <div className="flex items-center space-x-3 min-w-0">
@@ -113,10 +113,10 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div className="flex items-center space-x-2.5 min-w-0">
             <div className="hidden sm:flex w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/15 text-slate-700 dark:text-white items-center justify-center shrink-0">
-              <Icon className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
+              <Icon className="w-4 h-4 text-[#E5A952]" />
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white tracking-tight truncate">
+              <h1 className="font-serif text-base sm:text-lg font-medium text-[#1C1917] dark:text-[#F5EFE6] tracking-tight truncate">
                 {screenInfo.title}
               </h1>
               <p className="hidden md:block text-[11px] text-slate-500 dark:text-white/50 truncate">

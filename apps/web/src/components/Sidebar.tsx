@@ -61,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Home / Showcase',
       icon: Home,
       badge: 'Landing',
-      badgeColor: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
+      badgeColor: 'bg-[#E5A952]/10 text-[#E5A952]',
     },
     {
       id: 'dashboard',
@@ -74,21 +74,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Assignments',
       icon: CheckSquare,
       badge: pendingCount > 0 ? `${pendingCount}` : null,
-      badgeColor: 'bg-primary-500/15 text-themePrimary-600 dark:text-themePrimary-400',
+      badgeColor: 'bg-[#C24138]/10 text-[#E06357]',
     },
     {
       id: 'planner',
       label: 'Study Planner',
       icon: Clock,
       badge: 'Focus',
-      badgeColor: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
+      badgeColor: 'bg-[#E5A952]/10 text-[#E5A952]',
     },
     {
       id: 'voice',
       label: 'Voice Console',
       icon: Mic,
       badge: 'Live',
-      badgeColor: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300',
+      badgeColor: 'bg-[#4E7A68]/10 text-[#7AB89F]',
     },
     {
       id: 'telemetry',
@@ -96,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Terminal,
       badge: serverHealthy ? 'Ready' : 'Offline',
       badgeColor: serverHealthy
-        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+        ? 'bg-[#4E7A68]/10 text-[#7AB89F]'
         : 'bg-rose-500/15 text-rose-700 dark:text-rose-300',
     },
   ];
@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Main Sidebar */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-white/95 dark:bg-[#0c1222]/95 backdrop-blur-2xl border-r border-slate-200/80 dark:border-white/10 flex flex-col justify-between p-4 text-slate-800 dark:text-white transition-all duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#FAF7F2] dark:bg-[#0E1117] border-r border-[#E6DFD3] dark:border-white/[0.06] flex flex-col justify-between p-4 text-slate-800 dark:text-white transition-all duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${
           mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
@@ -135,19 +135,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleSelectScreen('home')}
               className="flex items-center space-x-3 text-left group"
             >
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white dark:bg-white/10 dark:border dark:border-white/15 flex items-center justify-center shadow-md dark:shadow-inner group-hover:scale-105 transition-transform backdrop-blur-md">
+              <div className="w-10 h-10 rounded-xl bg-[#E5A952] text-[#0E1117] flex items-center justify-center shadow-md dark:shadow-inner group-hover:scale-105 transition-transform backdrop-blur-md">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-base text-slate-900 dark:text-white block leading-none">
+                  <span className="font-serif text-lg font-medium text-[#1C1917] dark:text-[#F5EFE6] block leading-none">
                     studymate
                   </span>
-                  <span className="rounded-full bg-blue-100 text-blue-700 dark:bg-cyan-500/20 dark:text-cyan-300 px-1.5 py-0.2 text-[9px] font-semibold tracking-wider uppercase border border-blue-200 dark:border-cyan-500/30">
+                  <span className="rounded-full bg-[#E5A952]/10 text-[#E5A952] px-2 py-0.5 text-[9px] font-sans font-medium border border-[#E5A952]/25">
                     MCP
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-500 dark:text-white/50 block mt-1 tracking-wide">
+                <span className="text-[10px] text-[#8E867A] block mt-1">
                   Alexa+ Add-on · 2026
                 </span>
               </div>

@@ -188,7 +188,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'get_tasks',
       tag: 'Deadlines',
-      seal: '締め切り',
+      seal: 'TASK',
       desc: 'Triages upcoming coursework & exams prioritized by due date.',
       payload: '{"status": "pending", "limit": 5}',
       action: onOpenAssignments || onOpenDashboard,
@@ -196,7 +196,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'add_task',
       tag: 'Capture',
-      seal: '录入',
+      seal: 'LOG',
       desc: 'Zero-friction voice ingestion directly into local SQLite.',
       payload: '{"title": "CS 420 Lab 3", "priority": "high", "est_minutes": 90}',
       action: onOpenDashboard,
@@ -204,7 +204,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'create_study_plan',
       tag: 'Pomodoro',
-      seal: '番茄时钟',
+      seal: 'FOCUS',
       desc: 'Generates structured 25-45 min focus sprints with breaks.',
       payload: '{"available_minutes": 45, "course": "Distributed Systems"}',
       action: onOpenPlanner || onOpenDashboard,
@@ -212,7 +212,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'update_progress',
       tag: 'Progress',
-      seal: '进度',
+      seal: 'PACE',
       desc: 'Marks assignments complete and recalibrates course mastery.',
       payload: '{"task_id": 1, "status": "done", "minutes_spent": 45}',
       action: onOpenDashboard,
@@ -220,7 +220,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'get_course_progress',
       tag: 'Analytics',
-      seal: '统计',
+      seal: 'STAT',
       desc: 'Returns completion percentages & weekly study investment.',
       payload: '{"course": "Algorithms & Matrix Theory"}',
       action: onOpenTelemetry || onOpenDashboard,
@@ -299,25 +299,21 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       </div>
 
       {/* ============================================================== */}
-      {/* 2. FIXED BACKGROUND VIDEO: University Campus & Study Ambience   */}
+      {/* 2. FIXED BACKGROUND: Academic Study Desk Atmosphere          */}
       {/* ============================================================== */}
-      <div className="fixed inset-0 h-full w-full pointer-events-none z-0 overflow-hidden">
-        <video
-          className="h-full w-full object-cover filter contrast-[1.05] brightness-90 saturate-[0.85]"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          src="/academic-study.mp4"
+      <div className="fixed inset-0 h-full w-full pointer-events-none z-0 overflow-hidden bg-[#0B0D13]">
+        {/* Subtle gridded B5 study desk texture overlay */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none"
+          style={{
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23E5A952' fill-opacity='0.12'/%3E%3Ccircle cx='18' cy='18' r='1' fill='%23FFFFFF' fill-opacity='0.04'/%3E%3C/svg%3E\")",
+            backgroundSize: "32px 32px",
+          }}
         />
-        {/* Warm library & study cafe atmosphere overlay */}
-        <div className="absolute inset-0 bg-[#0B0D13]/85 pointer-events-none" />
-
-        {/* Muted study desk lamp amber & celadon jade radial lights */}
-        <div className="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-[#E5A952]/[0.08] blur-[160px] pointer-events-none" />
-        <div className="absolute top-[30%] -right-36 w-[42rem] h-[42rem] rounded-full bg-[#4E7A68]/[0.09] blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-10 left-1/4 w-[45rem] h-[30rem] rounded-full bg-[#1F2538]/[0.15] blur-[170px] pointer-events-none" />
+        {/* Warm tungsten reading lamp ambient light glows */}
+        <div className="absolute -top-32 -left-32 w-[38rem] h-[38rem] rounded-full bg-[#E5A952]/[0.06] blur-[140px] pointer-events-none" />
+        <div className="absolute top-[28%] -right-36 w-[40rem] h-[40rem] rounded-full bg-[#4E7A68]/[0.06] blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-10 left-1/3 w-[45rem] h-[25rem] rounded-full bg-[#E5A952]/[0.04] blur-[160px] pointer-events-none" />
       </div>
 
       {/* ============================================================== */}
@@ -325,13 +321,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* ============================================================== */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5 p-2 rounded-full bg-[#11141C] border border-white/[0.08] ">
         {[
-          { id: 'hero', label: 'Awakening', seal: '序' },
-          { id: 'story', label: 'The Dilemma', seal: '困' },
-          { id: 'voice-studio', label: 'Voice AI', seal: '音' },
-          { id: 'mcp-architecture', label: 'MCP Tools', seal: '器' },
-          { id: 'focus-flow', label: 'Focus Flow', seal: '心' },
-          { id: 'privacy', label: 'Privacy', seal: '私' },
-          { id: 'launch', label: 'Launch', seal: '始' },
+          { id: 'hero', label: 'Awakening', seal: 'I' },
+          { id: 'story', label: 'The Dilemma', seal: 'II' },
+          { id: 'voice-studio', label: 'Voice AI', seal: 'III' },
+          { id: 'mcp-architecture', label: 'MCP Tools', seal: 'IV' },
+          { id: 'focus-flow', label: 'Focus Flow', seal: 'V' },
+          { id: 'privacy', label: 'Privacy', seal: 'VI' },
+          { id: 'launch', label: 'Launch', seal: 'VII' },
         ].map((chap, idx) => {
           const isActive = activeChapter === chap.id;
           return (
@@ -379,7 +375,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 StudyMate
               </span>
               <span className="rounded-full bg-[#E5A952]/10 px-2.5 py-0.5 font-sans tabular-nums text-[9px] font-medium text-[#E5A952] border border-[#E5A952]/25">
-                열공 ∙ Alexa+ MCP
+                Study Desk ∙ Alexa+ MCP
               </span>
             </div>
           </div>
@@ -436,7 +432,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 >
                   <div className="px-3 py-1 text-[10px] font-sans text-[#E5A952]/90 flex items-center justify-between">
                     <span>Model Context Protocol</span>
-                    <span className="font-serif text-[#D0C8BE]/70">工具</span>
+                    <span className="font-serif text-[#D0C8BE]/70">Tools</span>
                   </div>
                   {mcpTools.map((t) => (
                     <button
@@ -538,7 +534,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }}
               className="text-left py-2 hover:text-[#E5A952]"
             >
-              1. The Academic Dilemma (困)
+              1. The Academic Dilemma
             </button>
             <button
               onClick={() => {
@@ -547,7 +543,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }}
               className="text-left py-2 hover:text-[#E5A952]"
             >
-              2. Alexa+ Voice Studio (音)
+              2. Alexa+ Voice Studio
             </button>
             <button
               onClick={() => {
@@ -556,7 +552,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }}
               className="text-left py-2 hover:text-[#E5A952]"
             >
-              3. 5 MCP Tools Desk (器)
+              3. 5 MCP Tools Desk
             </button>
             <button
               onClick={() => {
@@ -565,7 +561,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }}
               className="text-left py-2 hover:text-[#E5A952]"
             >
-              4. Pomodoro Focus Velocity (心)
+              4. Pomodoro Focus Velocity
             </button>
             <button
               onClick={() => {
@@ -614,7 +610,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {/* East Asian Study Seal Stamp */}
               <div className="inline-flex items-center gap-2 rounded-full bg-[#161B26] px-3.5 py-1 border border-white/10 text-xs text-[#D8CEBD]">
                 <span className="w-2 h-2 rounded-full bg-[#E5A952]" />
-                <span className="font-sans text-[11px] tracking-wide text-[#E5A952]">열공 ∙ 專注</span>
+                <span className="font-sans text-[11px] tracking-wide text-[#E5A952]">Study Desk ∙ Deep Focus</span>
                 <span className="text-[#8B8378]">|</span>
                 <span className="text-[11px]">Alexa+ Academic Add-on</span>
               </div>
@@ -814,7 +810,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             }`}
           >
             <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#C24138]/10 text-[#E06357] border border-[#C24138]/30">
-              Act I · The Academic Friction (困)
+              Act I · Academic Friction
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               Why university students drop deadlines.
@@ -871,7 +867,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 <div className="space-y-4">
                   <div className="inline-flex items-center gap-2 rounded-full bg-[#4E7A68]/20 px-3 py-1 text-xs font-sans text-[#7AB89F] border border-[#4E7A68]/35">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#7AB89F]" />
-                    <span>The StudyMate Flow (靜心)</span>
+                    <span>The StudyMate Flow</span>
                   </div>
                   <h3 className="font-serif text-2xl text-[#F5EFE6]">Zero-Friction Voice Intelligence</h3>
                   <p className="text-xs text-[#C8BFB2] leading-relaxed">
@@ -913,7 +909,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             }`}
           >
             <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
-              Act II · Spoken Dialogue (音)
+              Act II · Spoken Dialogue
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               The multi-turn conversational loop.
@@ -933,9 +929,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {/* Step Selector Tabs (Desk Bookmarks) */}
               <div className="flex flex-wrap items-center justify-center gap-2">
                 {[
-                  { turn: 1, title: '1. Check Due Dates', seal: '查' },
-                  { turn: 2, title: '2. Request Study Plan', seal: '划' },
-                  { turn: 3, title: '3. Confirm & Start', seal: '行' },
+                  { turn: 1, title: '1. Check Due Dates', seal: 'I' },
+                  { turn: 2, title: '2. Request Study Plan', seal: 'II' },
+                  { turn: 3, title: '3. Confirm & Start', seal: 'III' },
                 ].map((step) => (
                   <button
                     key={step.turn}
@@ -1048,7 +1044,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             }`}
           >
             <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#4E7A68]/10 text-[#7AB89F] border border-[#4E7A68]/25">
-              Act III · The Native Engine (器)
+              Act III · Native Engine
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               5 Standard MCP Tools. Zero Fluff.
@@ -1149,7 +1145,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             }`}
           >
             <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
-              Act IV · Gongbang Study Rhythm (心)
+              Act IV · Disciplined Study Rhythm
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               Maintain momentum without academic burnout.
@@ -1171,7 +1167,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 <div className="space-y-4">
                   <div className="inline-flex items-center gap-2 rounded-full bg-[#E5A952]/10 px-3 py-1 text-xs font-sans text-[#E5A952] border border-[#E5A952]/25">
                     <Clock className="w-3.5 h-3.5" />
-                    <span>25m Focus Block (專注)</span>
+                    <span>25m Focus Block</span>
                   </div>
 
                   <div className="font-sans tabular-nums text-5xl font-light text-[#F5EFE6] tracking-widest py-2">
@@ -1293,7 +1289,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-xl text-[#F5EFE6]">Student Data Sovereignty (私)</h3>
+                    <h3 className="font-serif text-xl text-[#F5EFE6]">Student Data Sovereignty</h3>
                     <p className="text-xs text-[#8B8378]">Your coursework records belong exclusively to you</p>
                   </div>
                 </div>
@@ -1349,7 +1345,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           >
             <div className="p-10 sm:p-14 rounded-[2.6rem] bg-[#121520] border border-white/[0.06] space-y-6">
               <span className="font-sans text-xs font-medium px-3.5 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
-                Begin Your First Session (始)
+                Begin Your First Session
               </span>
 
               <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#F5EFE6] leading-tight">

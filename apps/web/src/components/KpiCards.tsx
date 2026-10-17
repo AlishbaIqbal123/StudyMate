@@ -34,7 +34,7 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* 1. Pending Tasks */}
-      <div className="rounded-2xl p-5 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
+      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
             Pending Tasks
@@ -56,12 +56,12 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
       </div>
 
       {/* 2. Active Courses */}
-      <div className="rounded-2xl p-5 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
+      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
             Active Courses
           </span>
-          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 dark:bg-white/10 dark:text-white dark:border-white/15">
+          <div className="p-1.5 rounded-lg bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/20 dark:bg-white/10 dark:text-white dark:border-white/15">
             <BookOpen className="w-4 h-4" />
           </div>
         </div>
@@ -77,12 +77,12 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
       </div>
 
       {/* 3. Weekly Study Time */}
-      <div className="rounded-2xl p-5 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
+      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
             Weekly Study Time
           </span>
-          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/20 uppercase tracking-wider">
+          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25 uppercase tracking-wider">
             {totalHoursWeek > 0 ? `${totalHoursWeek.toFixed(1)}h logged` : 'Real-Time'}
           </span>
         </div>
@@ -98,7 +98,7 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
       </div>
 
       {/* 4. Avg Completion Rate */}
-      <div className="rounded-2xl p-5 bg-white dark:bg-white/[0.04] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
+      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
             Avg Completion Rate

@@ -130,10 +130,10 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner with Stats & Controls */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#121520] border border-white/[0.08] dark:from-white/[0.08] dark:via-white/[0.04] dark:to-transparent backdrop-blur-2xl border border-blue-600/30 dark:border-white/15 text-white shadow-xl dark:shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center space-x-3">
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="font-serif text-2xl font-medium tracking-tight text-[#F5EFE6]">
               Assignments
             </h1>
             <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider">
@@ -156,7 +156,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   : 'text-white/70 hover:text-white'
               }`}
             >
-              <Kanban className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-300" />
+              <Kanban className="w-3.5 h-3.5 text-[#E5A952] dark:text-[#E5A952]" />
               <span>Kanban</span>
             </button>
             <button
@@ -167,7 +167,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                   : 'text-white/70 hover:text-white'
               }`}
             >
-              <List className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-300" />
+              <List className="w-3.5 h-3.5 text-[#E5A952] dark:text-[#E5A952]" />
               <span>List View</span>
             </button>
           </div>
@@ -212,7 +212,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                 onClick={() => setSelectedPriority(p)}
                 className={`px-3 py-1 rounded-full uppercase text-[10px] font-semibold transition cursor-pointer ${
                   selectedPriority === p
-                    ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/30'
+                    ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-500/30'
                     : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/80 border border-slate-200 dark:bg-white/[0.04] dark:text-white/60 dark:border-white/10 dark:hover:text-white dark:hover:bg-white/[0.08]'
                 }`}
               >
@@ -261,7 +261,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
 
             {/* Drop Placeholder if dragging over */}
             {dragOverCol === 'pending' && (
-              <div className="p-3 rounded-2xl border-2 border-dashed border-blue-500/80 dark:border-cyan-400/80 bg-blue-50 dark:bg-cyan-500/10 text-center text-xs font-semibold text-blue-700 dark:text-cyan-300 animate-pulse">
+              <div className="p-3 rounded-2xl border-2 border-dashed border-blue-500/80 dark:border-cyan-400/80 bg-blue-50 dark:bg-cyan-500/10 text-center text-xs font-semibold text-blue-700 dark:text-[#E5A952] animate-pulse">
                 Drop to move to To Do
               </div>
             )}
@@ -279,8 +279,8 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-1.5 min-w-0">
-                      <GripVertical className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 dark:text-white/30 dark:group-hover:text-cyan-400 shrink-0" />
-                      <span className="font-mono text-[10px] font-semibold text-blue-600 dark:text-cyan-300 truncate max-w-[160px]">
+                      <GripVertical className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#E5A952] dark:text-white/30 dark:group-hover:text-[#E5A952] shrink-0" />
+                      <span className="font-mono text-[10px] font-semibold text-[#E5A952] dark:text-[#E5A952] truncate max-w-[160px]">
                         {task.course_name}
                       </span>
                     </div>
@@ -520,7 +520,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
         </div>
       ) : (
         /* List View */
-        <div className="p-6 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-3">
+        <div className="p-6 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] shadow-sm dark:shadow-2xl space-y-3">
           {filtered.length === 0 ? (
             <div className="py-12 px-4 text-center space-y-3">
               <p className="text-xs text-slate-500 dark:text-white/50 font-mono">No assignments found in workspace</p>
@@ -543,7 +543,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                 <div className="flex items-center space-x-3 min-w-0">
                   <button
                     onClick={() => updateStatusDirect(task.id, isDone ? 'pending' : 'done')}
-                    className="text-slate-400 hover:text-blue-600 dark:text-white/40 dark:hover:text-cyan-300 transition cursor-pointer"
+                    className="text-slate-400 hover:text-[#E5A952] dark:text-white/40 dark:hover:text-[#E5A952] transition cursor-pointer"
                   >
                     {isDone ? (
                       <CheckCircle2 className="w-5 h-5 text-emerald-500" />

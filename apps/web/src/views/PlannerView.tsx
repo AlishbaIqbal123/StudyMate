@@ -125,7 +125,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             className="px-3.5 py-2 rounded-full text-xs font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 transition flex items-center space-x-1.5 cursor-pointer backdrop-blur-md"
             title="Show floating widget"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-cyan-300" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#E5A952]" />
             <span className="hidden sm:inline">Floating Pop-up</span>
           </button>
         </div>
@@ -137,7 +137,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
             <Target className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
             Focused Assignment: <strong className="text-slate-900 dark:text-white">{focusTitle}</strong> ({selectedCourse})
           </span>
-          <span className="text-xs font-mono text-blue-700 bg-blue-100 border border-blue-200 dark:text-cyan-300 font-semibold px-2.5 py-0.5 rounded-full dark:bg-cyan-500/20 dark:border-cyan-500/30">
+          <span className="text-xs font-mono text-blue-700 bg-blue-100 border border-blue-200 dark:text-[#E5A952] font-semibold px-2.5 py-0.5 rounded-full dark:bg-cyan-500/20 dark:border-cyan-500/30">
             Auto-targeted
           </span>
         </div>
@@ -147,7 +147,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Big Pomodoro Clock (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl text-center space-y-8 relative overflow-hidden">
+          <div className="p-8 sm:p-10 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] text-center space-y-8 relative overflow-hidden">
             {/* Ambient subtle glow orb */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500/10 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -234,7 +234,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                     onClick={() => setDuration(dur)}
                     className={`px-4 py-1.5 rounded-full font-mono text-xs font-semibold transition cursor-pointer ${
                       totalDuration === dur
-                        ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/40 shadow-sm'
+                        ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-500/40 shadow-sm'
                         : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/80 border border-slate-200 dark:bg-white/[0.04] dark:text-white/60 dark:hover:text-white dark:border-white/10'
                     }`}
                   >
@@ -250,7 +250,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                 <button
                   type="button"
                   onClick={requestNotificationPermission}
-                  className="text-xs font-semibold text-blue-600 dark:text-cyan-300 hover:underline flex items-center justify-center space-x-1.5 mx-auto cursor-pointer"
+                  className="text-xs font-semibold text-blue-600 dark:text-[#E5A952] hover:underline flex items-center justify-center space-x-1.5 mx-auto cursor-pointer"
                 >
                   <Bell className="w-3.5 h-3.5" />
                   <span>Notify me when timer ends in background</span>
@@ -262,10 +262,10 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
 
         {/* Right Column: AI Generated Schedule Blocks (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-4">
+          <div className="p-6 sm:p-7 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
               <div className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-blue-600 dark:text-cyan-300" />
+                <Sparkles className="w-4 h-4 text-blue-600 dark:text-[#E5A952]" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                   AI Study Schedule
                 </h3>
@@ -301,7 +301,7 @@ export const PlannerView: React.FC<PlannerViewProps> = ({
                           <span
                             className={`px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] shrink-0 ${
                               isStudy
-                                ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/30'
+                                ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-500/30'
                                 : 'bg-emerald-100 text-emerald-800 border border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
                             }`}
                           >
