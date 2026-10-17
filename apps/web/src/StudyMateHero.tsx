@@ -281,17 +281,19 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   const formatTimer = (secs: number) => {
     const m = Math.floor(secs / 60);
     const s = secs % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    const mm = m < 10 ? '0' + m : '' + m;
+    const ss = s < 10 ? '0' + s : '' + s;
+    return mm + ':' + ss;
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#0B0D13] text-[#F3EFEA] selection:bg-[#E5A952]/25 selection:text-[#F8E3C2] font-sans antialiased overflow-x-hidden">
+    <div className="relative min-h-[100svh] w-full bg-[#0B0D13] text-[#F3EFEA] selection:bg-[#E5A952]/25 selection:text-[#F8E3C2] font-sans antialiased overflow-x-hidden">
       {/* ============================================================== */}
       {/* 1. REAL-TIME CONTINUOUS SCROLL PROGRESS BAR                     */}
       {/* ============================================================== */}
       <div className="fixed top-0 left-0 right-0 h-1 z-[70] bg-[#141824]/60 pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-[#E5A952] via-[#E2B77A] to-[#4E7A68] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(229,169,82,0.6)]"
+          className="h-full bg-[#E5A952] transition-[width] duration-150 ease-out"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -310,7 +312,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           src="/academic-study.mp4"
         />
         {/* Warm library & study cafe atmosphere overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0D13]/85 via-[#0F121A]/72 to-[#0B0D13]/95 pointer-events-none" />
+        <div className="absolute inset-0 bg-[#0B0D13]/85 pointer-events-none" />
 
         {/* Muted study desk lamp amber & celadon jade radial lights */}
         <div className="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-[#E5A952]/[0.08] blur-[160px] pointer-events-none" />
@@ -321,7 +323,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* ============================================================== */}
       {/* 3. FLOATING CHAPTER STORY NAVIGATOR (Minimalist Study Index)   */}
       {/* ============================================================== */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5 p-2 rounded-full bg-[#11141C]/85 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5 p-2 rounded-full bg-[#11141C] border border-white/[0.08] ">
         {[
           { id: 'hero', label: 'Awakening', seal: '序' },
           { id: 'story', label: 'The Dilemma', seal: '困' },
@@ -340,16 +342,16 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               title={chap.label}
             >
               {/* Tooltip on Hover */}
-              <span className="absolute right-9 px-2.5 py-1 rounded-md text-[10px] font-mono font-medium bg-[#141824] text-[#E5A952] border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl">
-                0{idx + 1} · {chap.label} ({chap.seal})
+              <span className="absolute right-9 px-2.5 py-1 rounded-md text-[10px] font-sans font-medium bg-[#141824] text-[#E5A952] border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                {chap.seal} · {chap.label}
               </span>
 
               {/* Indicator Dot Pill */}
               <div
-                className={`w-3.5 h-3.5 rounded-full transition-all duration-300 flex items-center justify-center font-serif text-[9px] ${
+                className={`w-3.5 h-3.5 rounded-full transition-colors duration-300 flex items-center justify-center font-serif text-[9px] ${
                   isActive
-                    ? 'w-7 h-7 bg-[#E5A952] text-[#0E1117] font-bold shadow-[0_0_12px_rgba(229,169,82,0.6)]'
-                    : 'bg-white/20 hover:bg-[#E5A952]/40 text-transparent'
+                    ? 'w-7 h-7 bg-[#E5A952] text-[#0E1117] font-bold '
+                    : 'bg-white/20 hover:bg-[#E5A952]/40 text-[#E5A952]'
                 }`}
               >
                 {isActive && chap.seal}
@@ -363,20 +365,20 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* 4. REFINED EDITORIAL NAVIGATION HEADER                         */}
       {/* ============================================================== */}
       <header className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <nav className="flex items-center justify-between p-2 rounded-full bg-[#11141C]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_6px_28px_rgba(0,0,0,0.4)]">
+        <nav className="flex items-center justify-between p-2 rounded-full bg-[#11141C]/80 backdrop-blur-2xl border border-white/[0.08] ">
           {/* Logo & Brand Identity */}
           <div
             onClick={() => scrollToSection('hero')}
             className="flex items-center gap-3 pl-3 py-1 cursor-pointer group"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#E5A952] text-[#0E1117] shadow-sm group-hover:scale-105 transition-transform">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#E5A952] text-[#0E1117] group-hover:scale-105 transition-transform">
               <GraduationCap className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2">
               <span className="font-serif text-base tracking-tight text-[#F5EFE6] font-medium group-hover:text-[#E5A952] transition-colors">
                 StudyMate
               </span>
-              <span className="rounded-full bg-[#E5A952]/10 px-2.5 py-0.5 font-mono text-[9px] font-medium text-[#E5A952] border border-[#E5A952]/25">
+              <span className="rounded-full bg-[#E5A952]/10 px-2.5 py-0.5 font-sans tabular-nums text-[9px] font-medium text-[#E5A952] border border-[#E5A952]/25">
                 열공 ∙ Alexa+ MCP
               </span>
             </div>
@@ -430,9 +432,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {isToolsDropdownOpen && (
                 <div
                   onMouseLeave={() => setIsToolsDropdownOpen(false)}
-                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-[#121622]/95 p-4 backdrop-blur-3xl border border-white/10 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
+                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-[#121622] p-4 border border-white/10 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
                 >
-                  <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-[#E5A952]/90 flex items-center justify-between">
+                  <div className="px-3 py-1 text-[10px] font-sans text-[#E5A952]/90 flex items-center justify-between">
                     <span>Model Context Protocol</span>
                     <span className="font-serif text-[#D0C8BE]/70">工具</span>
                   </div>
@@ -448,10 +450,10 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       className="w-full flex flex-col items-start rounded-xl p-2.5 text-left transition hover:bg-white/[0.06] cursor-pointer group"
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="font-mono text-xs font-medium text-[#F5EFE6] group-hover:text-[#E5A952]">
+                        <code className="text-xs font-medium text-[#F5EFE6] group-hover:text-[#E5A952]">
                           {t.name}
-                        </span>
-                        <span className="rounded-full bg-[#E5A952]/10 px-2 py-0.5 text-[9px] font-mono text-[#E5A952] border border-[#E5A952]/20">
+                        </code>
+                        <span className="rounded-full bg-[#E5A952]/10 px-2 py-0.5 text-[9px] font-sans text-[#E5A952] border border-[#E5A952]/20">
                           {t.seal} · {t.tag}
                         </span>
                       </div>
@@ -492,7 +494,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 if (onOpenDashboard) onOpenDashboard();
                 else handleRunVoiceCommand("Alexa, what's due this week?");
               }}
-              className="pl-4 pr-1.5 py-1.5 rounded-full text-xs font-medium text-[#0E1117] transition-all hover:bg-white active:scale-[0.98] flex items-center gap-2.5 cursor-pointer bg-[#F5EFE6] shadow-[0_4px_16px_rgba(229,169,82,0.2)] group"
+              className="pl-4 pr-1.5 py-1.5 rounded-full text-xs font-medium text-[#0E1117] transition-colors hover:bg-white active:scale-[0.98] flex items-center gap-2.5 cursor-pointer bg-[#F5EFE6]  group"
             >
               <span className="font-semibold">Open Desk</span>
               <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -514,8 +516,8 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
       {/* MOBILE SLIDE-IN MENU */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0B0D13]/98 backdrop-blur-3xl p-6 flex flex-col justify-between animate-fadeIn md:hidden">
-          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+        <div className="fixed inset-0 z-50 bg-[#0B0D13] p-6 flex flex-col justify-between animate-fadeIn md:hidden">
+          <div className="flex items-center justify-between pb-6">
             <div className="flex items-center gap-2">
               <GraduationCap className="h-5 w-5 text-[#E5A952]" />
               <span className="font-serif text-lg text-[#F5EFE6]">StudyMate</span>
@@ -581,7 +583,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               setIsMenuOpen(false);
               if (onOpenDashboard) onOpenDashboard();
             }}
-            className="w-full py-3.5 rounded-full text-center font-semibold text-sm text-[#0E1117] bg-[#F5EFE6] shadow-lg"
+            className="w-full py-3.5 rounded-full text-center font-semibold text-sm text-[#0E1117] bg-[#F5EFE6] hover:bg-white transition-colors"
           >
             Launch Companion Desk
           </button>
@@ -598,21 +600,21 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         <section
           id="hero"
           ref={heroRef}
-          className={`px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-8 sm:pt-16 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-8 sm:pt-16 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             heroVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
           }`}
         >
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
             {/* Left Column: Literary Academic Copy */}
             <div
-              className={`max-w-2xl space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`max-w-2xl space-y-6 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
               {/* East Asian Study Seal Stamp */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#161B26] px-3.5 py-1 border border-white/10 text-xs text-[#D8CEBD] shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-[#E5A952] animate-pulse" />
-                <span className="font-mono text-[11px] tracking-wide text-[#E5A952]">열공 ∙ 專注</span>
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#161B26] px-3.5 py-1 border border-white/10 text-xs text-[#D8CEBD]">
+                <span className="w-2 h-2 rounded-full bg-[#E5A952]" />
+                <span className="font-sans text-[11px] tracking-wide text-[#E5A952]">열공 ∙ 專注</span>
                 <span className="text-[#8B8378]">|</span>
                 <span className="text-[11px]">Alexa+ Academic Add-on</span>
               </div>
@@ -620,7 +622,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {/* Dignified Editorial Headline */}
               <h1 className="font-serif text-4xl sm:text-6xl lg:text-[4.2rem] font-medium tracking-tight leading-[1.08] text-[#F5EFE6]">
                 Your academic life, organized through{' '}
-                <em className="font-editorial italic font-normal text-[#E5A952] drop-shadow-[0_0_20px_rgba(229,169,82,0.3)]">
+                <em className="font-editorial italic font-normal text-[#E5A952] ">
                   quiet conversation.
                 </em>
               </h1>
@@ -656,7 +658,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     </div>
                     <button
                       type="submit"
-                      className="w-full sm:w-auto rounded-full px-5 py-2.5 text-xs font-semibold text-[#0E1117] bg-[#E5A952] hover:bg-[#F2BC66] transition-all active:scale-95 shrink-0 cursor-pointer shadow-md"
+                      className="w-full sm:w-auto rounded-full px-5 py-2.5 text-xs font-semibold text-[#0E1117] bg-[#E5A952] hover:bg-[#F2BC66] transition-colors active:scale-95 shrink-0 cursor-pointer"
                     >
                       Ask Alexa
                     </button>
@@ -665,7 +667,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
                 {/* Subtle Prompt Chips */}
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-[#8B8378] font-mono">Quick cues:</span>
+                  <span className="text-xs text-[#8B8378] font-sans">Quick cues:</span>
                   {[
                     "Alexa, what's due this week?",
                     '45 min study sprint',
@@ -685,11 +687,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
               {/* Simulated Voice Output Dialog Box */}
               {activeVoiceDemo && (
-                <div className="rounded-2xl bg-[#141824] p-5 border border-[#E5A952]/30 shadow-xl space-y-3 animate-fadeIn">
-                  <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs">
-                    <div className="flex items-center gap-2 font-mono text-[#E5A952]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#E5A952] animate-ping" />
-                      <span>TOOL: {activeVoiceDemo.tool}</span>
+                <div className="rounded-2xl bg-[#141824] p-5 border border-[#E5A952]/30 space-y-3 animate-fadeIn">
+                  <div className="flex items-center justify-between pb-2 text-xs">
+                    <div className="flex items-center gap-2 font-sans text-[#E5A952]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#E5A952]" />
+                      <code>TOOL: {activeVoiceDemo.tool}</code>
                     </div>
                     <button
                       type="button"
@@ -719,7 +721,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
             {/* Right Column: Double-Bezel Desk Artifacts */}
             <div
-              className={`flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-80 shrink-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+              className={`flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-80 shrink-0 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
                 heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
@@ -727,10 +729,10 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
                 <div className="p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06] space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#E5A952] font-semibold">
+                    <span className="text-[10px] font-sans text-[#E5A952] font-semibold">
                       Autonomous Ops
                     </span>
-                    <span className="rounded-full bg-[#4E7A68]/20 px-2 py-0.5 text-[9px] font-mono font-medium text-[#7AB89F] border border-[#4E7A68]/30">
+                    <span className="rounded-full bg-[#4E7A68]/20 px-2 py-0.5 text-[9px] font-sans font-medium text-[#7AB89F] border border-[#4E7A68]/30">
                       WAL Mode
                     </span>
                   </div>
@@ -748,12 +750,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
                   <div className="pt-2 flex flex-wrap gap-1.5">
                     {['get_tasks', 'add_task', 'create_study_plan'].map((tool) => (
-                      <span
+                      <code
                         key={tool}
-                        className="font-mono text-[9px] rounded-md bg-white/[0.04] px-2 py-0.5 text-[#C8BFB2] border border-white/[0.06]"
+                        className="text-[9px] rounded-md bg-white/[0.04] px-2 py-0.5 text-[#C8BFB2] border border-white/[0.06]"
                       >
                         {tool}
-                      </span>
+                      </code>
                     ))}
                   </div>
                 </div>
@@ -769,8 +771,8 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   <p className="text-xs text-[#A8A196] italic leading-relaxed font-serif">
                     "No tedious form fields or kanban dragging. You speak to your Echo, and your academic priorities update instantly."
                   </p>
-                  <div className="pt-2 flex items-center justify-between text-xs text-[#8B8378] border-t border-white/[0.06]">
-                    <span className="font-mono text-[10px]">Study Desk Companion</span>
+                  <div className="pt-2 flex items-center justify-between text-xs text-[#8B8378] ">
+                    <span className="font-sans text-[10px]">Study Desk Companion</span>
                     <button
                       onClick={() => scrollToSection('voice-studio')}
                       className="text-[#E5A952] hover:underline flex items-center gap-1 cursor-pointer text-xs"
@@ -790,9 +792,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('story')}
               className="flex flex-col items-center gap-2 text-[#8B8378] hover:text-[#E5A952] transition-colors cursor-pointer group"
             >
-              <span className="text-[10px] font-mono tracking-widest uppercase">The Study Journey</span>
+              <span className="text-[10px] font-sans">The Study Journey</span>
               <div className="w-5 h-8 rounded-full border border-white/20 flex items-center justify-center p-0.5 group-hover:border-[#E5A952] transition-colors">
-                <div className="w-1 h-2 bg-[#E5A952] rounded-full animate-bounce" />
+                <div className="w-1 h-2 bg-[#E5A952] rounded-full" />
               </div>
             </button>
           </div>
@@ -807,11 +809,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-[transform,opacity] duration-700 ease-out ${
               storyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#C24138]/10 text-[#E06357] border border-[#C24138]/30">
+            <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#C24138]/10 text-[#E06357] border border-[#C24138]/30">
               Act I · The Academic Friction (困)
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
@@ -826,13 +828,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             {/* The Fragmented Reality (Cinnabar Warning) */}
             <div
-              className={`p-1.5 rounded-[2.5rem] bg-white/[0.02] border border-[#C24138]/20 ring-1 ring-[#C24138]/10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`p-1.5 rounded-[2.5rem] bg-white/[0.02] border border-[#C24138]/20 ring-1 ring-[#C24138]/10 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
               <div className="h-full p-8 rounded-[2rem] bg-[#161215]/80 border border-[#C24138]/15 space-y-6 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#C24138]/15 px-3 py-1 text-xs font-mono text-[#E06357] border border-[#C24138]/25">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#C24138]/15 px-3 py-1 text-xs font-sans text-[#E06357] border border-[#C24138]/25">
                     <X className="w-3 h-3" />
                     <span>The Fragmented Reality</span>
                   </div>
@@ -853,7 +855,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     ))}
                   </div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-[#C24138]/20 font-mono text-[11px] text-[#E06357]">
+                <div className="p-3.5 rounded-xl bg-black/40 border border-[#C24138]/20 font-sans text-[11px] text-[#E06357]">
                   Friction Audit: 4.8 hrs lost/week on syllabus housekeeping
                 </div>
               </div>
@@ -861,13 +863,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
             {/* The StudyMate Flow (Bamboo Celadon & Amber) */}
             <div
-              className={`p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-[#4E7A68]/30 ring-1 ring-[#4E7A68]/15 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+              className={`p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-[#4E7A68]/30 ring-1 ring-[#4E7A68]/15 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
                 storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              <div className="h-full p-8 rounded-[2rem] bg-[#0E151A]/85 border border-[#4E7A68]/25 space-y-6 flex flex-col justify-between shadow-[0_10px_35px_rgba(78,122,104,0.15)]">
+              <div className="h-full p-8 rounded-[2rem] bg-[#0E151A]/85 border border-[#4E7A68]/25 space-y-6 flex flex-col justify-between ">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#4E7A68]/20 px-3 py-1 text-xs font-mono text-[#7AB89F] border border-[#4E7A68]/35">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#4E7A68]/20 px-3 py-1 text-xs font-sans text-[#7AB89F] border border-[#4E7A68]/35">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#7AB89F]" />
                     <span>The StudyMate Flow (靜心)</span>
                   </div>
@@ -888,7 +890,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     ))}
                   </div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-[#4E7A68]/25 font-mono text-[11px] text-[#7AB89F] flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-black/40 border border-[#4E7A68]/25 font-sans text-[11px] text-[#7AB89F] flex items-center justify-between">
                   <span>Latency: &lt; 25ms</span>
                   <span className="font-semibold text-[#E5A952]">100% Student-Sovereign</span>
                 </div>
@@ -906,11 +908,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-[transform,opacity] duration-700 ease-out ${
               voiceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
+            <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
               Act II · Spoken Dialogue (音)
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
@@ -923,7 +925,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
           {/* Double-Bezel Speech Console */}
           <div
-            className={`p-2 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`p-2 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               voiceVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-95'
             }`}
           >
@@ -939,9 +941,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     key={step.turn}
                     type="button"
                     onClick={() => setActiveStoryTurn(step.turn)}
-                    className={`px-4 py-2 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                    className={`px-4 py-2 rounded-full text-xs font-sans transition-colors cursor-pointer ${
                       activeStoryTurn === step.turn
-                        ? 'bg-[#E5A952] text-[#0E1117] font-bold shadow-md'
+                        ? 'bg-[#E5A952] text-[#0E1117] font-bold '
                         : 'bg-white/[0.04] text-[#A8A196] hover:bg-white/[0.08] hover:text-[#F5EFE6]'
                     }`}
                   >
@@ -955,16 +957,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <div className="max-w-2xl mx-auto p-6 sm:p-8 rounded-[2rem] bg-[#0B0D14] border border-white/[0.06] space-y-5">
                 {/* User Voice Utterance */}
                 <div
-                  className={`flex items-start justify-end gap-3 transition-all duration-700 ease-out delay-150 ${
+                  className={`flex items-start justify-end gap-3 transition-[transform,opacity] duration-700 ease-out delay-150 ${
                     voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
                   }`}
                 >
-                  <div className="p-4 rounded-2xl bg-[#1C2232] text-[#F5EFE6] text-xs sm:text-sm font-sans border border-white/10 shadow-sm">
+                  <div className="p-4 rounded-2xl bg-[#1C2232] text-[#F5EFE6] text-xs sm:text-sm font-sans border border-white/10 "
+                  >
                     {activeStoryTurn === 1 && '"Alexa, what is due this week for my classes?"'}
                     {activeStoryTurn === 2 && '"I have 45 minutes tonight. Can you build me a study plan?"'}
                     {activeStoryTurn === 3 && '"Yes, let\'s start right now!"'}
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-mono text-xs text-[#E5A952] shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-sans text-xs text-[#E5A952] shrink-0">
                     ST
                   </div>
                 </div>
@@ -986,20 +989,20 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
                 {/* StudyMate Voice Response */}
                 <div
-                  className={`flex items-start justify-start gap-3 transition-all duration-700 ease-out delay-300 ${
+                  className={`flex items-start justify-start gap-3 transition-[transform,opacity] duration-700 ease-out delay-300 ${
                     voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#E5A952] text-[#0E1117] flex items-center justify-center font-serif font-bold text-xs shrink-0 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#E5A952] text-[#0E1117] flex items-center justify-center font-serif font-bold text-xs shrink-0 ">
                     AI
                   </div>
                   <div className="p-5 rounded-2xl bg-[#141824] border border-white/[0.08] text-[#D8CEBD] text-xs sm:text-sm leading-relaxed max-w-xl space-y-3">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-[#E5A952]">
-                      <span>
+                    <div className="flex items-center justify-between text-[10px] font-sans text-[#E5A952]">
+                      <code>
                         {activeStoryTurn === 1 && 'EXECUTED: get_tasks(status="pending")'}
                         {activeStoryTurn === 2 && 'EXECUTED: create_study_plan(duration=45)'}
                         {activeStoryTurn === 3 && 'EXECUTED: start_pomodoro_timer(mins=25)'}
-                      </span>
+                      </code>
                       <span className="text-[#8B8378]">18ms WAL</span>
                     </div>
 
@@ -1040,11 +1043,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-[transform,opacity] duration-700 ease-out ${
               mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#4E7A68]/10 text-[#7AB89F] border border-[#4E7A68]/25">
+            <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#4E7A68]/10 text-[#7AB89F] border border-[#4E7A68]/25">
               Act III · The Native Engine (器)
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
@@ -1071,15 +1074,15 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   onClick={() => {
                     if (tool.action) tool.action();
                   }}
-                  className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] hover:border-[#E5A952]/40 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group cursor-pointer ${animClass}`}
+                  className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] hover:border-[#E5A952]/40 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group cursor-pointer ${animClass}`}
                 >
                   <div className="h-full p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.05] space-y-4 flex flex-col justify-between">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-semibold text-[#F5EFE6] group-hover:text-[#E5A952] transition-colors">
+                        <code className="text-xs font-semibold text-[#F5EFE6] group-hover:text-[#E5A952] transition-colors">
                           {tool.name}
-                        </span>
-                        <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] text-[#A8A196] border border-white/[0.06]">
+                        </code>
+                        <span className="font-sans text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] text-[#A8A196] border border-white/[0.06]">
                           {tool.seal} · {tool.tag}
                         </span>
                       </div>
@@ -1090,11 +1093,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     </div>
 
                     <div className="space-y-3 pt-2">
-                      <div className="p-2.5 rounded-xl bg-[#0B0D13] border border-white/[0.06] font-mono text-[10px] text-[#C8BFB2] truncate">
-                        {tool.payload}
+                      <div className="p-2.5 rounded-xl bg-[#0B0D13] border border-white/[0.06] text-[10px] text-[#C8BFB2] truncate">
+                        <code>{tool.payload}</code>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs text-[#E5A952] font-mono pt-1">
+                      <div className="flex items-center justify-between text-xs text-[#E5A952] font-sans pt-1">
                         <span>Execute Protocol</span>
                         <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -1107,13 +1110,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             {/* Architecture Explainer Card */}
             <div
               onClick={() => setIsArchModalOpen(true)}
-              className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-[#E5A952]/30 ring-1 ring-[#E5A952]/10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 cursor-pointer group ${
+              className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-[#E5A952]/30 ring-1 ring-[#E5A952]/10 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 cursor-pointer group ${
                 mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
               <div className="h-full p-6 rounded-[1.8rem] bg-[#161A26] border border-[#E5A952]/20 space-y-4 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-2 text-[#E5A952] text-xs font-mono uppercase tracking-wider">
+                  <div className="flex items-center gap-2 text-[#E5A952] text-xs font-medium">
                     <Cpu className="w-3.5 h-3.5" />
                     <span>Embedded WAL Engine</span>
                   </div>
@@ -1123,7 +1126,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between text-xs font-mono text-[#E5A952] pt-2 border-t border-white/[0.08]">
+                <div className="flex items-center justify-between text-xs font-sans text-[#E5A952] pt-2">
                   <span>System Architecture Spec</span>
                   <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -1141,11 +1144,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-[transform,opacity] duration-700 ease-out ${
               focusVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
+            <span className="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
               Act IV · Gongbang Study Rhythm (心)
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
@@ -1160,18 +1163,18 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Left: Pomodoro Timer Visualizer (5 cols) */}
             <div
-              className={`lg:col-span-5 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`lg:col-span-5 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
               <div className="h-full p-8 rounded-[2rem] bg-[#121520] border border-white/[0.06] text-center space-y-5 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#E5A952]/10 px-3 py-1 text-xs font-mono text-[#E5A952] border border-[#E5A952]/25">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#E5A952]/10 px-3 py-1 text-xs font-sans text-[#E5A952] border border-[#E5A952]/25">
                     <Clock className="w-3.5 h-3.5" />
                     <span>25m Focus Block (專注)</span>
                   </div>
 
-                  <div className="font-mono text-5xl font-light text-[#F5EFE6] tracking-widest py-2">
+                  <div className="font-sans tabular-nums text-5xl font-light text-[#F5EFE6] tracking-widest py-2">
                     {formatTimer(heroTimerSeconds)}
                   </div>
 
@@ -1180,11 +1183,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-3 pt-4 border-t border-white/[0.06]">
+                <div className="flex items-center justify-center gap-3 pt-4 ">
                   <button
                     type="button"
                     onClick={() => setHeroTimerRunning(!heroTimerRunning)}
-                    className="pl-5 pr-2 py-2 rounded-full text-xs font-semibold text-[#0E1117] transition-all bg-[#E5A952] hover:bg-[#F2BC66] active:scale-95 flex items-center gap-2 cursor-pointer shadow-md group"
+                    className="pl-5 pr-2 py-2 rounded-full text-xs font-semibold text-[#0E1117] transition-colors bg-[#E5A952] hover:bg-[#F2BC66] active:scale-95 flex items-center gap-2 cursor-pointer group"
                   >
                     <span>{heroTimerRunning ? 'Pause Sprint' : heroTimerSeconds < 25 * 60 ? 'Resume' : 'Start Focus'}</span>
                     <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center">
@@ -1208,17 +1211,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
             {/* Right: B5 Study Planner Velocity Graph (7 cols) */}
             <div
-              className={`lg:col-span-7 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+              className={`lg:col-span-7 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
                 focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
               <div className="h-full p-8 rounded-[2rem] bg-[#121520] border border-white/[0.06] space-y-6 flex flex-col justify-between">
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                <div className="flex items-center justify-between pb-3">
                   <div>
                     <h3 className="font-serif text-lg text-[#F5EFE6]">Weekly Focus Velocity</h3>
-                    <p className="text-xs text-[#8B8378] font-mono">B5 Gridded Log ∙ 7-Day Investment</p>
+                    <p className="text-xs text-[#8B8378] font-sans">B5 Gridded Log ∙ 7-Day Investment</p>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-mono text-[#E5A952] bg-[#E5A952]/10 px-3 py-1 rounded-full border border-[#E5A952]/25">
+                  <div className="flex items-center gap-1.5 text-xs font-sans text-[#E5A952] bg-[#E5A952]/10 px-3 py-1 rounded-full border border-[#E5A952]/25">
                     <Flame className="w-3.5 h-3.5 fill-[#E5A952]" />
                     <span>6 Day Streak</span>
                   </div>
@@ -1238,28 +1241,28 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
                       <div className="w-full rounded-lg bg-white/[0.02] h-full flex items-end p-1 border border-white/[0.04]">
                         <div
-                          className={`w-full rounded transition-all duration-500 ${
+                          className={`w-full rounded transition-[transform,opacity] duration-500 ${
                             item.active
-                              ? 'bg-[#E5A952] shadow-[0_0_10px_rgba(229,169,82,0.4)]'
+                              ? 'bg-[#E5A952] '
                               : 'bg-white/15'
                           }`}
                           style={{ height: `${item.h}%` }}
                         />
                       </div>
-                      <span className={`text-[10px] font-mono ${item.active ? 'text-[#E5A952] font-semibold' : 'text-[#8B8378]'}`}>
+                      <span className={`text-[10px] font-sans ${item.active ? 'text-[#E5A952] font-semibold' : 'text-[#8B8378]'}`}>
                         {item.day}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-2 flex items-center justify-between text-xs text-[#A8A196] border-t border-white/[0.06]">
+                <div className="pt-2 flex items-center justify-between text-xs text-[#A8A196] ">
                   <span>Weekly Total: <strong className="text-[#F5EFE6]">16.5 hrs</strong> logged</span>
                   <button
                     onClick={() => {
                       if (onOpenPlanner) onOpenPlanner();
                     }}
-                    className="text-[#E5A952] hover:underline flex items-center gap-1 font-mono text-xs cursor-pointer"
+                    className="text-[#E5A952] hover:underline flex items-center gap-1 font-sans text-xs cursor-pointer"
                   >
                     <span>Full Log View</span>
                     <ArrowRight className="h-3 w-3" />
@@ -1279,12 +1282,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto overflow-hidden"
         >
           <div
-            className={`p-1.5 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`p-1.5 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
             }`}
           >
             <div className="p-8 sm:p-10 rounded-[2.3rem] bg-[#121520] border border-white/[0.06] space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.06]">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-[#4E7A68]/20 text-[#7AB89F] border border-[#4E7A68]/30">
                     <ShieldCheck className="w-5 h-5" />
@@ -1294,14 +1297,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     <p className="text-xs text-[#8B8378]">Your coursework records belong exclusively to you</p>
                   </div>
                 </div>
-                <span className="font-mono text-xs px-3 py-1 rounded-full bg-white/[0.04] text-[#D8CEBD] border border-white/10 self-start md:self-auto">
+                <span className="font-sans text-xs px-3 py-1 rounded-full bg-white/[0.04] text-[#D8CEBD] border border-white/10 self-start md:self-auto">
                   No Subscription Paywalls
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-[#A8A196] leading-relaxed">
                 <div
-                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-100 ${
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-[transform,opacity] duration-700 ease-out delay-100 ${
                     privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
                   }`}
                 >
@@ -1310,7 +1313,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 </div>
 
                 <div
-                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-200 ${
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-[transform,opacity] duration-700 ease-out delay-200 ${
                     privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
                   }`}
                 >
@@ -1319,7 +1322,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 </div>
 
                 <div
-                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-300 ${
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-[transform,opacity] duration-700 ease-out delay-300 ${
                     privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
                   }`}
                 >
@@ -1340,12 +1343,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-4xl mx-auto text-center space-y-8 overflow-hidden"
         >
           <div
-            className={`p-1.5 rounded-[3rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`p-1.5 rounded-[3rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               launchVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'
             }`}
           >
             <div className="p-10 sm:p-14 rounded-[2.6rem] bg-[#121520] border border-white/[0.06] space-y-6">
-              <span className="font-mono text-xs font-medium px-3.5 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25 tracking-wider">
+              <span className="font-sans text-xs font-medium px-3.5 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
                 Begin Your First Session (始)
               </span>
 
@@ -1363,7 +1366,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   onClick={() => {
                     if (onOpenDashboard) onOpenDashboard();
                   }}
-                  className="pl-6 pr-2 py-2.5 rounded-full text-xs font-semibold text-[#0E1117] transition-all bg-[#F5EFE6] hover:bg-white active:scale-95 flex items-center gap-3 cursor-pointer shadow-lg group"
+                  className="pl-6 pr-2 py-2.5 rounded-full text-xs font-semibold text-[#0E1117] transition-colors bg-[#F5EFE6] hover:bg-white active:scale-95 flex items-center gap-3 cursor-pointer group"
                 >
                   <span>Launch Study Companion</span>
                   <div className="w-7 h-7 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -1376,7 +1379,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   onClick={() => {
                     if (onOpenVoice) onOpenVoice();
                   }}
-                  className="px-6 py-3 rounded-full text-xs font-medium text-[#D8CEBD] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all cursor-pointer flex items-center space-x-2"
+                  className="px-6 py-3 rounded-full text-xs font-medium text-[#D8CEBD] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors cursor-pointer flex items-center space-x-2"
                 >
                   <Mic className="w-3.5 h-3.5 text-[#E5A952]" />
                   <span>Open Voice Console</span>
@@ -1389,17 +1392,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* FOOTER: CALM EDITORIAL SIGNATURE                               */}
         {/* ============================================================== */}
-        <footer className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-12 border-t border-white/[0.06]">
+        <footer className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-12 ">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#8B8378]">
             <div className="flex items-center gap-3">
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E5A952] text-[#0E1117]">
                 <GraduationCap className="h-3.5 w-3.5" />
               </div>
               <span className="font-serif text-[#F5EFE6] font-medium text-sm">StudyMate</span>
-              <span className="font-mono text-[10px]">· Alexa+ Model Context Protocol (MCP)</span>
+              <span className="font-sans text-[10px]">· Alexa+ Model Context Protocol (MCP)</span>
             </div>
 
-            <div className="flex items-center gap-4 font-mono text-[11px]">
+            <div className="flex items-center gap-4 font-sans text-[11px]">
               <button onClick={() => scrollToSection('hero')} className="hover:text-[#E5A952] transition-colors cursor-pointer">
                 Back to Desk ↑
               </button>
@@ -1414,9 +1417,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
       {/* SYSTEM ARCHITECTURE MODAL */}
       {isArchModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-[#121520] p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-fadeIn">
+          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-[#121520] p-6 sm:p-8 border border-white/10 space-y-6">
+            <div className="flex items-center justify-between pb-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
                   <Cpu className="h-4 w-4" />
@@ -1425,7 +1428,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   <h3 className="font-serif text-base text-[#F5EFE6]">
                     StudyMate Technical Architecture
                   </h3>
-                  <p className="text-xs text-[#8B8378] font-mono">
+                  <p className="text-xs text-[#8B8378] font-sans">
                     Alexa+ Model Context Protocol (MCP) Add-on Specification
                   </p>
                 </div>
@@ -1439,7 +1442,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               </button>
             </div>
 
-            <div className="space-y-2.5 font-mono text-xs">
+            <div className="space-y-2.5 font-sans text-xs">
               <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
                   <span className="text-[#E5A952] font-semibold">1. Student Surface</span>
@@ -1505,7 +1508,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <button
                 type="button"
                 onClick={() => setIsArchModalOpen(false)}
-                className="px-4 py-2 text-xs font-mono text-[#8B8378] hover:text-white cursor-pointer"
+                className="px-4 py-2 text-xs font-sans text-[#8B8378] hover:text-white cursor-pointer"
               >
                 Close
               </button>
