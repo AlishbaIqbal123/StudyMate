@@ -10,9 +10,11 @@ export default {
       fontFamily: {
         sans: ["'Geist'", '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         geist: ["'Geist'", '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ["'Newsreader'", "'Instrument Serif'", 'Georgia', 'serif'],
+        editorial: ["'Instrument Serif'", "'Newsreader'", 'Georgia', 'serif'],
         silkscreen: ["'Silkscreen'", 'cursive'],
         headline: ['"Space Grotesk"', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        mono: ["'Geist Mono'", '"JetBrains Mono"', 'monospace'],
       },
       colors: {
         // Semantic Application Tokens linked to user variables

@@ -42,7 +42,7 @@ export interface StudyMateHeroProps {
 // Reusable Continuous Scroll-Reveal Hook that re-triggers on every scroll pass
 function useOnScreen(
   ref: React.RefObject<HTMLDivElement | null>,
-  threshold = 0.1,
+  threshold = 0.08,
   initialVisible = false
 ) {
   const [isIntersecting, setIntersecting] = useState(initialVisible);
@@ -50,7 +50,6 @@ function useOnScreen(
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Continuous triggering: sets true when in view, false when out of view
         setIntersecting(entry.isIntersecting);
       },
       { threshold, rootMargin: '0px 0px -40px 0px' }
@@ -121,7 +120,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     document.title = 'StudyMate — Alexa+ Conversational Academic Co-Pilot';
   }, []);
 
-  // Continuous Scroll Listener with requestAnimationFrame for 60fps parallax animations
+  // Continuous Scroll Listener with requestAnimationFrame
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -189,6 +188,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'get_tasks',
       tag: 'Deadlines',
+      seal: '締め切り',
       desc: 'Triages upcoming coursework & exams prioritized by due date.',
       payload: '{"status": "pending", "limit": 5}',
       action: onOpenAssignments || onOpenDashboard,
@@ -196,6 +196,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'add_task',
       tag: 'Capture',
+      seal: '录入',
       desc: 'Zero-friction voice ingestion directly into local SQLite.',
       payload: '{"title": "CS 420 Lab 3", "priority": "high", "est_minutes": 90}',
       action: onOpenDashboard,
@@ -203,6 +204,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'create_study_plan',
       tag: 'Pomodoro',
+      seal: '番茄时钟',
       desc: 'Generates structured 25-45 min focus sprints with breaks.',
       payload: '{"available_minutes": 45, "course": "Distributed Systems"}',
       action: onOpenPlanner || onOpenDashboard,
@@ -210,6 +212,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'update_progress',
       tag: 'Progress',
+      seal: '进度',
       desc: 'Marks assignments complete and recalibrates course mastery.',
       payload: '{"task_id": 1, "status": "done", "minutes_spent": 45}',
       action: onOpenDashboard,
@@ -217,6 +220,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
     {
       name: 'get_course_progress',
       tag: 'Analytics',
+      seal: '统计',
       desc: 'Returns completion percentages & weekly study investment.',
       payload: '{"course": "Algorithms & Matrix Theory"}',
       action: onOpenTelemetry || onOpenDashboard,
@@ -262,7 +266,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       const utt = new SpeechSynthesisUtterance(
         activeVoiceDemo?.response || "I've triaged your coursework and organized your schedule."
       );
-      utt.rate = 1.05;
+      utt.rate = 1.02;
       window.speechSynthesis.speak(utt);
     }
   };
@@ -281,23 +285,23 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#070B19] text-white selection:bg-cyan-500/30 selection:text-cyan-200 font-sans antialiased overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[#0B0D13] text-[#F3EFEA] selection:bg-[#E5A952]/25 selection:text-[#F8E3C2] font-sans antialiased overflow-x-hidden">
       {/* ============================================================== */}
       {/* 1. REAL-TIME CONTINUOUS SCROLL PROGRESS BAR                     */}
       {/* ============================================================== */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 z-[70] bg-white/[0.06] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 h-1 z-[70] bg-[#141824]/60 pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 transition-all duration-150 ease-out shadow-[0_0_16px_rgba(99,102,241,0.85)]"
+          className="h-full bg-gradient-to-r from-[#E5A952] via-[#E2B77A] to-[#4E7A68] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(229,169,82,0.6)]"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
       {/* ============================================================== */}
-      {/* 2. FIXED BACKGROUND VIDEO: Academic Study & Campus Visual Canvas*/}
+      {/* 2. FIXED BACKGROUND VIDEO: University Campus & Study Ambience   */}
       {/* ============================================================== */}
       <div className="fixed inset-0 h-full w-full pointer-events-none z-0 overflow-hidden">
         <video
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover filter contrast-[1.05] brightness-90 saturate-[0.85]"
           autoPlay
           loop
           muted
@@ -305,29 +309,28 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           preload="auto"
           src="/academic-study.mp4"
         />
-        {/* Soft atmospheric gradient overlay with rich color grading */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070B19]/75 via-[#0A0F26]/60 to-[#070B19]/90 pointer-events-none" />
+        {/* Warm library & study cafe atmosphere overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0D13]/85 via-[#0F121A]/72 to-[#0B0D13]/95 pointer-events-none" />
 
-        {/* Ambient atmospheric radial glows - Multi-chromatic Aurora */}
-        <div className="absolute -top-32 -left-32 w-[38rem] h-[38rem] rounded-full bg-indigo-600/25 blur-[140px] pointer-events-none" />
-        <div className="absolute top-[25%] -right-32 w-[42rem] h-[42rem] rounded-full bg-cyan-500/20 blur-[150px] pointer-events-none" />
-        <div className="absolute top-[55%] -left-32 w-[36rem] h-[36rem] rounded-full bg-fuchsia-600/18 blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-10 right-1/4 w-[45rem] h-[32rem] rounded-full bg-blue-600/20 blur-[160px] pointer-events-none" />
+        {/* Muted study desk lamp amber & celadon jade radial lights */}
+        <div className="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-[#E5A952]/[0.08] blur-[160px] pointer-events-none" />
+        <div className="absolute top-[30%] -right-36 w-[42rem] h-[42rem] rounded-full bg-[#4E7A68]/[0.09] blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-10 left-1/4 w-[45rem] h-[30rem] rounded-full bg-[#1F2538]/[0.15] blur-[170px] pointer-events-none" />
       </div>
 
       {/* ============================================================== */}
-      {/* 3. FLOATING CHAPTER STORY NAVIGATOR (Continuous Scroll Guide)  */}
+      {/* 3. FLOATING CHAPTER STORY NAVIGATOR (Minimalist Study Index)   */}
       {/* ============================================================== */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 p-2.5 rounded-full bg-[#0D132A]/80 backdrop-blur-2xl border border-indigo-500/30 shadow-[0_10px_35px_rgba(0,0,0,0.6)]">
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-2.5 p-2 rounded-full bg-[#11141C]/85 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
         {[
-          { id: 'hero', label: 'Awakening', num: '01' },
-          { id: 'story', label: 'The Dilemma', num: '02' },
-          { id: 'voice-studio', label: 'Voice AI', num: '03' },
-          { id: 'mcp-architecture', label: 'MCP Tools', num: '04' },
-          { id: 'focus-flow', label: 'Focus Flow', num: '05' },
-          { id: 'privacy', label: 'Privacy', num: '06' },
-          { id: 'launch', label: 'Launch', num: '07' },
-        ].map((chap) => {
+          { id: 'hero', label: 'Awakening', seal: '序' },
+          { id: 'story', label: 'The Dilemma', seal: '困' },
+          { id: 'voice-studio', label: 'Voice AI', seal: '音' },
+          { id: 'mcp-architecture', label: 'MCP Tools', seal: '器' },
+          { id: 'focus-flow', label: 'Focus Flow', seal: '心' },
+          { id: 'privacy', label: 'Privacy', seal: '私' },
+          { id: 'launch', label: 'Launch', seal: '始' },
+        ].map((chap, idx) => {
           const isActive = activeChapter === chap.id;
           return (
             <button
@@ -337,19 +340,19 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               title={chap.label}
             >
               {/* Tooltip on Hover */}
-              <span className="absolute right-8 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-[#0B0F24]/90 text-cyan-300 border border-cyan-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl">
-                {chap.num} · {chap.label}
+              <span className="absolute right-9 px-2.5 py-1 rounded-md text-[10px] font-mono font-medium bg-[#141824] text-[#E5A952] border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl">
+                0{idx + 1} · {chap.label} ({chap.seal})
               </span>
 
               {/* Indicator Dot Pill */}
               <div
-                className={`w-3.5 h-3.5 rounded-full transition-all duration-300 flex items-center justify-center ${
+                className={`w-3.5 h-3.5 rounded-full transition-all duration-300 flex items-center justify-center font-serif text-[9px] ${
                   isActive
-                    ? 'w-7 h-7 bg-gradient-to-r from-cyan-400 to-indigo-500 border border-cyan-300 text-slate-950 font-mono text-[9px] font-black shadow-[0_0_16px_rgba(34,211,238,0.7)]'
-                    : 'bg-white/25 hover:bg-cyan-400/50 border border-transparent'
+                    ? 'w-7 h-7 bg-[#E5A952] text-[#0E1117] font-bold shadow-[0_0_12px_rgba(229,169,82,0.6)]'
+                    : 'bg-white/20 hover:bg-[#E5A952]/40 text-transparent'
                 }`}
               >
-                {isActive && chap.num}
+                {isActive && chap.seal}
               </div>
             </button>
           );
@@ -357,39 +360,37 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       </div>
 
       {/* ============================================================== */}
-      {/* 4. STICKY GLASS BUBBLE NAVIGATION BAR                          */}
+      {/* 4. REFINED EDITORIAL NAVIGATION HEADER                         */}
       {/* ============================================================== */}
-      <header className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <nav className="flex items-center justify-between p-2 rounded-full bg-[#0B1028]/80 dark:bg-[#0B1028]/80 backdrop-blur-2xl border border-indigo-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+      <header className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <nav className="flex items-center justify-between p-2 rounded-full bg-[#11141C]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_6px_28px_rgba(0,0,0,0.4)]">
           {/* Logo & Brand Identity */}
           <div
             onClick={() => scrollToSection('hero')}
             className="flex items-center gap-3 pl-3 py-1 cursor-pointer group"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform">
-              <GraduationCap className="h-5 w-5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#E5A952] text-[#0E1117] shadow-sm group-hover:scale-105 transition-transform">
+              <GraduationCap className="h-4 w-4" />
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-sm tracking-tight text-white group-hover:text-cyan-300 transition-colors">
-                  StudyMate
-                </span>
-                <span className="rounded-full bg-cyan-500/20 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-cyan-300 border border-cyan-400/30 shadow-[0_0_10px_rgba(34,211,238,0.3)]">
-                  Alexa+ MCP
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <span className="font-serif text-base tracking-tight text-[#F5EFE6] font-medium group-hover:text-[#E5A952] transition-colors">
+                StudyMate
+              </span>
+              <span className="rounded-full bg-[#E5A952]/10 px-2.5 py-0.5 font-mono text-[9px] font-medium text-[#E5A952] border border-[#E5A952]/25">
+                열공 ∙ Alexa+ MCP
+              </span>
             </div>
           </div>
 
-          {/* Desktop Navigation Bubble Pill Cluster */}
-          <div className="hidden md:flex items-center gap-1.5 p-1 rounded-full bg-white/[0.08] border border-indigo-500/20">
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-full bg-white/[0.03] border border-white/[0.06]">
             <button
               type="button"
               onClick={() => scrollToSection('story')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
                 activeChapter === 'story'
-                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  ? 'bg-white/10 text-[#F5EFE6] font-semibold'
+                  : 'text-[#D0C8BE] hover:text-[#F5EFE6] hover:bg-white/[0.05]'
               }`}
             >
               The Story
@@ -399,11 +400,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('voice-studio')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
                 activeChapter === 'voice-studio'
-                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  ? 'bg-white/10 text-[#F5EFE6] font-semibold'
+                  : 'text-[#D0C8BE] hover:text-[#F5EFE6] hover:bg-white/[0.05]'
               }`}
             >
-              <Mic className="h-3 w-3 text-cyan-400" />
+              <Mic className="h-3 w-3 text-[#E5A952]" />
               <span>Voice AI</span>
             </button>
 
@@ -414,14 +415,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 onClick={() => setIsToolsDropdownOpen((prev) => !prev)}
                 className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1 ${
                   activeChapter === 'mcp-architecture'
-                    ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
-                    : 'text-white/80 hover:text-white hover:bg-white/10'
+                    ? 'bg-white/10 text-[#F5EFE6] font-semibold'
+                    : 'text-[#D0C8BE] hover:text-[#F5EFE6] hover:bg-white/[0.05]'
                 }`}
               >
-                <span>5 MCP Tools</span>
+                <span>5 Tools</span>
                 <ChevronDown
                   className={`h-3 w-3 transition-transform duration-200 ${
-                    isToolsDropdownOpen ? 'rotate-180 text-cyan-400' : ''
+                    isToolsDropdownOpen ? 'rotate-180 text-[#E5A952]' : ''
                   }`}
                 />
               </button>
@@ -429,10 +430,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {isToolsDropdownOpen && (
                 <div
                   onMouseLeave={() => setIsToolsDropdownOpen(false)}
-                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-[#0E142F]/95 p-4 backdrop-blur-3xl border border-indigo-500/30 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5"
+                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-[#121622]/95 p-4 backdrop-blur-3xl border border-white/10 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
                 >
-                  <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-cyan-300/90 font-bold">
-                    Model Context Protocol Registry
+                  <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-[#E5A952]/90 flex items-center justify-between">
+                    <span>Model Context Protocol</span>
+                    <span className="font-serif text-[#D0C8BE]/70">工具</span>
                   </div>
                   {mcpTools.map((t) => (
                     <button
@@ -443,17 +445,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                         scrollToSection('mcp-architecture');
                         setActiveMcpTab(t.name);
                       }}
-                      className="w-full flex flex-col items-start rounded-2xl p-2.5 text-left transition hover:bg-indigo-950/50 cursor-pointer group border border-transparent hover:border-indigo-500/30"
+                      className="w-full flex flex-col items-start rounded-xl p-2.5 text-left transition hover:bg-white/[0.06] cursor-pointer group"
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="font-mono text-xs font-semibold text-cyan-300 group-hover:text-cyan-200">
+                        <span className="font-mono text-xs font-medium text-[#F5EFE6] group-hover:text-[#E5A952]">
                           {t.name}
                         </span>
-                        <span className="rounded-full bg-cyan-500/10 px-2 py-0.5 text-[9px] font-medium text-cyan-300 border border-cyan-500/20">
-                          {t.tag}
+                        <span className="rounded-full bg-[#E5A952]/10 px-2 py-0.5 text-[9px] font-mono text-[#E5A952] border border-[#E5A952]/20">
+                          {t.seal} · {t.tag}
                         </span>
                       </div>
-                      <span className="text-[11px] text-white/70 mt-0.5 line-clamp-1">
+                      <span className="text-[11px] text-[#A8A196] mt-0.5 line-clamp-1">
                         {t.desc}
                       </span>
                     </button>
@@ -467,8 +469,8 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('focus-flow')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
                 activeChapter === 'focus-flow'
-                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  ? 'bg-white/10 text-[#F5EFE6] font-semibold'
+                  : 'text-[#D0C8BE] hover:text-[#F5EFE6] hover:bg-white/[0.05]'
               }`}
             >
               Focus Flow
@@ -476,13 +478,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <button
               type="button"
               onClick={() => setIsArchModalOpen(true)}
-              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-cyan-300 hover:bg-white/10 transition cursor-pointer"
+              className="rounded-full px-4 py-1.5 text-xs font-medium text-[#D0C8BE] hover:text-[#E5A952] hover:bg-white/[0.05] transition cursor-pointer"
             >
               Architecture
             </button>
           </div>
 
-          {/* Action CTAs */}
+          {/* Action CTAs: Button-in-Button Trailing Pattern */}
           <div className="hidden sm:flex items-center gap-2 pr-1">
             <button
               type="button"
@@ -490,10 +492,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 if (onOpenDashboard) onOpenDashboard();
                 else handleRunVoiceCommand("Alexa, what's due this week?");
               }}
-              className="px-5 py-2 rounded-full text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] hover:shadow-[0_0_30px_rgba(34,211,238,0.7)] border border-white/20"
+              className="pl-4 pr-1.5 py-1.5 rounded-full text-xs font-medium text-[#0E1117] transition-all hover:bg-white active:scale-[0.98] flex items-center gap-2.5 cursor-pointer bg-[#F5EFE6] shadow-[0_4px_16px_rgba(229,169,82,0.2)] group"
             >
-              <span>Launch Companion</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <span className="font-semibold">Open Desk</span>
+              <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                <ArrowRight className="h-3 w-3" />
+              </div>
             </button>
           </div>
 
@@ -501,7 +505,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white md:hidden cursor-pointer hover:bg-white/20"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[#F5EFE6] md:hidden cursor-pointer hover:bg-white/15"
           >
             {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -510,63 +514,63 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
       {/* MOBILE SLIDE-IN MENU */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#070B19]/95 backdrop-blur-3xl p-6 flex flex-col justify-between animate-fadeIn md:hidden">
-          <div className="flex items-center justify-between pb-6 border-b border-indigo-500/20">
+        <div className="fixed inset-0 z-50 bg-[#0B0D13]/98 backdrop-blur-3xl p-6 flex flex-col justify-between animate-fadeIn md:hidden">
+          <div className="flex items-center justify-between pb-6 border-b border-white/10">
             <div className="flex items-center gap-2">
-              <GraduationCap className="h-6 w-6 text-cyan-400" />
-              <span className="font-bold text-base text-white">StudyMate</span>
+              <GraduationCap className="h-5 w-5 text-[#E5A952]" />
+              <span className="font-serif text-lg text-[#F5EFE6]">StudyMate</span>
             </div>
             <button
               onClick={() => setIsMenuOpen(false)}
               className="p-2 rounded-full bg-white/10 text-white"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="flex flex-col gap-3 py-8 text-base font-semibold">
+          <div className="flex flex-col gap-4 py-8 text-base font-serif">
             <button
               onClick={() => {
                 setIsMenuOpen(false);
                 scrollToSection('story');
               }}
-              className="text-left py-2 hover:text-cyan-300"
+              className="text-left py-2 hover:text-[#E5A952]"
             >
-              1. The Student Dilemma
+              1. The Academic Dilemma (困)
             </button>
             <button
               onClick={() => {
                 setIsMenuOpen(false);
                 scrollToSection('voice-studio');
               }}
-              className="text-left py-2 hover:text-cyan-300"
+              className="text-left py-2 hover:text-[#E5A952]"
             >
-              2. Alexa+ Voice Studio
+              2. Alexa+ Voice Studio (音)
             </button>
             <button
               onClick={() => {
                 setIsMenuOpen(false);
                 scrollToSection('mcp-architecture');
               }}
-              className="text-left py-2 hover:text-cyan-300"
+              className="text-left py-2 hover:text-[#E5A952]"
             >
-              3. 5 Native MCP Tools
+              3. 5 MCP Tools Desk (器)
             </button>
             <button
               onClick={() => {
                 setIsMenuOpen(false);
                 scrollToSection('focus-flow');
               }}
-              className="text-left py-2 hover:text-cyan-300"
+              className="text-left py-2 hover:text-[#E5A952]"
             >
-              4. Pomodoro Focus Velocity
+              4. Pomodoro Focus Velocity (心)
             </button>
             <button
               onClick={() => {
                 setIsMenuOpen(false);
                 setIsArchModalOpen(true);
               }}
-              className="text-left py-2 hover:text-cyan-300"
+              className="text-left py-2 hover:text-[#E5A952]"
             >
               5. System Architecture
             </button>
@@ -577,97 +581,101 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               setIsMenuOpen(false);
               if (onOpenDashboard) onOpenDashboard();
             }}
-            className="w-full py-3.5 rounded-full text-center font-bold text-sm text-white bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_25px_rgba(99,102,241,0.5)] border border-white/20"
+            className="w-full py-3.5 rounded-full text-center font-semibold text-sm text-[#0E1117] bg-[#F5EFE6] shadow-lg"
           >
-            Launch Live Companion
+            Launch Companion Desk
           </button>
         </div>
       )}
 
       {/* ============================================================== */}
-      {/* 5. MAIN STORY-TELLING SCROLLABLE BODY WITH CONTINUOUS REVEALS  */}
+      {/* 5. MAIN STORY-TELLING SCROLLABLE BODY WITH DOUBLE-BEZEL PODS   */}
       {/* ============================================================== */}
-      <main className="relative z-10 space-y-28 sm:space-y-40 pb-28 pt-8">
+      <main className="relative z-10 space-y-28 sm:space-y-36 pb-28 pt-8">
         {/* ============================================================== */}
-        {/* ACT 1: HERO AWAKENING — BUBBLY INTRO                           */}
+        {/* ACT 1: HERO AWAKENING — QUIET STUDY DESK                       */}
         {/* ============================================================== */}
         <section
           id="hero"
           ref={heroRef}
-          className={`px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-6 sm:pt-12 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-8 sm:pt-16 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             heroVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.98]'
           }`}
         >
-          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12 overflow-hidden">
-            {/* Left Narrative Column - Flies in from Left */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+            {/* Left Column: Literary Academic Copy */}
             <div
               className={`max-w-2xl space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-24'
+                heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
-              {/* Bubbly Track Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-purple-500/20 px-4 py-1.5 backdrop-blur-2xl border border-cyan-400/35 text-xs font-semibold text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:border-cyan-300 transition-colors">
-                <span className="flex h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping" />
-                <span>Alexa+ Model Context Protocol (MCP) Add-on</span>
+              {/* East Asian Study Seal Stamp */}
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#161B26] px-3.5 py-1 border border-white/10 text-xs text-[#D8CEBD] shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-[#E5A952] animate-pulse" />
+                <span className="font-mono text-[11px] tracking-wide text-[#E5A952]">열공 ∙ 專注</span>
+                <span className="text-[#8B8378]">|</span>
+                <span className="text-[11px]">Alexa+ Academic Add-on</span>
               </div>
 
-              {/* Headline */}
-              <h1 className="text-4xl sm:text-6xl lg:text-[4.2rem] font-bold tracking-tight leading-[1.08] text-white">
+              {/* Dignified Editorial Headline */}
+              <h1 className="font-serif text-4xl sm:text-6xl lg:text-[4.2rem] font-medium tracking-tight leading-[1.08] text-[#F5EFE6]">
                 Your academic life, organized through{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-300 drop-shadow-[0_0_35px_rgba(34,211,238,0.35)]">
-                  conversation.
-                </span>
+                <em className="font-editorial italic font-normal text-[#E5A952] drop-shadow-[0_0_20px_rgba(229,169,82,0.3)]">
+                  quiet conversation.
+                </em>
               </h1>
 
               {/* Sub-lead Narrative */}
-              <p className="text-base sm:text-lg text-white/85 leading-relaxed max-w-xl">
-                An autonomous voice-first co-pilot for college students. Triage syllabus deadlines, launch calibrated Pomodoro focus sprints, and update course mastery simply by talking to Alexa.
+              <p className="text-base sm:text-lg text-[#C8BFB2] leading-relaxed max-w-xl font-normal">
+                An autonomous, voice-first companion for the focused student. Triage syllabus deadlines, commence calibrated Pomodoro sprints, and recalibrate course mastery without ever leaving your study desk.
               </p>
 
-              {/* Interactive Voice Capsule Bubble Form */}
+              {/* Double-Bezel Voice Input Capsule */}
               <div className="pt-2">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (voiceQuery.trim()) {
-                      handleRunVoiceCommand(voiceQuery);
-                    } else {
-                      handleRunVoiceCommand("Alexa, what's due this week?");
-                    }
-                  }}
-                  className="flex flex-col sm:flex-row items-center gap-2 p-2 rounded-[2.5rem] bg-gradient-to-r from-white/[0.12] via-white/[0.07] to-indigo-950/40 backdrop-blur-2xl border border-indigo-400/35 shadow-[0_10px_40px_rgba(99,102,241,0.2)] hover:border-cyan-400/60 transition-all"
-                >
-                  <div className="flex items-center pl-4 pr-2 w-full sm:w-auto flex-1">
-                    <Mic className="h-4 w-4 text-cyan-400 shrink-0 mr-2.5 animate-pulse" />
-                    <input
-                      type="text"
-                      value={voiceQuery}
-                      onChange={(e) => setVoiceQuery(e.target.value)}
-                      placeholder="Ask Alexa: 'What's due this week?'"
-                      className="w-full bg-transparent text-sm text-white placeholder-cyan-100/50 outline-none font-sans py-2"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto rounded-full px-6 py-3 text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-white/25"
+                <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (voiceQuery.trim()) {
+                        handleRunVoiceCommand(voiceQuery);
+                      } else {
+                        handleRunVoiceCommand("Alexa, what's due this week?");
+                      }
+                    }}
+                    className="flex flex-col sm:flex-row items-center gap-2 p-1.5 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06]"
                   >
-                    Ask Alexa
-                  </button>
-                </form>
+                    <div className="flex items-center pl-4 pr-2 w-full sm:w-auto flex-1">
+                      <Mic className="h-4 w-4 text-[#E5A952] shrink-0 mr-2.5" />
+                      <input
+                        type="text"
+                        value={voiceQuery}
+                        onChange={(e) => setVoiceQuery(e.target.value)}
+                        placeholder="Say: 'Alexa, what's due this week?'"
+                        className="w-full bg-transparent text-sm text-[#F5EFE6] placeholder-[#8E867A] outline-none font-sans py-2"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full sm:w-auto rounded-full px-5 py-2.5 text-xs font-semibold text-[#0E1117] bg-[#E5A952] hover:bg-[#F2BC66] transition-all active:scale-95 shrink-0 cursor-pointer shadow-md"
+                    >
+                      Ask Alexa
+                    </button>
+                  </form>
+                </div>
 
-                {/* Spoken Prompt Chips */}
+                {/* Subtle Prompt Chips */}
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-cyan-200/60">Quick speech cues:</span>
+                  <span className="text-xs text-[#8B8378] font-mono">Quick cues:</span>
                   {[
                     "Alexa, what's due this week?",
-                    '45 min study plan',
-                    'Mark OS lab complete',
+                    '45 min study sprint',
+                    'Mark CS lab complete',
                   ].map((chip) => (
                     <button
                       key={chip}
                       type="button"
                       onClick={() => handleRunVoiceCommand(chip)}
-                      className="rounded-full bg-indigo-950/40 hover:bg-indigo-900/60 px-3.5 py-1 text-xs font-medium text-cyan-100 backdrop-blur-xl border border-indigo-500/30 hover:border-cyan-400/50 transition-all hover:scale-105 cursor-pointer shadow-sm"
+                      className="rounded-full bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1 text-xs text-[#D8CEBD] border border-white/[0.06] transition-colors cursor-pointer"
                     >
                       {chip}
                     </button>
@@ -675,26 +683,24 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 </div>
               </div>
 
-              {/* Simulated Speech Output Bubble */}
+              {/* Simulated Voice Output Dialog Box */}
               {activeVoiceDemo && (
-                <div className="rounded-[2rem] bg-[#0E1533]/90 p-5 backdrop-blur-3xl border border-cyan-400/50 shadow-2xl animate-fadeIn space-y-3">
+                <div className="rounded-2xl bg-[#141824] p-5 border border-[#E5A952]/30 shadow-xl space-y-3 animate-fadeIn">
                   <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
-                      <span className="font-mono font-bold text-cyan-300">
-                        TOOL: {activeVoiceDemo.tool}
-                      </span>
+                    <div className="flex items-center gap-2 font-mono text-[#E5A952]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#E5A952] animate-ping" />
+                      <span>TOOL: {activeVoiceDemo.tool}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setActiveVoiceDemo(null)}
-                      className="text-white/40 hover:text-white"
+                      className="text-[#8B8378] hover:text-[#F5EFE6]"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
-                  <p className="text-xs leading-relaxed text-white/90">
-                    <strong className="text-cyan-300">Alexa+: </strong>
+                  <p className="text-xs leading-relaxed text-[#D8CEBD]">
+                    <strong className="text-[#E5A952]">Alexa+: </strong>
                     {activeVoiceDemo.response}
                   </p>
                   <button
@@ -702,74 +708,77 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     onClick={() => {
                       if (onOpenDashboard) onOpenDashboard();
                     }}
-                    className="text-xs font-semibold text-cyan-300 hover:underline flex items-center gap-1"
+                    className="text-xs font-medium text-[#E5A952] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    <span>View in Dashboard</span>
+                    <span>Inspect on Desk Dashboard</span>
                     <ArrowRight className="h-3 w-3" />
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Right Bubbly Cards Column - Flies in from Right */}
+            {/* Right Column: Double-Bezel Desk Artifacts */}
             <div
-              className={`flex flex-col sm:flex-row lg:flex-col gap-5 w-full lg:w-80 shrink-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
-                heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
+              className={`flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-80 shrink-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+                heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              {/* Card 1: Silkscreen Metric Bubble */}
-              <div className="p-6 rounded-[2.5rem] bg-gradient-to-br from-[#121936]/85 via-[#0E152E]/75 to-[#0A0E22]/90 backdrop-blur-2xl border border-indigo-500/35 shadow-[0_12px_40px_rgba(99,102,241,0.18)] space-y-4 hover:border-cyan-400/50 hover:shadow-[0_16px_50px_rgba(34,211,238,0.25)] transition-all">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-300 font-bold">
-                    Autonomous MCP Ops
-                  </span>
-                  <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold text-emerald-300 border border-emerald-500/30">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Live SQLite
-                  </span>
-                </div>
-
-                <div
-                  className="text-4xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200"
-                  style={{ fontFamily: "'Silkscreen', cursive" }}
-                >
-                  42,500+
-                </div>
-
-                <p className="text-xs text-white/75 leading-relaxed">
-                  Sub-millisecond tool executions with zero cloud database fees. Pure local data sovereignty.
-                </p>
-
-                <div className="pt-2 flex flex-wrap gap-1.5">
-                  {['get_tasks', 'add_task', 'create_study_plan'].map((tool) => (
-                    <span
-                      key={tool}
-                      className="font-mono text-[9px] rounded-full bg-cyan-950/50 px-2.5 py-1 text-cyan-200/80 border border-cyan-500/25"
-                    >
-                      {tool}
+              {/* Double-Bezel Card 1: Local SQLite Velocity */}
+              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
+                <div className="p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06] space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#E5A952] font-semibold">
+                      Autonomous Ops
                     </span>
-                  ))}
+                    <span className="rounded-full bg-[#4E7A68]/20 px-2 py-0.5 text-[9px] font-mono font-medium text-[#7AB89F] border border-[#4E7A68]/30">
+                      WAL Mode
+                    </span>
+                  </div>
+
+                  <div
+                    className="text-3xl font-normal text-[#F5EFE6]"
+                    style={{ fontFamily: "'Silkscreen', cursive" }}
+                  >
+                    42,500+
+                  </div>
+
+                  <p className="text-xs text-[#A8A196] leading-relaxed">
+                    Sub-millisecond tool executions with zero cloud database fees. Pure local data sovereignty.
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap gap-1.5">
+                    {['get_tasks', 'add_task', 'create_study_plan'].map((tool) => (
+                      <span
+                        key={tool}
+                        className="font-mono text-[9px] rounded-md bg-white/[0.04] px-2 py-0.5 text-[#C8BFB2] border border-white/[0.06]"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Card 2: Voice Flow Capsule */}
-              <div className="p-6 rounded-[2.5rem] bg-gradient-to-br from-[#181338]/85 via-[#130E2E]/75 to-[#0C0A24]/90 backdrop-blur-2xl border border-purple-500/35 shadow-[0_12px_40px_rgba(168,85,247,0.18)] space-y-3 hover:border-fuchsia-400/50 hover:shadow-[0_16px_50px_rgba(217,70,239,0.25)] transition-all">
-                <div className="flex items-center gap-2 text-xs font-bold text-white">
-                  <Sparkles className="h-4 w-4 text-fuchsia-300" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-300 to-cyan-300">Alexa+ Multi-Turn Memory</span>
-                </div>
-                <p className="text-xs text-white/75 italic leading-relaxed">
-                  "No tedious form fields or kanban dragging. You speak to your Echo, and your academic priorities update instantly."
-                </p>
-                <div className="pt-2 flex items-center justify-between text-xs text-white/60 border-t border-purple-500/20">
-                  <span className="text-purple-200/70">Student Companion</span>
-                  <button
-                    onClick={() => scrollToSection('voice-studio')}
-                    className="text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 cursor-pointer font-medium"
-                  >
-                    <span>Test speech</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </button>
+              {/* Double-Bezel Card 2: Dokseosil Multi-Turn Memory */}
+              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
+                <div className="p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06] space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-serif font-medium text-[#F5EFE6]">
+                    <Sparkles className="h-3.5 w-3.5 text-[#E5A952]" />
+                    <span>Multi-Turn Dialogue Context</span>
+                  </div>
+                  <p className="text-xs text-[#A8A196] italic leading-relaxed font-serif">
+                    "No tedious form fields or kanban dragging. You speak to your Echo, and your academic priorities update instantly."
+                  </p>
+                  <div className="pt-2 flex items-center justify-between text-xs text-[#8B8378] border-t border-white/[0.06]">
+                    <span className="font-mono text-[10px]">Study Desk Companion</span>
+                    <button
+                      onClick={() => scrollToSection('voice-studio')}
+                      className="text-[#E5A952] hover:underline flex items-center gap-1 cursor-pointer text-xs"
+                    >
+                      <span>Try audio</span>
+                      <ArrowRight className="h-3 w-3" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -779,235 +788,242 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <div className="pt-16 flex flex-col items-center justify-center text-center">
             <button
               onClick={() => scrollToSection('story')}
-              className="flex flex-col items-center gap-2 text-white/50 hover:text-white transition group cursor-pointer"
+              className="flex flex-col items-center gap-2 text-[#8B8378] hover:text-[#E5A952] transition-colors cursor-pointer group"
             >
-              <span className="text-[11px] font-mono tracking-widest uppercase">Scroll To Explore The Story</span>
-              <div className="w-8 h-12 rounded-full border border-white/20 flex items-center justify-center p-1 group-hover:border-cyan-400 transition-colors">
-                <div className="w-1.5 h-3 bg-cyan-400 rounded-full animate-bounce" />
+              <span className="text-[10px] font-mono tracking-widest uppercase">The Study Journey</span>
+              <div className="w-5 h-8 rounded-full border border-white/20 flex items-center justify-center p-0.5 group-hover:border-[#E5A952] transition-colors">
+                <div className="w-1 h-2 bg-[#E5A952] rounded-full animate-bounce" />
               </div>
             </button>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 2: THE STUDENT DILEMMA — CHAOS VS STUDYMATE FLOW            */}
+        {/* ACT 2: THE ACADEMIC FRICTION (困 — CHAOS VS STUDYMATE FLOW)    */}
         {/* ============================================================== */}
         <section
           id="story"
           ref={storyRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-2xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
               storyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-rose-500/20 to-amber-500/20 text-rose-300 border border-rose-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(244,63,94,0.2)]">
-              Act I · The Academic Friction
+            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#C24138]/10 text-[#E06357] border border-[#C24138]/30">
+              Act I · The Academic Friction (困)
             </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               Why university students drop deadlines.
             </h2>
-            <p className="text-sm text-white/75 leading-relaxed">
+            <p className="text-sm text-[#A8A196] leading-relaxed">
               Between Canvas, PDF syllabi, Slack, and email notifications, cognitive overload kills deep academic focus.
             </p>
           </div>
 
-          {/* Two Bubbly Contrast Pods */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            {/* The Chaotic Way - Flies in from Left */}
+          {/* Asymmetrical Bento Contrast */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            {/* The Fragmented Reality (Cinnabar Warning) */}
             <div
-              className={`rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-rose-950/40 via-red-950/20 to-[#120712]/80 backdrop-blur-2xl border border-rose-500/35 shadow-[0_15px_45px_rgba(244,63,94,0.15)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-rose-400/50 hover:shadow-[0_20px_55px_rgba(244,63,94,0.25)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-24'
+              className={`p-1.5 rounded-[2.5rem] bg-white/[0.02] border border-[#C24138]/20 ring-1 ring-[#C24138]/10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3.5 py-1 text-xs font-semibold text-rose-300 border border-rose-500/30 shadow-sm">
-                  <X className="w-3.5 h-3.5" />
-                  <span>The Fragmented Reality</span>
+              <div className="h-full p-8 rounded-[2rem] bg-[#161215]/80 border border-[#C24138]/15 space-y-6 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#C24138]/15 px-3 py-1 text-xs font-mono text-[#E06357] border border-[#C24138]/25">
+                    <X className="w-3 h-3" />
+                    <span>The Fragmented Reality</span>
+                  </div>
+                  <h3 className="font-serif text-2xl text-[#F5EFE6]">Manual Disorganization</h3>
+                  <p className="text-xs text-[#C8BFB2] leading-relaxed">
+                    Students spend 45 minutes every Sunday manually copying syllabus tables into Trello or Notion, only to abandon them when midterm season strikes.
+                  </p>
+                  <div className="space-y-2.5 pt-2 text-xs">
+                    {[
+                      'Surprise assignments discovered 2 hours before the portal closes',
+                      'Uncalibrated study sessions causing rapid mental fatigue',
+                      'Persistent anxiety over which course requires attention today',
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-[#E0B8B4]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C24138] mt-1.5 shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white">Manual Disorganization</h3>
-                <p className="text-xs text-white/75 leading-relaxed">
-                  Students spend up to 45 minutes every Sunday manually transcribing syllabus tables into Trello or Notion, only to abandon them when exams hit.
-                </p>
-                <div className="space-y-3 pt-2 text-xs">
-                  {[
-                    'Surprise assignments discovered 2 hours before the portal closes',
-                    'Uncalibrated study sessions causing rapid mental fatigue',
-                    'Guilt and anxiety over which course needs attention today',
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-rose-200/90">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
+                <div className="p-3.5 rounded-xl bg-black/40 border border-[#C24138]/20 font-mono text-[11px] text-[#E06357]">
+                  Friction Audit: 4.8 hrs lost/week on syllabus housekeeping
                 </div>
-              </div>
-              <div className="p-4 rounded-2xl bg-black/60 border border-rose-500/25 font-mono text-[11px] text-rose-300">
-                Avg. Student Friction: 4.8 hrs lost/week on syllabus management
               </div>
             </div>
 
-            {/* The StudyMate Way - Flies in from Right */}
+            {/* The StudyMate Flow (Bamboo Celadon & Amber) */}
             <div
-              className={`rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-cyan-950/50 via-indigo-950/40 to-[#0A0F26]/90 backdrop-blur-3xl border border-cyan-400/50 shadow-[0_15px_50px_rgba(6,182,212,0.25)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-cyan-300 hover:shadow-[0_20px_70px_rgba(34,211,238,0.35)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 animate-float-slow ${
-                storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
+              className={`p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-[#4E7A68]/30 ring-1 ring-[#4E7A68]/15 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+                storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500/25 to-blue-500/25 px-3.5 py-1 text-xs font-semibold text-cyan-200 border border-cyan-400/40 shadow-lg shadow-cyan-500/20">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-300" />
-                  <span>The StudyMate Flow</span>
+              <div className="h-full p-8 rounded-[2rem] bg-[#0E151A]/85 border border-[#4E7A68]/25 space-y-6 flex flex-col justify-between shadow-[0_10px_35px_rgba(78,122,104,0.15)]">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#4E7A68]/20 px-3 py-1 text-xs font-mono text-[#7AB89F] border border-[#4E7A68]/35">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#7AB89F]" />
+                    <span>The StudyMate Flow (靜心)</span>
+                  </div>
+                  <h3 className="font-serif text-2xl text-[#F5EFE6]">Zero-Friction Voice Intelligence</h3>
+                  <p className="text-xs text-[#C8BFB2] leading-relaxed">
+                    Speak one sentence as you return to your room. StudyMate triages deadline urgency and schedules calibrated focus sprints immediately.
+                  </p>
+                  <div className="space-y-2.5 pt-2 text-xs">
+                    {[
+                      'Instant Alexa+ triage: prioritized by due date & syllabus weight',
+                      'Cognitively-structured 25m focus & 5m recovery intervals',
+                      'Embedded local SQLite engine with sub-millisecond response',
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-[#D1E5DC]">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#7AB89F] shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white">Zero-Friction Voice Intelligence</h3>
-                <p className="text-xs text-white/80 leading-relaxed">
-                  Speak one sentence as you walk back to your dorm. StudyMate triages deadline urgency and schedules Pomodoro sprints immediately.
-                </p>
-                <div className="space-y-3 pt-2 text-xs">
-                  {[
-                    'Instant Alexa+ triage: priority ordering by due date & course weight',
-                    'Cognitively-structured 25m focus & 5m recovery intervals',
-                    'Embedded local SQLite engine with sub-millisecond response',
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-cyan-100">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-300 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
+                <div className="p-3.5 rounded-xl bg-black/40 border border-[#4E7A68]/25 font-mono text-[11px] text-[#7AB89F] flex items-center justify-between">
+                  <span>Latency: &lt; 25ms</span>
+                  <span className="font-semibold text-[#E5A952]">100% Student-Sovereign</span>
                 </div>
-              </div>
-              <div className="p-4 rounded-2xl bg-black/60 border border-cyan-500/30 font-mono text-[11px] text-cyan-300 flex items-center justify-between">
-                <span>Response Latency: &lt; 25ms</span>
-                <span className="font-bold text-emerald-300 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">100% Student-Sovereign</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 3: VOICE STUDIO — MULTI-TURN CONVERSATION SCENARIO         */}
+        {/* ACT 3: VOICE STUDIO (音 — MULTI-TURN CONVERSATION SCENARIO)     */}
         {/* ============================================================== */}
         <section
           id="voice-studio"
           ref={voiceRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-2xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
               voiceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/20 to-cyan-500/20 text-violet-300 border border-violet-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(139,92,246,0.2)]">
-              Act II · Spoken Dialogue
+            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
+              Act II · Spoken Dialogue (音)
             </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
-              Experience the multi-turn conversational loop.
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
+              The multi-turn conversational loop.
             </h2>
-            <p className="text-sm text-white/75 leading-relaxed">
-              Click through a real academic dialog turn. Watch how StudyMate tracks conversational context from inquiry to timer initiation.
+            <p className="text-sm text-[#A8A196] leading-relaxed">
+              Step through a real academic dialog turn. Watch StudyMate preserve context from deadline inquiry to focus timer initiation.
             </p>
           </div>
 
-          {/* Interactive Bubbly Speech Console Card - Rises from Bottom Up */}
+          {/* Double-Bezel Speech Console */}
           <div
-            className={`rounded-[3rem] p-6 sm:p-10 bg-gradient-to-br from-[#121835]/85 via-[#0E142C]/75 to-[#080C1D]/90 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_20px_60px_rgba(99,102,241,0.2)] space-y-8 hover:border-cyan-400/50 hover:shadow-[0_0_60px_rgba(6,182,212,0.25)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              voiceVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'
+            className={`p-2 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              voiceVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-20 scale-95'
             }`}
           >
-            {/* Step Selector Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {[
-                { turn: 1, title: '1. Check Due Dates', prompt: "Alexa, what's due this week?" },
-                { turn: 2, title: '2. Request Study Plan', prompt: 'I have 45 minutes, help me study' },
-                { turn: 3, title: '3. Confirm & Start', prompt: 'Yes, start now' },
-              ].map((step) => (
-                <button
-                  key={step.turn}
-                  type="button"
-                  onClick={() => setActiveStoryTurn(step.turn)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                    activeStoryTurn === step.turn
-                      ? 'bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(34,211,238,0.5)] scale-105 border border-white/20'
-                      : 'bg-indigo-950/40 text-cyan-200/80 hover:bg-indigo-900/60 hover:text-white border border-indigo-500/25'
-                  }`}
-                >
-                  {step.title}
-                </button>
-              ))}
-            </div>
-
-            {/* Conversation Display Bubble */}
-            <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-[2.5rem] bg-[#070A1A]/85 border border-indigo-500/25 space-y-6 shadow-2xl">
-              {/* User Voice Utterance - Slides from Right */}
-              <div
-                className={`flex items-start justify-end gap-3 transition-all duration-700 ease-out delay-150 ${
-                  voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
-                }`}
-              >
-                <div className="p-4 rounded-[2rem] bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-[0_4px_20px_rgba(99,102,241,0.35)] border border-white/15">
-                  {activeStoryTurn === 1 && '"Alexa, what is due this week for my classes?"'}
-                  {activeStoryTurn === 2 && '"I have 45 minutes tonight. Can you build me a study plan?"'}
-                  {activeStoryTurn === 3 && '"Yes, let\'s start right now!"'}
-                </div>
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs shrink-0 text-white shadow-md">
-                  ST
-                </div>
-              </div>
-
-              {/* Animated Soundwave Visualizer Bubble */}
-              <div className="flex items-center justify-center gap-1.5 py-3 px-6 rounded-full bg-white/[0.06] border border-cyan-500/30 max-w-sm mx-auto shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-                <Mic className="w-3.5 h-3.5 text-cyan-400 mr-2 animate-pulse" />
-                {[10, 22, 34, 16, 40, 26, 14, 30, 42, 20, 12].map((h, i) => (
-                  <div
-                    key={i}
-                    className="w-1 bg-gradient-to-t from-cyan-400 via-sky-300 to-violet-400 rounded-full eq-anim-bar shadow-[0_0_8px_rgba(34,211,238,0.7)]"
-                    style={{
-                      height: `${h}px`,
-                      animationDelay: `${(i * 0.12).toFixed(2)}s`,
-                    }}
-                  />
+            <div className="p-6 sm:p-10 rounded-[2.3rem] bg-[#121520] border border-white/[0.06] space-y-8">
+              {/* Step Selector Tabs (Desk Bookmarks) */}
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {[
+                  { turn: 1, title: '1. Check Due Dates', seal: '查' },
+                  { turn: 2, title: '2. Request Study Plan', seal: '划' },
+                  { turn: 3, title: '3. Confirm & Start', seal: '行' },
+                ].map((step) => (
+                  <button
+                    key={step.turn}
+                    type="button"
+                    onClick={() => setActiveStoryTurn(step.turn)}
+                    className={`px-4 py-2 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                      activeStoryTurn === step.turn
+                        ? 'bg-[#E5A952] text-[#0E1117] font-bold shadow-md'
+                        : 'bg-white/[0.04] text-[#A8A196] hover:bg-white/[0.08] hover:text-[#F5EFE6]'
+                    }`}
+                  >
+                    <span>{step.seal} · </span>
+                    <span>{step.title}</span>
+                  </button>
                 ))}
               </div>
 
-              {/* StudyMate Voice Response - Slides from Left */}
-              <div
-                className={`flex items-start justify-start gap-3 transition-all duration-700 ease-out delay-300 ${
-                  voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
-                }`}
-              >
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-slate-950 font-black text-xs shrink-0 shadow-lg shadow-cyan-400/30">
-                  AI
-                </div>
-                <div className="p-5 rounded-[2rem] bg-gradient-to-br from-[#131A3A]/90 to-[#0B1028]/95 border border-cyan-400/40 text-white text-xs sm:text-sm leading-relaxed max-w-xl space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-cyan-300 font-semibold">
-                    <span>
-                      {activeStoryTurn === 1 && 'EXECUTED: get_tasks(status="pending")'}
-                      {activeStoryTurn === 2 && 'EXECUTED: create_study_plan(duration=45)'}
-                      {activeStoryTurn === 3 && 'EXECUTED: start_pomodoro_timer(mins=25)'}
-                    </span>
-                    <span className="text-cyan-400/60">Latency: 18ms</span>
+              {/* Conversation Display Container */}
+              <div className="max-w-2xl mx-auto p-6 sm:p-8 rounded-[2rem] bg-[#0B0D14] border border-white/[0.06] space-y-5">
+                {/* User Voice Utterance */}
+                <div
+                  className={`flex items-start justify-end gap-3 transition-all duration-700 ease-out delay-150 ${
+                    voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+                  }`}
+                >
+                  <div className="p-4 rounded-2xl bg-[#1C2232] text-[#F5EFE6] text-xs sm:text-sm font-sans border border-white/10 shadow-sm">
+                    {activeStoryTurn === 1 && '"Alexa, what is due this week for my classes?"'}
+                    {activeStoryTurn === 2 && '"I have 45 minutes tonight. Can you build me a study plan?"'}
+                    {activeStoryTurn === 3 && '"Yes, let\'s start right now!"'}
                   </div>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-mono text-xs text-[#E5A952] shrink-0">
+                    ST
+                  </div>
+                </div>
 
-                  <p className="text-white/90">
-                    {activeStoryTurn === 1 &&
-                      "You have 3 active assignments. Your most urgent is 'Problem Set 4: Dynamic Programming' for CS 301, due tomorrow at 5:00 PM."}
-                    {activeStoryTurn === 2 &&
-                      "I've built a 45-minute focused protocol for Algorithms. Interval 1: 25-minute deep focus; 5-minute recovery break; Interval 2: 15-minute problem review. Ready to begin?"}
-                    {activeStoryTurn === 3 &&
-                      "Starting your 25-minute deep work Pomodoro session for CS 301 now! I've activated your companion timer. Let's make today count!"}
-                  </p>
-
-                  <div className="pt-2 flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onOpenVoice) onOpenVoice();
+                {/* Animated Soundwave Visualizer */}
+                <div className="flex items-center justify-center gap-1.5 py-2 px-5 rounded-full bg-white/[0.02] border border-white/[0.06] max-w-xs mx-auto">
+                  <Mic className="w-3 h-3 text-[#E5A952] mr-2" />
+                  {[8, 18, 28, 14, 32, 22, 12, 26, 34, 16, 10].map((h, i) => (
+                    <div
+                      key={i}
+                      className="w-1 bg-[#E5A952] rounded-full eq-anim-bar opacity-80"
+                      style={{
+                        height: `${h}px`,
+                        animationDelay: `${(i * 0.12).toFixed(2)}s`,
                       }}
-                      className="text-xs font-bold text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>Open Full Voice Console</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </button>
+                    />
+                  ))}
+                </div>
+
+                {/* StudyMate Voice Response */}
+                <div
+                  className={`flex items-start justify-start gap-3 transition-all duration-700 ease-out delay-300 ${
+                    voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#E5A952] text-[#0E1117] flex items-center justify-center font-serif font-bold text-xs shrink-0 shadow-sm">
+                    AI
+                  </div>
+                  <div className="p-5 rounded-2xl bg-[#141824] border border-white/[0.08] text-[#D8CEBD] text-xs sm:text-sm leading-relaxed max-w-xl space-y-3">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[#E5A952]">
+                      <span>
+                        {activeStoryTurn === 1 && 'EXECUTED: get_tasks(status="pending")'}
+                        {activeStoryTurn === 2 && 'EXECUTED: create_study_plan(duration=45)'}
+                        {activeStoryTurn === 3 && 'EXECUTED: start_pomodoro_timer(mins=25)'}
+                      </span>
+                      <span className="text-[#8B8378]">18ms WAL</span>
+                    </div>
+
+                    <p>
+                      {activeStoryTurn === 1 &&
+                        "You have 3 active assignments. Your most urgent is 'Problem Set 4: Dynamic Programming' for CS 301, due tomorrow at 5:00 PM."}
+                      {activeStoryTurn === 2 &&
+                        "I've built a 45-minute focused protocol for Algorithms. Interval 1: 25-minute deep focus; 5-minute recovery break; Interval 2: 15-minute problem review. Ready to begin?"}
+                      {activeStoryTurn === 3 &&
+                        "Starting your 25-minute deep work Pomodoro session for CS 301 now! I've activated your companion timer. Let's make today count!"}
+                    </p>
+
+                    <div className="pt-2 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onOpenVoice) onOpenVoice();
+                        }}
+                        className="text-xs font-medium text-[#E5A952] hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Open Voice Console</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1016,377 +1032,380 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 4: 5 NATIVE MCP TOOLS ARCHITECTURE                         */}
+        {/* ACT 4: 5 NATIVE MCP TOOLS (器 — THE STUDY DESK COMPARTMENTS)   */}
         {/* ============================================================== */}
         <section
           id="mcp-architecture"
           ref={mcpRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-2xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
               mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 border border-emerald-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-              Act III · The Native Engine
+            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#4E7A68]/10 text-[#7AB89F] border border-[#4E7A68]/25">
+              Act III · The Native Engine (器)
             </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
-              5 Standard MCP Tools. Pure Precision.
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
+              5 Standard MCP Tools. Zero Fluff.
             </h2>
-            <p className="text-sm text-white/75 leading-relaxed">
+            <p className="text-sm text-[#A8A196] leading-relaxed">
               StudyMate implements the official Model Context Protocol (MCP) specification over standard JSON-RPC 2.0 with streamable HTTP.
             </p>
           </div>
 
-          {/* 5 Bubbly MCP Tool Cards - Multi-directional entry (Left, Bottom, Right) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Double-Bezel Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {mcpTools.map((tool, idx) => {
               const animClass =
                 idx % 3 === 0
-                  ? mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'
+                  ? mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
                   : idx % 3 === 1
-                  ? mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                  : mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20';
-
-              const cardBorders = [
-                'hover:border-cyan-400/70 hover:shadow-[0_15px_45px_rgba(6,182,212,0.25)]',
-                'hover:border-fuchsia-400/70 hover:shadow-[0_15px_45px_rgba(217,70,239,0.25)]',
-                'hover:border-amber-400/70 hover:shadow-[0_15px_45px_rgba(245,158,11,0.25)]',
-                'hover:border-emerald-400/70 hover:shadow-[0_15px_45px_rgba(16,185,129,0.25)]',
-                'hover:border-indigo-400/70 hover:shadow-[0_15px_45px_rgba(99,102,241,0.25)]',
-              ];
+                  ? mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+                  : mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16';
 
               return (
                 <div
                   key={tool.name}
-                  className={`p-6 rounded-[2.5rem] bg-gradient-to-br from-[#111836]/80 via-[#0D132D]/70 to-[#090D22]/90 backdrop-blur-2xl border border-indigo-500/30 ${cardBorders[idx % cardBorders.length]} shadow-xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-4 group cursor-pointer ${animClass}`}
                   onClick={() => {
                     if (tool.action) tool.action();
                   }}
+                  className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] hover:border-[#E5A952]/40 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group cursor-pointer ${animClass}`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-cyan-300 group-hover:text-cyan-200">
-                      {tool.name}
-                    </span>
-                    <span className="font-mono text-[9px] uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-                      {tool.tag}
-                    </span>
-                  </div>
+                  <div className="h-full p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.05] space-y-4 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-xs font-semibold text-[#F5EFE6] group-hover:text-[#E5A952] transition-colors">
+                          {tool.name}
+                        </span>
+                        <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] text-[#A8A196] border border-white/[0.06]">
+                          {tool.seal} · {tool.tag}
+                        </span>
+                      </div>
 
-                  <p className="text-xs text-white/75 leading-relaxed min-h-[36px]">
-                    {tool.desc}
-                  </p>
+                      <p className="text-xs text-[#A8A196] leading-relaxed min-h-[36px]">
+                        {tool.desc}
+                      </p>
+                    </div>
 
-                  <div className="p-3 rounded-2xl bg-[#070A1C]/80 border border-indigo-500/25 font-mono text-[10px] text-cyan-200/80 truncate">
-                    {tool.payload}
-                  </div>
+                    <div className="space-y-3 pt-2">
+                      <div className="p-2.5 rounded-xl bg-[#0B0D13] border border-white/[0.06] font-mono text-[10px] text-[#C8BFB2] truncate">
+                        {tool.payload}
+                      </div>
 
-                  <div className="flex items-center justify-between text-xs text-cyan-300/90 group-hover:text-cyan-200 font-bold pt-1">
-                    <span>Explore Tool</span>
-                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1.5 transition-transform" />
+                      <div className="flex items-center justify-between text-xs text-[#E5A952] font-mono pt-1">
+                        <span>Execute Protocol</span>
+                        <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
             })}
 
-            {/* Architecture Explainer Card - Slides from Right */}
+            {/* Architecture Explainer Card */}
             <div
               onClick={() => setIsArchModalOpen(true)}
-              className={`p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-950/70 via-purple-950/40 to-[#090C22]/95 backdrop-blur-2xl border border-indigo-400/40 shadow-[0_15px_45px_rgba(99,102,241,0.25)] space-y-4 cursor-pointer hover:border-indigo-300 hover:shadow-[0_20px_55px_rgba(99,102,241,0.35)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 flex flex-col justify-between ${
-                mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
+              className={`p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-[#E5A952]/30 ring-1 ring-[#E5A952]/10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 cursor-pointer group ${
+                mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              <div>
-                <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider font-mono">
-                  <Cpu className="w-4 h-4 text-indigo-400" />
-                  <span>Architecture</span>
+              <div className="h-full p-6 rounded-[1.8rem] bg-[#161A26] border border-[#E5A952]/20 space-y-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-[#E5A952] text-xs font-mono uppercase tracking-wider">
+                    <Cpu className="w-3.5 h-3.5" />
+                    <span>Embedded WAL Engine</span>
+                  </div>
+                  <h3 className="font-serif text-xl text-[#F5EFE6] mt-2">Local SQLite Sovereignty</h3>
+                  <p className="text-xs text-[#A8A196] mt-2 leading-relaxed">
+                    StudyMate connects Alexa+ directly to an embedded SQLite database using WAL mode for concurrent reading without locks.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-white mt-2">Local SQLite WAL Engine</h3>
-                <p className="text-xs text-white/75 mt-2 leading-relaxed">
-                  StudyMate connects Alexa+ directly to an embedded SQLite database using WAL mode for concurrent reading without locks.
-                </p>
-              </div>
 
-              <div className="flex items-center justify-between text-xs font-semibold text-indigo-300 pt-2 border-t border-white/10">
-                <span>View Full System Diagram</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+                <div className="flex items-center justify-between text-xs font-mono text-[#E5A952] pt-2 border-t border-white/[0.08]">
+                  <span>System Architecture Spec</span>
+                  <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 5: FOCUS FLOW & HABIT VELOCITY                             */}
+        {/* ACT 5: FOCUS FLOW (心 — GONGBANG POMODORO & VELOCITY)          */}
         {/* ============================================================== */}
         <section
           id="focus-flow"
           ref={focusRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-12 overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto space-y-12 overflow-hidden"
         >
           <div
-            className={`text-center max-w-2xl mx-auto space-y-3 transition-all duration-700 ease-out ${
+            className={`text-center max-w-xl mx-auto space-y-3 transition-all duration-700 ease-out ${
               focusVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-              Act IV · Deep Work Velocity
+            <span className="font-mono text-xs font-medium px-3 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
+              Act IV · Gongbang Study Rhythm (心)
             </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#F5EFE6]">
               Maintain momentum without academic burnout.
             </h2>
-            <p className="text-sm text-white/75 leading-relaxed">
+            <p className="text-sm text-[#A8A196] leading-relaxed">
               StudyMate pairs voice execution with structured Pomodoro pacing and velocity metrics across your entire semester.
             </p>
           </div>
 
-          {/* Bubbly Focus Dashboard Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left: Pomodoro Timer Visualizer (5 cols) - Flies in from Left */}
+          {/* Double-Bezel Focus Rhythm Pods */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* Left: Pomodoro Timer Visualizer (5 cols) */}
             <div
-              className={`lg:col-span-5 p-8 rounded-[3rem] bg-gradient-to-br from-[#121A3B]/85 via-[#0F142D]/75 to-[#0A0D22]/90 backdrop-blur-3xl border border-cyan-400/40 shadow-[0_15px_50px_rgba(6,182,212,0.2)] text-center space-y-5 hover:border-cyan-300 hover:shadow-[0_20px_60px_rgba(34,211,238,0.35)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] animate-float-slow ${
-                focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-24'
+              className={`lg:col-span-5 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
               }`}
             >
-              <span className="font-mono text-[11px] font-bold text-cyan-300 uppercase tracking-wider">
-                Autonomous Focus Sprint
-              </span>
+              <div className="h-full p-8 rounded-[2rem] bg-[#121520] border border-white/[0.06] text-center space-y-5 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#E5A952]/10 px-3 py-1 text-xs font-mono text-[#E5A952] border border-[#E5A952]/25">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>25m Focus Block (專注)</span>
+                  </div>
 
-              <div className="font-mono text-6xl font-normal text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 drop-shadow-[0_0_25px_rgba(34,211,238,0.4)] tracking-widest py-2">
-                {formatTimer(heroTimerSeconds)}
-              </div>
+                  <div className="font-mono text-5xl font-light text-[#F5EFE6] tracking-widest py-2">
+                    {formatTimer(heroTimerSeconds)}
+                  </div>
 
-              <p className="text-xs text-cyan-100/70">
-                Interval 1 of 3: CS 301 Algorithms & Dynamic Programming
-              </p>
+                  <p className="text-xs text-[#A8A196]">
+                    Interval 1 of 3: CS 301 Algorithms & Dynamic Programming
+                  </p>
+                </div>
 
-              <div className="flex items-center justify-center gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setHeroTimerRunning(!heroTimerRunning)}
-                  className="px-6 py-2.5 rounded-full text-xs font-bold text-white transition shadow-xl border border-white/25 active:scale-95 hover:scale-105 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)]"
-                >
-                  {heroTimerRunning ? (
-                    <>
-                      <Pause className="w-3.5 h-3.5 fill-current" />
-                      <span>Pause Sprint</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>{heroTimerSeconds < 25 * 60 ? 'Resume Sprint' : 'Start Focus'}</span>
-                    </>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setHeroTimerRunning(false);
-                    setHeroTimerSeconds(25 * 60);
-                  }}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 transition cursor-pointer"
-                  title="Reset Timer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center justify-center gap-3 pt-4 border-t border-white/[0.06]">
+                  <button
+                    type="button"
+                    onClick={() => setHeroTimerRunning(!heroTimerRunning)}
+                    className="pl-5 pr-2 py-2 rounded-full text-xs font-semibold text-[#0E1117] transition-all bg-[#E5A952] hover:bg-[#F2BC66] active:scale-95 flex items-center gap-2 cursor-pointer shadow-md group"
+                  >
+                    <span>{heroTimerRunning ? 'Pause Sprint' : heroTimerSeconds < 25 * 60 ? 'Resume' : 'Start Focus'}</span>
+                    <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center">
+                      {heroTimerRunning ? <Pause className="w-3 h-3 fill-current" /> : <Play className="w-3 h-3 fill-current" />}
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHeroTimerRunning(false);
+                      setHeroTimerSeconds(25 * 60);
+                    }}
+                    className="p-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-[#D8CEBD] border border-white/[0.06] transition-colors cursor-pointer"
+                    title="Reset Timer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Right: Velocity Graph & Streak Pod (7 cols) - Flies in from Right */}
+            {/* Right: B5 Study Planner Velocity Graph (7 cols) */}
             <div
-              className={`lg:col-span-7 p-8 rounded-[3rem] bg-gradient-to-br from-[#131B3A]/85 via-[#0F142E]/75 to-[#0A0D22]/90 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_15px_50px_rgba(99,102,241,0.18)] hover:border-indigo-400/50 space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
-                focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
+              className={`lg:col-span-7 p-1.5 rounded-[2.5rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+                focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
-                <div>
-                  <h3 className="text-base font-bold text-white">Weekly Focus Velocity</h3>
-                  <p className="text-xs text-white/70">Study hours logged across all courses</p>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-mono bg-amber-500/15 px-3 py-1 rounded-full border border-amber-500/30">
-                  <Flame className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span>6 Day Streak</span>
-                </div>
-              </div>
-
-              {/* Visual Pillar Graph */}
-              <div className="flex items-end justify-between gap-3 h-36 px-2 pt-4">
-                {[
-                  { day: 'Mon', h: 55, active: false },
-                  { day: 'Tue', h: 70, active: false },
-                  { day: 'Wed', h: 90, active: false },
-                  { day: 'Thu', h: 60, active: false },
-                  { day: 'Fri', h: 80, active: false },
-                  { day: 'Sat', h: 40, active: false },
-                  { day: 'Today', h: 85, active: true },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                    <div className="w-full rounded-2xl bg-white/[0.04] h-full flex items-end p-1 border border-white/10">
-                      <div
-                        className={`w-full rounded-xl transition-all duration-500 ${
-                          item.active
-                            ? 'bg-gradient-to-t from-cyan-400 via-indigo-500 to-purple-500 shadow-[0_0_16px_rgba(34,211,238,0.7)] animate-pulse'
-                            : 'bg-white/20'
-                        }`}
-                        style={{ height: `${item.h}%` }}
-                      />
-                    </div>
-                    <span className={`text-[10px] font-mono ${item.active ? 'text-cyan-300 font-bold' : 'text-white/60'}`}>
-                      {item.day}
-                    </span>
+              <div className="h-full p-8 rounded-[2rem] bg-[#121520] border border-white/[0.06] space-y-6 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                  <div>
+                    <h3 className="font-serif text-lg text-[#F5EFE6]">Weekly Focus Velocity</h3>
+                    <p className="text-xs text-[#8B8378] font-mono">B5 Gridded Log ∙ 7-Day Investment</p>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-[#E5A952] bg-[#E5A952]/10 px-3 py-1 rounded-full border border-[#E5A952]/25">
+                    <Flame className="w-3.5 h-3.5 fill-[#E5A952]" />
+                    <span>6 Day Streak</span>
+                  </div>
+                </div>
 
-              <div className="pt-2 flex items-center justify-between text-xs text-white/70">
-                <span>Total: <strong className="text-cyan-300">16.5 hrs</strong> logged</span>
-                <button
-                  onClick={() => {
-                    if (onOpenPlanner) onOpenPlanner();
-                  }}
-                  className="text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 font-bold cursor-pointer"
-                >
-                  <span>Open Full Tracker</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                {/* Grid Bar Chart */}
+                <div className="flex items-end justify-between gap-3 h-32 px-2 pt-2">
+                  {[
+                    { day: 'Mon', h: 55, active: false },
+                    { day: 'Tue', h: 70, active: false },
+                    { day: 'Wed', h: 90, active: false },
+                    { day: 'Thu', h: 60, active: false },
+                    { day: 'Fri', h: 80, active: false },
+                    { day: 'Sat', h: 40, active: false },
+                    { day: 'Today', h: 85, active: true },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                      <div className="w-full rounded-lg bg-white/[0.02] h-full flex items-end p-1 border border-white/[0.04]">
+                        <div
+                          className={`w-full rounded transition-all duration-500 ${
+                            item.active
+                              ? 'bg-[#E5A952] shadow-[0_0_10px_rgba(229,169,82,0.4)]'
+                              : 'bg-white/15'
+                          }`}
+                          style={{ height: `${item.h}%` }}
+                        />
+                      </div>
+                      <span className={`text-[10px] font-mono ${item.active ? 'text-[#E5A952] font-semibold' : 'text-[#8B8378]'}`}>
+                        {item.day}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-2 flex items-center justify-between text-xs text-[#A8A196] border-t border-white/[0.06]">
+                  <span>Weekly Total: <strong className="text-[#F5EFE6]">16.5 hrs</strong> logged</span>
+                  <button
+                    onClick={() => {
+                      if (onOpenPlanner) onOpenPlanner();
+                    }}
+                    className="text-[#E5A952] hover:underline flex items-center gap-1 font-mono text-xs cursor-pointer"
+                  >
+                    <span>Full Log View</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 6: DATA SOVEREIGNTY & PRIVACY                              */}
+        {/* ACT 6: DATA SOVEREIGNTY & PRIVACY (私)                          */}
         {/* ============================================================== */}
         <section
           id="privacy"
           ref={privacyRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto overflow-hidden"
         >
           <div
-            className={`p-8 sm:p-12 rounded-[3.5rem] bg-gradient-to-br from-[#111936]/85 via-[#0D132A]/75 to-[#080B1B]/95 backdrop-blur-3xl border border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.15)] space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`p-1.5 rounded-[2.8rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
             }`}
           >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-emerald-500/20">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
-                  <ShieldCheck className="w-6 h-6" />
+            <div className="p-8 sm:p-10 rounded-[2.3rem] bg-[#121520] border border-white/[0.06] space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.06]">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-[#4E7A68]/20 text-[#7AB89F] border border-[#4E7A68]/30">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-xl text-[#F5EFE6]">Student Data Sovereignty (私)</h3>
+                    <p className="text-xs text-[#8B8378]">Your coursework records belong exclusively to you</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white">Student Data Sovereignty</h3>
-                  <p className="text-xs text-emerald-100/70">Your academic records belong exclusively to you</p>
+                <span className="font-mono text-xs px-3 py-1 rounded-full bg-white/[0.04] text-[#D8CEBD] border border-white/10 self-start md:self-auto">
+                  No Subscription Paywalls
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-[#A8A196] leading-relaxed">
+                <div
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-100 ${
+                    privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+                  }`}
+                >
+                  <span className="font-serif text-[#F5EFE6] text-sm block">1. Clean Guest Mode</span>
+                  <p>Explore and test the workspace with 0 dummy seed clutter. When ready, authenticate to preserve records across devices.</p>
                 </div>
-              </div>
-              <span className="font-mono text-xs px-3.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 self-start md:self-auto font-semibold">
-                No Cloud Subscription Required
-              </span>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-white/75 leading-relaxed">
-              {/* Card 1 - Flies in from Left */}
-              <div
-                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-100 shadow-md ${
-                  privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
-                }`}
-              >
-                <span className="font-bold text-emerald-300 text-sm block">1. Clean Guest Mode</span>
-                <p>Browse and test the app with zero dummy data and zero tracking. When you're ready, sign in to unlock cloud sync.</p>
-              </div>
+                <div
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-200 ${
+                    privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+                  }`}
+                >
+                  <span className="font-serif text-[#F5EFE6] text-sm block">2. Local SQLite Engine</span>
+                  <p>All coursework records live in an embedded SQLite file with sub-millisecond execution and zero cloud latency.</p>
+                </div>
 
-              {/* Card 2 - Flies in from Bottom */}
-              <div
-                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-200 shadow-md ${
-                  privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
-                }`}
-              >
-                <span className="font-bold text-emerald-300 text-sm block">2. Local SQLite Core</span>
-                <p>All coursework records live in an embedded SQLite file with sub-millisecond execution and zero cloud latency.</p>
-              </div>
-
-              {/* Card 3 - Flies in from Right */}
-              <div
-                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-300 shadow-md ${
-                  privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
-                }`}
-              >
-                <span className="font-bold text-emerald-300 text-sm block">3. Multi-Device Clerk Auth</span>
-                <p>Authenticate with Clerk to sync your tasks and focus history securely between your laptop, tablet, and Echo device.</p>
+                <div
+                  className={`p-5 rounded-2xl bg-[#0B0D13] border border-white/[0.06] space-y-2 transition-all duration-700 ease-out delay-300 ${
+                    privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+                  }`}
+                >
+                  <span className="font-serif text-[#F5EFE6] text-sm block">3. Multi-Surface Clerk Auth</span>
+                  <p>Authenticate with Clerk to sync deadlines and Pomodoro logs securely between your laptop and Echo device.</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* ACT 7: THE GRAND FINALE CALL TO ACTION BUBBLE                  */}
+        {/* ACT 7: THE GRAND FINALE CALL TO ACTION (始)                    */}
         {/* ============================================================== */}
         <section
           id="launch"
           ref={launchRef}
-          className="px-5 sm:px-8 lg:px-12 max-w-5xl mx-auto text-center space-y-8 overflow-hidden"
+          className="px-5 sm:px-8 lg:px-12 max-w-4xl mx-auto text-center space-y-8 overflow-hidden"
         >
           <div
-            className={`p-10 sm:p-16 rounded-[4rem] bg-gradient-to-br from-indigo-950/70 via-[#0F1538]/90 to-purple-950/70 backdrop-blur-3xl border border-cyan-400/40 shadow-[0_0_90px_rgba(99,102,241,0.35)] hover:shadow-[0_0_120px_rgba(34,211,238,0.5)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-6 ${
-              launchVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-32 scale-90'
+            className={`p-1.5 rounded-[3rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              launchVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'
             }`}
           >
-            <span className="font-mono text-xs font-bold px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 text-slate-950 border border-white/30 uppercase tracking-widest shadow-lg">
-              Ready to Upgrade Your Academic Life?
-            </span>
+            <div className="p-10 sm:p-14 rounded-[2.6rem] bg-[#121520] border border-white/[0.06] space-y-6">
+              <span className="font-mono text-xs font-medium px-3.5 py-1 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25 tracking-wider">
+                Begin Your First Session (始)
+              </span>
 
-            <h2 className="text-3xl sm:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-indigo-200 drop-shadow-[0_0_35px_rgba(34,211,238,0.3)] leading-tight">
-              Start your first voice-directed focus session.
-            </h2>
+              <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#F5EFE6] leading-tight">
+                Quiet your desk. Triage your week.
+              </h2>
 
-            <p className="text-sm sm:text-base text-cyan-100/80 max-w-xl mx-auto leading-relaxed">
-              Experience the future of academic management. Free to use with 0 dummy data, native MCP tools, and seamless voice triage.
-            </p>
+              <p className="text-sm sm:text-base text-[#A8A196] max-w-md mx-auto leading-relaxed font-sans">
+                Experience the calm of conversational academic management. Free to use with 0 dummy data and sub-millisecond local SQLite.
+              </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenDashboard) onOpenDashboard();
-                }}
-                className="px-8 py-3.5 rounded-full text-sm font-bold text-white transition-all shadow-[0_0_35px_rgba(99,102,241,0.7)] hover:shadow-[0_0_50px_rgba(34,211,238,0.9)] active:scale-95 hover:scale-105 flex items-center space-x-2 cursor-pointer bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 border border-white/30"
-              >
-                <span>Launch Companion Dashboard</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onOpenDashboard) onOpenDashboard();
+                  }}
+                  className="pl-6 pr-2 py-2.5 rounded-full text-xs font-semibold text-[#0E1117] transition-all bg-[#F5EFE6] hover:bg-white active:scale-95 flex items-center gap-3 cursor-pointer shadow-lg group"
+                >
+                  <span>Launch Study Companion</span>
+                  <div className="w-7 h-7 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenVoice) onOpenVoice();
-                }}
-                className="px-8 py-3.5 rounded-full text-sm font-semibold text-white bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/25 hover:border-cyan-400/60 transition-all active:scale-95 hover:scale-105 cursor-pointer flex items-center space-x-2 shadow-lg"
-              >
-                <Mic className="w-4 h-4 text-cyan-300" />
-                <span>Open Voice Console</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onOpenVoice) onOpenVoice();
+                  }}
+                  className="px-6 py-3 rounded-full text-xs font-medium text-[#D8CEBD] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all cursor-pointer flex items-center space-x-2"
+                >
+                  <Mic className="w-3.5 h-3.5 text-[#E5A952]" />
+                  <span>Open Voice Console</span>
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ============================================================== */}
-        {/* FOOTER: SLEEK BUBBLY BRAND SIGNATURE                           */}
+        {/* FOOTER: CALM EDITORIAL SIGNATURE                               */}
         {/* ============================================================== */}
-        <footer className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-12 border-t border-indigo-500/20">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-white/60">
+        <footer className="px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto pt-12 border-t border-white/[0.06]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#8B8378]">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/30">
-                <GraduationCap className="h-4 w-4" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E5A952] text-[#0E1117]">
+                <GraduationCap className="h-3.5 w-3.5" />
               </div>
-              <span className="font-bold text-white text-sm">StudyMate</span>
-              <span className="text-cyan-200/60">· Built for the Alexa+ MCP Challenge</span>
+              <span className="font-serif text-[#F5EFE6] font-medium text-sm">StudyMate</span>
+              <span className="font-mono text-[10px]">· Alexa+ Model Context Protocol (MCP)</span>
             </div>
 
             <div className="flex items-center gap-4 font-mono text-[11px]">
-              <button onClick={() => scrollToSection('hero')} className="hover:text-cyan-300 transition-colors cursor-pointer">
-                Back to Top ↑
+              <button onClick={() => scrollToSection('hero')} className="hover:text-[#E5A952] transition-colors cursor-pointer">
+                Back to Desk ↑
               </button>
               <span>•</span>
-              <button onClick={() => setIsArchModalOpen(true)} className="hover:text-cyan-300 transition-colors cursor-pointer">
-                Architecture Spec
+              <button onClick={() => setIsArchModalOpen(true)} className="hover:text-[#E5A952] transition-colors cursor-pointer">
+                Technical Spec
               </button>
             </div>
           </div>
@@ -1395,18 +1414,18 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
       {/* SYSTEM ARCHITECTURE MODAL */}
       {isArchModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl rounded-[3rem] bg-[#0A0E26]/95 p-6 sm:p-8 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_0_60px_rgba(99,102,241,0.3)] space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-[#121520] p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                  <Cpu className="h-5 w-5" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25">
+                  <Cpu className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="font-serif text-base text-[#F5EFE6]">
                     StudyMate Technical Architecture
                   </h3>
-                  <p className="text-xs text-white/60">
+                  <p className="text-xs text-[#8B8378] font-mono">
                     Alexa+ Model Context Protocol (MCP) Add-on Specification
                   </p>
                 </div>
@@ -1414,69 +1433,69 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <button
                 type="button"
                 onClick={() => setIsArchModalOpen(false)}
-                className="p-2 rounded-full bg-white/10 text-white/60 hover:text-white"
+                className="p-1.5 rounded-full bg-white/10 text-[#A8A196] hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="space-y-3 font-mono text-xs">
-              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
+            <div className="space-y-2.5 font-mono text-xs">
+              <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="text-cyan-400 font-bold">1. Student Surface</span>
-                  <div className="text-cyan-100/70 text-[11px] mt-0.5">
-                    Spoken voice via Echo device or Sleek Web Companion
+                  <span className="text-[#E5A952] font-semibold">1. Student Surface</span>
+                  <div className="text-[#8B8378] text-[11px] mt-0.5">
+                    Spoken voice via Echo device or Clean Web Companion
                   </div>
                 </div>
-                <span className="rounded-full bg-cyan-500/20 px-2.5 py-0.5 text-[10px] text-cyan-300 border border-cyan-500/30 font-semibold">
+                <span className="rounded-full bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-[#D8CEBD] border border-white/[0.08]">
                   Echo / Web
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
+              <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="text-indigo-400 font-bold">2. Alexa+ Conversational Layer</span>
-                  <div className="text-indigo-100/70 text-[11px] mt-0.5">
+                  <span className="text-[#E2B77A] font-semibold">2. Alexa+ Conversational Layer</span>
+                  <div className="text-[#8B8378] text-[11px] mt-0.5">
                     LLM tool selection, argument parsing & multi-turn dialog context
                   </div>
                 </div>
-                <span className="rounded-full bg-indigo-500/20 px-2.5 py-0.5 text-[10px] text-indigo-300 border border-indigo-500/30 font-semibold">
+                <span className="rounded-full bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-[#D8CEBD] border border-white/[0.08]">
                   Amazon Alexa+
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
+              <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="text-emerald-400 font-bold">3. Streamable HTTP Transport</span>
-                  <div className="text-emerald-100/70 text-[11px] mt-0.5">
+                  <span className="text-[#7AB89F] font-semibold">3. Streamable HTTP Transport</span>
+                  <div className="text-[#8B8378] text-[11px] mt-0.5">
                     POST /mcp via Cloudflare Quick Tunnel (Free TLS/HTTPS)
                   </div>
                 </div>
-                <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] text-emerald-300 border border-emerald-500/30 font-semibold">
+                <span className="rounded-full bg-[#4E7A68]/15 px-2.5 py-0.5 text-[10px] text-[#7AB89F] border border-[#4E7A68]/30">
                   Cloudflare Quick Tunnel
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
+              <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="text-amber-400 font-bold">4. StudyMate MCP Server</span>
-                  <div className="text-amber-100/70 text-[11px] mt-0.5">
+                  <span className="text-[#E5A952] font-semibold">4. StudyMate MCP Server</span>
+                  <div className="text-[#8B8378] text-[11px] mt-0.5">
                     @modelcontextprotocol/sdk TypeScript JSON-RPC 2.0 Engine
                   </div>
                 </div>
-                <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] text-amber-300 border border-amber-500/30 font-semibold">
+                <span className="rounded-full bg-[#E5A952]/15 px-2.5 py-0.5 text-[10px] text-[#E5A952] border border-[#E5A952]/30">
                   Node 22 + Express
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
+              <div className="rounded-xl bg-[#0B0D13] p-3.5 border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="text-purple-400 font-bold">5. Embedded SQLite (WAL Mode)</span>
-                  <div className="text-purple-100/70 text-[11px] mt-0.5">
+                  <span className="text-[#C24138] font-semibold">5. Embedded SQLite (WAL Mode)</span>
+                  <div className="text-[#8B8378] text-[11px] mt-0.5">
                     Sub-millisecond local-first academic database with zero cloud bills
                   </div>
                 </div>
-                <span className="rounded-full bg-purple-500/20 px-2.5 py-0.5 text-[10px] text-purple-300 border border-purple-500/30 font-semibold">
+                <span className="rounded-full bg-[#C24138]/15 px-2.5 py-0.5 text-[10px] text-[#E06357] border border-[#C24138]/30">
                   node:sqlite
                 </span>
               </div>
@@ -1486,7 +1505,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <button
                 type="button"
                 onClick={() => setIsArchModalOpen(false)}
-                className="px-5 py-2 text-xs font-semibold text-white/70 hover:text-white cursor-pointer"
+                className="px-4 py-2 text-xs font-mono text-[#8B8378] hover:text-white cursor-pointer"
               >
                 Close
               </button>
@@ -1496,7 +1515,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   setIsArchModalOpen(false);
                   if (onOpenDashboard) onOpenDashboard();
                 }}
-                className="px-5 py-2 rounded-full text-xs font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-white/20 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 cursor-pointer active:scale-95 transition-all"
+                className="px-5 py-2 rounded-full text-xs font-semibold text-[#0E1117] bg-[#F5EFE6] hover:bg-white cursor-pointer transition-colors"
               >
                 Launch Dashboard →
               </button>
