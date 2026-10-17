@@ -281,13 +281,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#030712] text-white selection:bg-cyan-500/20 selection:text-cyan-200 font-sans antialiased overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[#070B19] text-white selection:bg-cyan-500/30 selection:text-cyan-200 font-sans antialiased overflow-x-hidden">
       {/* ============================================================== */}
       {/* 1. REAL-TIME CONTINUOUS SCROLL PROGRESS BAR                     */}
       {/* ============================================================== */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 z-[70] bg-white/[0.04] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 h-1.5 z-[70] bg-white/[0.06] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 transition-all duration-150 ease-out shadow-[0_0_12px_rgba(34,211,238,0.7)]"
+          className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-fuchsia-500 transition-all duration-150 ease-out shadow-[0_0_16px_rgba(99,102,241,0.85)]"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -305,19 +305,20 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           preload="auto"
           src="/academic-study.mp4"
         />
-        {/* Soft atmospheric overlay ensuring high-contrast readability for bubbly pods */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-[#030712]/95 pointer-events-none" />
+        {/* Soft atmospheric gradient overlay with rich color grading */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#070B19]/75 via-[#0A0F26]/60 to-[#070B19]/90 pointer-events-none" />
 
-        {/* Ambient atmospheric radial glows */}
-        <div className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full bg-cyan-500/10 blur-[130px] pointer-events-none" />
-        <div className="absolute top-[40%] -right-40 w-[38rem] h-[38rem] rounded-full bg-indigo-500/10 blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-20 left-1/4 w-[42rem] h-[28rem] rounded-full bg-blue-600/10 blur-[150px] pointer-events-none" />
+        {/* Ambient atmospheric radial glows - Multi-chromatic Aurora */}
+        <div className="absolute -top-32 -left-32 w-[38rem] h-[38rem] rounded-full bg-indigo-600/25 blur-[140px] pointer-events-none" />
+        <div className="absolute top-[25%] -right-32 w-[42rem] h-[42rem] rounded-full bg-cyan-500/20 blur-[150px] pointer-events-none" />
+        <div className="absolute top-[55%] -left-32 w-[36rem] h-[36rem] rounded-full bg-fuchsia-600/18 blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[45rem] h-[32rem] rounded-full bg-blue-600/20 blur-[160px] pointer-events-none" />
       </div>
 
       {/* ============================================================== */}
       {/* 3. FLOATING CHAPTER STORY NAVIGATOR (Continuous Scroll Guide)  */}
       {/* ============================================================== */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 p-2.5 rounded-full bg-black/60 backdrop-blur-2xl border border-white/15 shadow-2xl">
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 p-2.5 rounded-full bg-[#0D132A]/80 backdrop-blur-2xl border border-indigo-500/30 shadow-[0_10px_35px_rgba(0,0,0,0.6)]">
         {[
           { id: 'hero', label: 'Awakening', num: '01' },
           { id: 'story', label: 'The Dilemma', num: '02' },
@@ -336,7 +337,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               title={chap.label}
             >
               {/* Tooltip on Hover */}
-              <span className="absolute right-8 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-black/80 text-cyan-300 border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg">
+              <span className="absolute right-8 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-[#0B0F24]/90 text-cyan-300 border border-cyan-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-xl">
                 {chap.num} · {chap.label}
               </span>
 
@@ -344,8 +345,8 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <div
                 className={`w-3.5 h-3.5 rounded-full transition-all duration-300 flex items-center justify-center ${
                   isActive
-                    ? 'w-7 h-7 bg-cyan-400/20 border border-cyan-400 text-cyan-300 font-mono text-[9px] font-bold shadow-[0_0_12px_rgba(34,211,238,0.5)]'
-                    : 'bg-white/20 hover:bg-white/50 border border-transparent'
+                    ? 'w-7 h-7 bg-gradient-to-r from-cyan-400 to-indigo-500 border border-cyan-300 text-slate-950 font-mono text-[9px] font-black shadow-[0_0_16px_rgba(34,211,238,0.7)]'
+                    : 'bg-white/25 hover:bg-cyan-400/50 border border-transparent'
                 }`}
               >
                 {isActive && chap.num}
@@ -359,13 +360,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* 4. STICKY GLASS BUBBLE NAVIGATION BAR                          */}
       {/* ============================================================== */}
       <header className="sticky top-4 z-50 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <nav className="flex items-center justify-between p-2 rounded-full bg-black/60 dark:bg-white/[0.04] backdrop-blur-2xl border border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <nav className="flex items-center justify-between p-2 rounded-full bg-[#0B1028]/80 dark:bg-[#0B1028]/80 backdrop-blur-2xl border border-indigo-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
           {/* Logo & Brand Identity */}
           <div
             onClick={() => scrollToSection('hero')}
             className="flex items-center gap-3 pl-3 py-1 cursor-pointer group"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
@@ -373,7 +374,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 <span className="font-bold text-sm tracking-tight text-white group-hover:text-cyan-300 transition-colors">
                   StudyMate
                 </span>
-                <span className="rounded-full bg-cyan-500/15 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-cyan-300 border border-cyan-500/30">
+                <span className="rounded-full bg-cyan-500/20 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-cyan-300 border border-cyan-400/30 shadow-[0_0_10px_rgba(34,211,238,0.3)]">
                   Alexa+ MCP
                 </span>
               </div>
@@ -381,13 +382,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           </div>
 
           {/* Desktop Navigation Bubble Pill Cluster */}
-          <div className="hidden md:flex items-center gap-1.5 p-1 rounded-full bg-white/[0.06] border border-white/10">
+          <div className="hidden md:flex items-center gap-1.5 p-1 rounded-full bg-white/[0.08] border border-indigo-500/20">
             <button
               type="button"
               onClick={() => scrollToSection('story')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
                 activeChapter === 'story'
-                  ? 'bg-white/20 text-white font-semibold'
+                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -398,7 +399,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('voice-studio')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1.5 ${
                 activeChapter === 'voice-studio'
-                  ? 'bg-white/20 text-white font-semibold'
+                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -413,7 +414,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 onClick={() => setIsToolsDropdownOpen((prev) => !prev)}
                 className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer flex items-center gap-1 ${
                   activeChapter === 'mcp-architecture'
-                    ? 'bg-white/20 text-white font-semibold'
+                    ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
                     : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -428,9 +429,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {isToolsDropdownOpen && (
                 <div
                   onMouseLeave={() => setIsToolsDropdownOpen(false)}
-                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-black/95 p-4 backdrop-blur-3xl border border-white/15 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5"
+                  className="absolute left-0 top-full mt-3 w-80 rounded-[2rem] bg-[#0E142F]/95 p-4 backdrop-blur-3xl border border-indigo-500/30 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1.5"
                 >
-                  <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-cyan-300/80">
+                  <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-cyan-300/90 font-bold">
                     Model Context Protocol Registry
                   </div>
                   {mcpTools.map((t) => (
@@ -442,17 +443,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                         scrollToSection('mcp-architecture');
                         setActiveMcpTab(t.name);
                       }}
-                      className="w-full flex flex-col items-start rounded-2xl p-2.5 text-left transition hover:bg-white/10 cursor-pointer group"
+                      className="w-full flex flex-col items-start rounded-2xl p-2.5 text-left transition hover:bg-indigo-950/50 cursor-pointer group border border-transparent hover:border-indigo-500/30"
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="font-mono text-xs font-semibold text-cyan-300 group-hover:text-cyan-200">
                           {t.name}
                         </span>
-                        <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-medium text-white/60">
+                        <span className="rounded-full bg-cyan-500/10 px-2 py-0.5 text-[9px] font-medium text-cyan-300 border border-cyan-500/20">
                           {t.tag}
                         </span>
                       </div>
-                      <span className="text-[11px] text-white/60 mt-0.5 line-clamp-1">
+                      <span className="text-[11px] text-white/70 mt-0.5 line-clamp-1">
                         {t.desc}
                       </span>
                     </button>
@@ -466,7 +467,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               onClick={() => scrollToSection('focus-flow')}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition cursor-pointer ${
                 activeChapter === 'focus-flow'
-                  ? 'bg-white/20 text-white font-semibold'
+                  ? 'bg-gradient-to-r from-cyan-500/30 to-indigo-500/30 text-white font-semibold border border-cyan-400/40 shadow-sm'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
@@ -475,7 +476,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <button
               type="button"
               onClick={() => setIsArchModalOpen(true)}
-              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer"
+              className="rounded-full px-4 py-1.5 text-xs font-medium text-white/80 hover:text-cyan-300 hover:bg-white/10 transition cursor-pointer"
             >
               Architecture
             </button>
@@ -489,7 +490,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 if (onOpenDashboard) onOpenDashboard();
                 else handleRunVoiceCommand("Alexa, what's due this week?");
               }}
-              className="px-5 py-2 rounded-full text-xs font-semibold text-white transition-all hover:opacity-90 shadow-xl border border-white/20 active:scale-95 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
+              className="px-5 py-2 rounded-full text-xs font-semibold text-white transition-all hover:scale-105 active:scale-95 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] hover:shadow-[0_0_30px_rgba(34,211,238,0.7)] border border-white/20"
             >
               <span>Launch Companion</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -500,7 +501,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white md:hidden cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white md:hidden cursor-pointer hover:bg-white/20"
           >
             {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -509,11 +510,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
       {/* MOBILE SLIDE-IN MENU */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl p-6 flex flex-col justify-between animate-fadeIn md:hidden">
-          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+        <div className="fixed inset-0 z-50 bg-[#070B19]/95 backdrop-blur-3xl p-6 flex flex-col justify-between animate-fadeIn md:hidden">
+          <div className="flex items-center justify-between pb-6 border-b border-indigo-500/20">
             <div className="flex items-center gap-2">
               <GraduationCap className="h-6 w-6 text-cyan-400" />
-              <span className="font-bold text-base">StudyMate</span>
+              <span className="font-bold text-base text-white">StudyMate</span>
             </div>
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -576,7 +577,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               setIsMenuOpen(false);
               if (onOpenDashboard) onOpenDashboard();
             }}
-            className="w-full py-3.5 rounded-full text-center font-bold text-sm text-white bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/20"
+            className="w-full py-3.5 rounded-full text-center font-bold text-sm text-white bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_25px_rgba(99,102,241,0.5)] border border-white/20"
           >
             Launch Live Companion
           </button>
@@ -605,7 +606,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }`}
             >
               {/* Bubbly Track Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-1.5 backdrop-blur-2xl border border-white/20 text-xs font-semibold text-white shadow-xl hover:border-cyan-400/40 transition-colors">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-purple-500/20 px-4 py-1.5 backdrop-blur-2xl border border-cyan-400/35 text-xs font-semibold text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:border-cyan-300 transition-colors">
                 <span className="flex h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping" />
                 <span>Alexa+ Model Context Protocol (MCP) Add-on</span>
               </div>
@@ -613,13 +614,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               {/* Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-[4.2rem] font-bold tracking-tight leading-[1.08] text-white">
                 Your academic life, organized through{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-300 drop-shadow-[0_0_35px_rgba(34,211,238,0.35)]">
                   conversation.
                 </span>
               </h1>
 
               {/* Sub-lead Narrative */}
-              <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-xl">
+              <p className="text-base sm:text-lg text-white/85 leading-relaxed max-w-xl">
                 An autonomous voice-first co-pilot for college students. Triage syllabus deadlines, launch calibrated Pomodoro focus sprints, and update course mastery simply by talking to Alexa.
               </p>
 
@@ -634,7 +635,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       handleRunVoiceCommand("Alexa, what's due this week?");
                     }
                   }}
-                  className="flex flex-col sm:flex-row items-center gap-2 p-2 rounded-[2.5rem] bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl hover:border-cyan-400/40 transition-all"
+                  className="flex flex-col sm:flex-row items-center gap-2 p-2 rounded-[2.5rem] bg-gradient-to-r from-white/[0.12] via-white/[0.07] to-indigo-950/40 backdrop-blur-2xl border border-indigo-400/35 shadow-[0_10px_40px_rgba(99,102,241,0.2)] hover:border-cyan-400/60 transition-all"
                 >
                   <div className="flex items-center pl-4 pr-2 w-full sm:w-auto flex-1">
                     <Mic className="h-4 w-4 text-cyan-400 shrink-0 mr-2.5 animate-pulse" />
@@ -643,12 +644,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       value={voiceQuery}
                       onChange={(e) => setVoiceQuery(e.target.value)}
                       placeholder="Ask Alexa: 'What's due this week?'"
-                      className="w-full bg-transparent text-sm text-white placeholder-white/50 outline-none font-sans py-2"
+                      className="w-full bg-transparent text-sm text-white placeholder-cyan-100/50 outline-none font-sans py-2"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full sm:w-auto rounded-full px-6 py-3 text-xs font-semibold text-white transition-all hover:opacity-90 shadow-xl border border-white/20 active:scale-95 shrink-0 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
+                    className="w-full sm:w-auto rounded-full px-6 py-3 text-xs font-bold text-white transition-all hover:scale-105 active:scale-95 shrink-0 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-white/25"
                   >
                     Ask Alexa
                   </button>
@@ -656,7 +657,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
                 {/* Spoken Prompt Chips */}
                 <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-white/50">Quick speech cues:</span>
+                  <span className="text-xs text-cyan-200/60">Quick speech cues:</span>
                   {[
                     "Alexa, what's due this week?",
                     '45 min study plan',
@@ -666,7 +667,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       key={chip}
                       type="button"
                       onClick={() => handleRunVoiceCommand(chip)}
-                      className="rounded-full bg-white/10 px-3.5 py-1 text-xs font-medium text-white/80 backdrop-blur-xl border border-white/10 transition-all hover:bg-white/20 hover:text-white cursor-pointer"
+                      className="rounded-full bg-indigo-950/40 hover:bg-indigo-900/60 px-3.5 py-1 text-xs font-medium text-cyan-100 backdrop-blur-xl border border-indigo-500/30 hover:border-cyan-400/50 transition-all hover:scale-105 cursor-pointer shadow-sm"
                     >
                       {chip}
                     </button>
@@ -676,7 +677,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
               {/* Simulated Speech Output Bubble */}
               {activeVoiceDemo && (
-                <div className="rounded-[2rem] bg-black/85 p-5 backdrop-blur-3xl border border-cyan-500/40 shadow-2xl animate-fadeIn space-y-3">
+                <div className="rounded-[2rem] bg-[#0E1533]/90 p-5 backdrop-blur-3xl border border-cyan-400/50 shadow-2xl animate-fadeIn space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs">
                     <div className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
@@ -717,9 +718,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               }`}
             >
               {/* Card 1: Silkscreen Metric Bubble */}
-              <div className="p-6 rounded-[2.5rem] bg-white/[0.08] backdrop-blur-2xl border border-white/15 shadow-2xl space-y-4 hover:border-cyan-400/40 transition-all">
+              <div className="p-6 rounded-[2.5rem] bg-gradient-to-br from-[#121936]/85 via-[#0E152E]/75 to-[#0A0E22]/90 backdrop-blur-2xl border border-indigo-500/35 shadow-[0_12px_40px_rgba(99,102,241,0.18)] space-y-4 hover:border-cyan-400/50 hover:shadow-[0_16px_50px_rgba(34,211,238,0.25)] transition-all">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-300 font-bold">
                     Autonomous MCP Ops
                   </span>
                   <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold text-emerald-300 border border-emerald-500/30">
@@ -729,13 +730,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 </div>
 
                 <div
-                  className="text-4xl font-normal tracking-tight text-white"
+                  className="text-4xl font-normal tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200"
                   style={{ fontFamily: "'Silkscreen', cursive" }}
                 >
                   42,500+
                 </div>
 
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/75 leading-relaxed">
                   Sub-millisecond tool executions with zero cloud database fees. Pure local data sovereignty.
                 </p>
 
@@ -743,7 +744,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   {['get_tasks', 'add_task', 'create_study_plan'].map((tool) => (
                     <span
                       key={tool}
-                      className="font-mono text-[9px] rounded-full bg-black/40 px-2.5 py-1 text-white/70 border border-white/10"
+                      className="font-mono text-[9px] rounded-full bg-cyan-950/50 px-2.5 py-1 text-cyan-200/80 border border-cyan-500/25"
                     >
                       {tool}
                     </span>
@@ -752,19 +753,19 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               </div>
 
               {/* Card 2: Voice Flow Capsule */}
-              <div className="p-6 rounded-[2.5rem] bg-white/[0.08] backdrop-blur-2xl border border-white/15 shadow-2xl space-y-3 hover:border-indigo-400/40 transition-all">
+              <div className="p-6 rounded-[2.5rem] bg-gradient-to-br from-[#181338]/85 via-[#130E2E]/75 to-[#0C0A24]/90 backdrop-blur-2xl border border-purple-500/35 shadow-[0_12px_40px_rgba(168,85,247,0.18)] space-y-3 hover:border-fuchsia-400/50 hover:shadow-[0_16px_50px_rgba(217,70,239,0.25)] transition-all">
                 <div className="flex items-center gap-2 text-xs font-bold text-white">
-                  <Sparkles className="h-4 w-4 text-cyan-300" />
-                  <span>Alexa+ Multi-Turn Memory</span>
+                  <Sparkles className="h-4 w-4 text-fuchsia-300" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-300 to-cyan-300">Alexa+ Multi-Turn Memory</span>
                 </div>
-                <p className="text-xs text-white/70 italic leading-relaxed">
+                <p className="text-xs text-white/75 italic leading-relaxed">
                   "No tedious form fields or kanban dragging. You speak to your Echo, and your academic priorities update instantly."
                 </p>
-                <div className="pt-2 flex items-center justify-between text-xs text-white/60 border-t border-white/10">
-                  <span>Student Companion</span>
+                <div className="pt-2 flex items-center justify-between text-xs text-white/60 border-t border-purple-500/20">
+                  <span className="text-purple-200/70">Student Companion</span>
                   <button
                     onClick={() => scrollToSection('voice-studio')}
-                    className="text-cyan-300 hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 cursor-pointer font-medium"
                   >
                     <span>Test speech</span>
                     <ArrowRight className="h-3 w-3" />
@@ -801,13 +802,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               storyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 uppercase tracking-wider">
+            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-rose-500/20 to-amber-500/20 text-rose-300 border border-rose-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(244,63,94,0.2)]">
               Act I · The Academic Friction
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
               Why university students drop deadlines.
             </h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <p className="text-sm text-white/75 leading-relaxed">
               Between Canvas, PDF syllabi, Slack, and email notifications, cognitive overload kills deep academic focus.
             </p>
           </div>
@@ -816,17 +817,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* The Chaotic Way - Flies in from Left */}
             <div
-              className={`rounded-[3rem] p-8 sm:p-10 bg-rose-950/20 backdrop-blur-2xl border border-rose-500/25 shadow-2xl space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-rose-400/40 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              className={`rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-rose-950/40 via-red-950/20 to-[#120712]/80 backdrop-blur-2xl border border-rose-500/35 shadow-[0_15px_45px_rgba(244,63,94,0.15)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-rose-400/50 hover:shadow-[0_20px_55px_rgba(244,63,94,0.25)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-24'
               }`}
             >
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3.5 py-1 text-xs font-semibold text-rose-300 border border-rose-500/30">
+                <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-3.5 py-1 text-xs font-semibold text-rose-300 border border-rose-500/30 shadow-sm">
                   <X className="w-3.5 h-3.5" />
                   <span>The Fragmented Reality</span>
                 </div>
                 <h3 className="text-2xl font-bold text-white">Manual Disorganization</h3>
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/75 leading-relaxed">
                   Students spend up to 45 minutes every Sunday manually transcribing syllabus tables into Trello or Notion, only to abandon them when exams hit.
                 </p>
                 <div className="space-y-3 pt-2 text-xs">
@@ -835,31 +836,31 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     'Uncalibrated study sessions causing rapid mental fatigue',
                     'Guilt and anxiety over which course needs attention today',
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-rose-200/80">
+                    <div key={i} className="flex items-start gap-2.5 text-rose-200/90">
                       <span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
                       <span>{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="p-4 rounded-2xl bg-black/40 border border-rose-500/20 font-mono text-[11px] text-rose-300/80">
+              <div className="p-4 rounded-2xl bg-black/60 border border-rose-500/25 font-mono text-[11px] text-rose-300">
                 Avg. Student Friction: 4.8 hrs lost/week on syllabus management
               </div>
             </div>
 
             {/* The StudyMate Way - Flies in from Right */}
             <div
-              className={`rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-cyan-950/35 via-blue-950/25 to-black/70 backdrop-blur-3xl border border-cyan-500/40 shadow-[0_15px_50px_rgba(6,182,212,0.15)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-cyan-400/60 hover:shadow-[0_20px_60px_rgba(6,182,212,0.25)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 animate-float-slow ${
+              className={`rounded-[3rem] p-8 sm:p-10 bg-gradient-to-br from-cyan-950/50 via-indigo-950/40 to-[#0A0F26]/90 backdrop-blur-3xl border border-cyan-400/50 shadow-[0_15px_50px_rgba(6,182,212,0.25)] space-y-6 flex flex-col justify-between relative overflow-hidden group hover:border-cyan-300 hover:shadow-[0_20px_70px_rgba(34,211,238,0.35)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 animate-float-slow ${
                 storyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
               }`}
             >
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/20 px-3.5 py-1 text-xs font-semibold text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500/25 to-blue-500/25 px-3.5 py-1 text-xs font-semibold text-cyan-200 border border-cyan-400/40 shadow-lg shadow-cyan-500/20">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-300" />
                   <span>The StudyMate Flow</span>
                 </div>
                 <h3 className="text-2xl font-bold text-white">Zero-Friction Voice Intelligence</h3>
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/80 leading-relaxed">
                   Speak one sentence as you walk back to your dorm. StudyMate triages deadline urgency and schedules Pomodoro sprints immediately.
                 </p>
                 <div className="space-y-3 pt-2 text-xs">
@@ -868,16 +869,16 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     'Cognitively-structured 25m focus & 5m recovery intervals',
                     'Embedded local SQLite engine with sub-millisecond response',
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-cyan-200/90">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                    <div key={i} className="flex items-start gap-2.5 text-cyan-100">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-300 shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="p-4 rounded-2xl bg-black/40 border border-cyan-500/20 font-mono text-[11px] text-cyan-300 flex items-center justify-between">
+              <div className="p-4 rounded-2xl bg-black/60 border border-cyan-500/30 font-mono text-[11px] text-cyan-300 flex items-center justify-between">
                 <span>Response Latency: &lt; 25ms</span>
-                <span className="font-semibold text-emerald-400">100% Student-Sovereign</span>
+                <span className="font-bold text-emerald-300 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">100% Student-Sovereign</span>
               </div>
             </div>
           </div>
@@ -896,20 +897,20 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               voiceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-blue-500/10 text-cyan-300 border border-blue-500/20 uppercase tracking-wider">
+            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/20 to-cyan-500/20 text-violet-300 border border-violet-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(139,92,246,0.2)]">
               Act II · Spoken Dialogue
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
               Experience the multi-turn conversational loop.
             </h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <p className="text-sm text-white/75 leading-relaxed">
               Click through a real academic dialog turn. Watch how StudyMate tracks conversational context from inquiry to timer initiation.
             </p>
           </div>
 
           {/* Interactive Bubbly Speech Console Card - Rises from Bottom Up */}
           <div
-            className={`rounded-[3rem] p-6 sm:p-10 bg-white/[0.04] backdrop-blur-3xl border border-white/15 shadow-2xl space-y-8 hover:border-cyan-400/40 hover:shadow-[0_0_50px_rgba(6,182,212,0.15)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`rounded-[3rem] p-6 sm:p-10 bg-gradient-to-br from-[#121835]/85 via-[#0E142C]/75 to-[#080C1D]/90 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_20px_60px_rgba(99,102,241,0.2)] space-y-8 hover:border-cyan-400/50 hover:shadow-[0_0_60px_rgba(6,182,212,0.25)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               voiceVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'
             }`}
           >
@@ -924,10 +925,10 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   key={step.turn}
                   type="button"
                   onClick={() => setActiveStoryTurn(step.turn)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     activeStoryTurn === step.turn
-                      ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/25 scale-105'
-                      : 'bg-white/10 text-white/70 hover:bg-white/15 hover:text-white'
+                      ? 'bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(34,211,238,0.5)] scale-105 border border-white/20'
+                      : 'bg-indigo-950/40 text-cyan-200/80 hover:bg-indigo-900/60 hover:text-white border border-indigo-500/25'
                   }`}
                 >
                   {step.title}
@@ -936,30 +937,30 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             </div>
 
             {/* Conversation Display Bubble */}
-            <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-[2.5rem] bg-black/60 border border-white/10 space-y-6">
+            <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-[2.5rem] bg-[#070A1A]/85 border border-indigo-500/25 space-y-6 shadow-2xl">
               {/* User Voice Utterance - Slides from Right */}
               <div
                 className={`flex items-start justify-end gap-3 transition-all duration-700 ease-out delay-150 ${
                   voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
                 }`}
               >
-                <div className="p-4 rounded-[2rem] bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm font-medium shadow-xl">
+                <div className="p-4 rounded-[2rem] bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-[0_4px_20px_rgba(99,102,241,0.35)] border border-white/15">
                   {activeStoryTurn === 1 && '"Alexa, what is due this week for my classes?"'}
                   {activeStoryTurn === 2 && '"I have 45 minutes tonight. Can you build me a study plan?"'}
                   {activeStoryTurn === 3 && '"Yes, let\'s start right now!"'}
                 </div>
-                <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xs shrink-0 text-white shadow-md">
                   ST
                 </div>
               </div>
 
               {/* Animated Soundwave Visualizer Bubble */}
-              <div className="flex items-center justify-center gap-1.5 py-3 px-6 rounded-full bg-white/[0.04] border border-white/10 max-w-sm mx-auto shadow-inner">
+              <div className="flex items-center justify-center gap-1.5 py-3 px-6 rounded-full bg-white/[0.06] border border-cyan-500/30 max-w-sm mx-auto shadow-[0_0_20px_rgba(6,182,212,0.15)]">
                 <Mic className="w-3.5 h-3.5 text-cyan-400 mr-2 animate-pulse" />
                 {[10, 22, 34, 16, 40, 26, 14, 30, 42, 20, 12].map((h, i) => (
                   <div
                     key={i}
-                    className="w-1 bg-gradient-to-t from-cyan-400 to-sky-300 rounded-full eq-anim-bar shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                    className="w-1 bg-gradient-to-t from-cyan-400 via-sky-300 to-violet-400 rounded-full eq-anim-bar shadow-[0_0_8px_rgba(34,211,238,0.7)]"
                     style={{
                       height: `${h}px`,
                       animationDelay: `${(i * 0.12).toFixed(2)}s`,
@@ -974,20 +975,20 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   voiceVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
                 }`}
               >
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-black font-bold text-xs shrink-0 shadow-lg">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-slate-950 font-black text-xs shrink-0 shadow-lg shadow-cyan-400/30">
                   AI
                 </div>
-                <div className="p-5 rounded-[2rem] bg-white/[0.07] border border-white/15 text-white text-xs sm:text-sm leading-relaxed max-w-xl space-y-3">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-cyan-300">
+                <div className="p-5 rounded-[2rem] bg-gradient-to-br from-[#131A3A]/90 to-[#0B1028]/95 border border-cyan-400/40 text-white text-xs sm:text-sm leading-relaxed max-w-xl space-y-3 shadow-xl">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-cyan-300 font-semibold">
                     <span>
                       {activeStoryTurn === 1 && 'EXECUTED: get_tasks(status="pending")'}
                       {activeStoryTurn === 2 && 'EXECUTED: create_study_plan(duration=45)'}
                       {activeStoryTurn === 3 && 'EXECUTED: start_pomodoro_timer(mins=25)'}
                     </span>
-                    <span className="text-white/40">Latency: 18ms</span>
+                    <span className="text-cyan-400/60">Latency: 18ms</span>
                   </div>
 
-                  <p>
+                  <p className="text-white/90">
                     {activeStoryTurn === 1 &&
                       "You have 3 active assignments. Your most urgent is 'Problem Set 4: Dynamic Programming' for CS 301, due tomorrow at 5:00 PM."}
                     {activeStoryTurn === 2 &&
@@ -1002,7 +1003,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                       onClick={() => {
                         if (onOpenVoice) onOpenVoice();
                       }}
-                      className="text-xs font-semibold text-cyan-300 hover:underline flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-bold text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 cursor-pointer"
                     >
                       <span>Open Full Voice Console</span>
                       <ArrowRight className="h-3 w-3" />
@@ -1027,13 +1028,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 uppercase tracking-wider">
+            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 border border-emerald-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)]">
               Act III · The Native Engine
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
               5 Standard MCP Tools. Pure Precision.
             </h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <p className="text-sm text-white/75 leading-relaxed">
               StudyMate implements the official Model Context Protocol (MCP) specification over standard JSON-RPC 2.0 with streamable HTTP.
             </p>
           </div>
@@ -1048,10 +1049,18 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   ? mcpVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                   : mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20';
 
+              const cardBorders = [
+                'hover:border-cyan-400/70 hover:shadow-[0_15px_45px_rgba(6,182,212,0.25)]',
+                'hover:border-fuchsia-400/70 hover:shadow-[0_15px_45px_rgba(217,70,239,0.25)]',
+                'hover:border-amber-400/70 hover:shadow-[0_15px_45px_rgba(245,158,11,0.25)]',
+                'hover:border-emerald-400/70 hover:shadow-[0_15px_45px_rgba(16,185,129,0.25)]',
+                'hover:border-indigo-400/70 hover:shadow-[0_15px_45px_rgba(99,102,241,0.25)]',
+              ];
+
               return (
                 <div
                   key={tool.name}
-                  className={`p-6 rounded-[2.5rem] bg-white/[0.05] hover:bg-white/[0.08] backdrop-blur-2xl border border-white/15 hover:border-cyan-400/50 shadow-xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-4 group cursor-pointer ${animClass}`}
+                  className={`p-6 rounded-[2.5rem] bg-gradient-to-br from-[#111836]/80 via-[#0D132D]/70 to-[#090D22]/90 backdrop-blur-2xl border border-indigo-500/30 ${cardBorders[idx % cardBorders.length]} shadow-xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-4 group cursor-pointer ${animClass}`}
                   onClick={() => {
                     if (tool.action) tool.action();
                   }}
@@ -1060,22 +1069,22 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                     <span className="font-mono text-xs font-bold text-cyan-300 group-hover:text-cyan-200">
                       {tool.name}
                     </span>
-                    <span className="font-mono text-[9px] uppercase px-2.5 py-0.5 rounded-full bg-white/10 text-white/80 border border-white/10">
+                    <span className="font-mono text-[9px] uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
                       {tool.tag}
                     </span>
                   </div>
 
-                  <p className="text-xs text-white/70 leading-relaxed min-h-[36px]">
+                  <p className="text-xs text-white/75 leading-relaxed min-h-[36px]">
                     {tool.desc}
                   </p>
 
-                  <div className="p-3 rounded-2xl bg-black/60 border border-white/10 font-mono text-[10px] text-white/60 truncate">
+                  <div className="p-3 rounded-2xl bg-[#070A1C]/80 border border-indigo-500/25 font-mono text-[10px] text-cyan-200/80 truncate">
                     {tool.payload}
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-cyan-300/80 group-hover:text-cyan-300 font-semibold pt-1">
+                  <div className="flex items-center justify-between text-xs text-cyan-300/90 group-hover:text-cyan-200 font-bold pt-1">
                     <span>Explore Tool</span>
-                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </div>
               );
@@ -1084,17 +1093,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             {/* Architecture Explainer Card - Slides from Right */}
             <div
               onClick={() => setIsArchModalOpen(true)}
-              className={`p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-black/60 backdrop-blur-2xl border border-indigo-500/30 shadow-xl space-y-4 cursor-pointer hover:border-indigo-400 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 flex flex-col justify-between ${
+              className={`p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-950/70 via-purple-950/40 to-[#090C22]/95 backdrop-blur-2xl border border-indigo-400/40 shadow-[0_15px_45px_rgba(99,102,241,0.25)] space-y-4 cursor-pointer hover:border-indigo-300 hover:shadow-[0_20px_55px_rgba(99,102,241,0.35)] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 flex flex-col justify-between ${
                 mcpVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
               }`}
             >
               <div>
                 <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider font-mono">
-                  <Cpu className="w-4 h-4" />
+                  <Cpu className="w-4 h-4 text-indigo-400" />
                   <span>Architecture</span>
                 </div>
                 <h3 className="text-xl font-bold text-white mt-2">Local SQLite WAL Engine</h3>
-                <p className="text-xs text-white/70 mt-2 leading-relaxed">
+                <p className="text-xs text-white/75 mt-2 leading-relaxed">
                   StudyMate connects Alexa+ directly to an embedded SQLite database using WAL mode for concurrent reading without locks.
                 </p>
               </div>
@@ -1120,13 +1129,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               focusVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-12'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-3.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 uppercase tracking-wider">
+            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-400/40 uppercase tracking-wider shadow-[0_0_15px_rgba(245,158,11,0.2)]">
               Act IV · Deep Work Velocity
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
               Maintain momentum without academic burnout.
             </h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <p className="text-sm text-white/75 leading-relaxed">
               StudyMate pairs voice execution with structured Pomodoro pacing and velocity metrics across your entire semester.
             </p>
           </div>
@@ -1135,19 +1144,19 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left: Pomodoro Timer Visualizer (5 cols) - Flies in from Left */}
             <div
-              className={`lg:col-span-5 p-8 rounded-[3rem] bg-white/[0.05] backdrop-blur-3xl border border-white/15 shadow-2xl text-center space-y-5 hover:border-cyan-400/50 hover:shadow-[0_15px_50px_rgba(6,182,212,0.18)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] animate-float-slow ${
+              className={`lg:col-span-5 p-8 rounded-[3rem] bg-gradient-to-br from-[#121A3B]/85 via-[#0F142D]/75 to-[#0A0D22]/90 backdrop-blur-3xl border border-cyan-400/40 shadow-[0_15px_50px_rgba(6,182,212,0.2)] text-center space-y-5 hover:border-cyan-300 hover:shadow-[0_20px_60px_rgba(34,211,238,0.35)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] animate-float-slow ${
                 focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-24'
               }`}
             >
-              <span className="font-mono text-[11px] font-semibold text-cyan-300 uppercase tracking-wider">
+              <span className="font-mono text-[11px] font-bold text-cyan-300 uppercase tracking-wider">
                 Autonomous Focus Sprint
               </span>
 
-              <div className="font-mono text-6xl font-light text-white tracking-widest py-2">
+              <div className="font-mono text-6xl font-normal text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 drop-shadow-[0_0_25px_rgba(34,211,238,0.4)] tracking-widest py-2">
                 {formatTimer(heroTimerSeconds)}
               </div>
 
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-cyan-100/70">
                 Interval 1 of 3: CS 301 Algorithms & Dynamic Programming
               </p>
 
@@ -1155,7 +1164,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 <button
                   type="button"
                   onClick={() => setHeroTimerRunning(!heroTimerRunning)}
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-xl border border-white/20 active:scale-95 hover:opacity-90 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
+                  className="px-6 py-2.5 rounded-full text-xs font-bold text-white transition shadow-xl border border-white/25 active:scale-95 hover:scale-105 flex items-center space-x-1.5 cursor-pointer bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 shadow-[0_0_20px_rgba(99,102,241,0.5)]"
                 >
                   {heroTimerRunning ? (
                     <>
@@ -1185,17 +1194,17 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
             {/* Right: Velocity Graph & Streak Pod (7 cols) - Flies in from Right */}
             <div
-              className={`lg:col-span-7 p-8 rounded-[3rem] bg-white/[0.05] backdrop-blur-3xl border border-white/15 shadow-2xl space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+              className={`lg:col-span-7 p-8 rounded-[3rem] bg-gradient-to-br from-[#131B3A]/85 via-[#0F142E]/75 to-[#0A0D22]/90 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_15px_50px_rgba(99,102,241,0.18)] hover:border-indigo-400/50 space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
                 focusVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-24'
               }`}
             >
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
                 <div>
                   <h3 className="text-base font-bold text-white">Weekly Focus Velocity</h3>
-                  <p className="text-xs text-white/60">Study hours logged across all courses</p>
+                  <p className="text-xs text-white/70">Study hours logged across all courses</p>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-mono">
-                  <Flame className="w-4 h-4 fill-amber-400" />
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 font-mono bg-amber-500/15 px-3 py-1 rounded-full border border-amber-500/30">
+                  <Flame className="w-4 h-4 fill-amber-400 text-amber-400" />
                   <span>6 Day Streak</span>
                 </div>
               </div>
@@ -1212,30 +1221,30 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   { day: 'Today', h: 85, active: true },
                 ].map((item, idx) => (
                   <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                    <div className="w-full rounded-2xl bg-white/5 h-full flex items-end p-1 border border-white/10">
+                    <div className="w-full rounded-2xl bg-white/[0.04] h-full flex items-end p-1 border border-white/10">
                       <div
                         className={`w-full rounded-xl transition-all duration-500 ${
                           item.active
-                            ? 'bg-gradient-to-t from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/30 animate-pulse'
+                            ? 'bg-gradient-to-t from-cyan-400 via-indigo-500 to-purple-500 shadow-[0_0_16px_rgba(34,211,238,0.7)] animate-pulse'
                             : 'bg-white/20'
                         }`}
                         style={{ height: `${item.h}%` }}
                       />
                     </div>
-                    <span className={`text-[10px] font-mono ${item.active ? 'text-cyan-300 font-bold' : 'text-white/50'}`}>
+                    <span className={`text-[10px] font-mono ${item.active ? 'text-cyan-300 font-bold' : 'text-white/60'}`}>
                       {item.day}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-2 flex items-center justify-between text-xs text-white/60">
-                <span>Total: 16.5 hrs logged</span>
+              <div className="pt-2 flex items-center justify-between text-xs text-white/70">
+                <span>Total: <strong className="text-cyan-300">16.5 hrs</strong> logged</span>
                 <button
                   onClick={() => {
                     if (onOpenPlanner) onOpenPlanner();
                   }}
-                  className="text-cyan-300 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
+                  className="text-cyan-300 hover:text-cyan-200 hover:underline flex items-center gap-1 font-bold cursor-pointer"
                 >
                   <span>Open Full Tracker</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -1254,53 +1263,53 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto overflow-hidden"
         >
           <div
-            className={`p-8 sm:p-12 rounded-[3.5rem] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-3xl border border-white/15 shadow-2xl space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`p-8 sm:p-12 rounded-[3.5rem] bg-gradient-to-br from-[#111936]/85 via-[#0D132A]/75 to-[#080B1B]/95 backdrop-blur-3xl border border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.15)] space-y-6 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
             }`}
           >
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-emerald-500/20">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">Student Data Sovereignty</h3>
-                  <p className="text-xs text-white/60">Your academic records belong exclusively to you</p>
+                  <p className="text-xs text-emerald-100/70">Your academic records belong exclusively to you</p>
                 </div>
               </div>
-              <span className="font-mono text-xs px-3.5 py-1 rounded-full bg-white/10 text-white/80 border border-white/15 self-start md:self-auto">
+              <span className="font-mono text-xs px-3.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 self-start md:self-auto font-semibold">
                 No Cloud Subscription Required
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-white/70 leading-relaxed">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-white/75 leading-relaxed">
               {/* Card 1 - Flies in from Left */}
               <div
-                className={`p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2 transition-all duration-700 ease-out delay-100 ${
+                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-100 shadow-md ${
                   privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'
                 }`}
               >
-                <span className="font-bold text-white text-sm block">1. Clean Guest Mode</span>
+                <span className="font-bold text-emerald-300 text-sm block">1. Clean Guest Mode</span>
                 <p>Browse and test the app with zero dummy data and zero tracking. When you're ready, sign in to unlock cloud sync.</p>
               </div>
 
               {/* Card 2 - Flies in from Bottom */}
               <div
-                className={`p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2 transition-all duration-700 ease-out delay-200 ${
+                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-200 shadow-md ${
                   privacyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
                 }`}
               >
-                <span className="font-bold text-white text-sm block">2. Local SQLite Core</span>
+                <span className="font-bold text-emerald-300 text-sm block">2. Local SQLite Core</span>
                 <p>All coursework records live in an embedded SQLite file with sub-millisecond execution and zero cloud latency.</p>
               </div>
 
               {/* Card 3 - Flies in from Right */}
               <div
-                className={`p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2 transition-all duration-700 ease-out delay-300 ${
+                className={`p-4 rounded-2xl bg-[#070A1A]/80 border border-emerald-500/20 hover:border-emerald-400/50 space-y-2 transition-all duration-700 ease-out delay-300 shadow-md ${
                   privacyVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
                 }`}
               >
-                <span className="font-bold text-white text-sm block">3. Multi-Device Clerk Auth</span>
+                <span className="font-bold text-emerald-300 text-sm block">3. Multi-Device Clerk Auth</span>
                 <p>Authenticate with Clerk to sync your tasks and focus history securely between your laptop, tablet, and Echo device.</p>
               </div>
             </div>
@@ -1316,19 +1325,19 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           className="px-5 sm:px-8 lg:px-12 max-w-5xl mx-auto text-center space-y-8 overflow-hidden"
         >
           <div
-            className={`p-10 sm:p-16 rounded-[4rem] bg-gradient-to-b from-blue-900/40 via-black/80 to-black/95 backdrop-blur-3xl border border-white/25 shadow-[0_0_70px_rgba(6,182,212,0.2)] hover:shadow-[0_0_100px_rgba(6,182,212,0.35)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-6 ${
+            className={`p-10 sm:p-16 rounded-[4rem] bg-gradient-to-br from-indigo-950/70 via-[#0F1538]/90 to-purple-950/70 backdrop-blur-3xl border border-cyan-400/40 shadow-[0_0_90px_rgba(99,102,241,0.35)] hover:shadow-[0_0_120px_rgba(34,211,238,0.5)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] space-y-6 ${
               launchVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-32 scale-90'
             }`}
           >
-            <span className="font-mono text-xs font-semibold px-4 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase tracking-widest">
+            <span className="font-mono text-xs font-bold px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 text-slate-950 border border-white/30 uppercase tracking-widest shadow-lg">
               Ready to Upgrade Your Academic Life?
             </span>
 
-            <h2 className="text-3xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
+            <h2 className="text-3xl sm:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-indigo-200 drop-shadow-[0_0_35px_rgba(34,211,238,0.3)] leading-tight">
               Start your first voice-directed focus session.
             </h2>
 
-            <p className="text-sm sm:text-base text-white/80 max-w-xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-cyan-100/80 max-w-xl mx-auto leading-relaxed">
               Experience the future of academic management. Free to use with 0 dummy data, native MCP tools, and seamless voice triage.
             </p>
 
@@ -1338,7 +1347,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 onClick={() => {
                   if (onOpenDashboard) onOpenDashboard();
                 }}
-                className="px-8 py-3.5 rounded-full text-sm font-semibold text-white transition shadow-2xl active:scale-95 hover:opacity-90 flex items-center space-x-2 cursor-pointer bg-gradient-to-b from-[#2B2B2B] to-[#101010] border border-white/25"
+                className="px-8 py-3.5 rounded-full text-sm font-bold text-white transition-all shadow-[0_0_35px_rgba(99,102,241,0.7)] hover:shadow-[0_0_50px_rgba(34,211,238,0.9)] active:scale-95 hover:scale-105 flex items-center space-x-2 cursor-pointer bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 border border-white/30"
               >
                 <span>Launch Companion Dashboard</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1349,7 +1358,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                 onClick={() => {
                   if (onOpenVoice) onOpenVoice();
                 }}
-                className="px-8 py-3.5 rounded-full text-sm font-semibold text-white bg-white/10 hover:bg-white/15 backdrop-blur-xl border border-white/20 transition active:scale-95 cursor-pointer flex items-center space-x-2"
+                className="px-8 py-3.5 rounded-full text-sm font-semibold text-white bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/25 hover:border-cyan-400/60 transition-all active:scale-95 hover:scale-105 cursor-pointer flex items-center space-x-2 shadow-lg"
               >
                 <Mic className="w-4 h-4 text-cyan-300" />
                 <span>Open Voice Console</span>
@@ -1361,22 +1370,22 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* ============================================================== */}
         {/* FOOTER: SLEEK BUBBLY BRAND SIGNATURE                           */}
         {/* ============================================================== */}
-        <footer className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-12 border-t border-white/10">
+        <footer className="px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-12 border-t border-indigo-500/20">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-white/60">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/30">
                 <GraduationCap className="h-4 w-4" />
               </div>
               <span className="font-bold text-white text-sm">StudyMate</span>
-              <span>· Built for the Alexa+ MCP Challenge</span>
+              <span className="text-cyan-200/60">· Built for the Alexa+ MCP Challenge</span>
             </div>
 
             <div className="flex items-center gap-4 font-mono text-[11px]">
-              <button onClick={() => scrollToSection('hero')} className="hover:text-white cursor-pointer">
+              <button onClick={() => scrollToSection('hero')} className="hover:text-cyan-300 transition-colors cursor-pointer">
                 Back to Top ↑
               </button>
               <span>•</span>
-              <button onClick={() => setIsArchModalOpen(true)} className="hover:text-white cursor-pointer">
+              <button onClick={() => setIsArchModalOpen(true)} className="hover:text-cyan-300 transition-colors cursor-pointer">
                 Architecture Spec
               </button>
             </div>
@@ -1387,7 +1396,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* SYSTEM ARCHITECTURE MODAL */}
       {isArchModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl rounded-[3rem] bg-black/95 p-6 sm:p-8 backdrop-blur-3xl border border-white/20 shadow-2xl space-y-6">
+          <div className="relative w-full max-w-2xl rounded-[3rem] bg-[#0A0E26]/95 p-6 sm:p-8 backdrop-blur-3xl border border-indigo-500/35 shadow-[0_0_60px_rgba(99,102,241,0.3)] space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
@@ -1412,62 +1421,62 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             </div>
 
             <div className="space-y-3 font-mono text-xs">
-              <div className="rounded-2xl bg-white/5 p-3.5 border border-white/10 flex items-center justify-between">
+              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
                 <div>
                   <span className="text-cyan-400 font-bold">1. Student Surface</span>
-                  <div className="text-white/60 text-[11px] mt-0.5">
+                  <div className="text-cyan-100/70 text-[11px] mt-0.5">
                     Spoken voice via Echo device or Sleek Web Companion
                   </div>
                 </div>
-                <span className="rounded-full bg-cyan-500/20 px-2.5 py-0.5 text-[10px] text-cyan-300">
+                <span className="rounded-full bg-cyan-500/20 px-2.5 py-0.5 text-[10px] text-cyan-300 border border-cyan-500/30 font-semibold">
                   Echo / Web
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-white/5 p-3.5 border border-white/10 flex items-center justify-between">
+              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
                 <div>
                   <span className="text-indigo-400 font-bold">2. Alexa+ Conversational Layer</span>
-                  <div className="text-white/60 text-[11px] mt-0.5">
+                  <div className="text-indigo-100/70 text-[11px] mt-0.5">
                     LLM tool selection, argument parsing & multi-turn dialog context
                   </div>
                 </div>
-                <span className="rounded-full bg-indigo-500/20 px-2.5 py-0.5 text-[10px] text-indigo-300">
+                <span className="rounded-full bg-indigo-500/20 px-2.5 py-0.5 text-[10px] text-indigo-300 border border-indigo-500/30 font-semibold">
                   Amazon Alexa+
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-white/5 p-3.5 border border-white/10 flex items-center justify-between">
+              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
                 <div>
                   <span className="text-emerald-400 font-bold">3. Streamable HTTP Transport</span>
-                  <div className="text-white/60 text-[11px] mt-0.5">
+                  <div className="text-emerald-100/70 text-[11px] mt-0.5">
                     POST /mcp via Cloudflare Quick Tunnel (Free TLS/HTTPS)
                   </div>
                 </div>
-                <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] text-emerald-300">
+                <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] text-emerald-300 border border-emerald-500/30 font-semibold">
                   Cloudflare Quick Tunnel
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-white/5 p-3.5 border border-white/10 flex items-center justify-between">
+              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
                 <div>
                   <span className="text-amber-400 font-bold">4. StudyMate MCP Server</span>
-                  <div className="text-white/60 text-[11px] mt-0.5">
+                  <div className="text-amber-100/70 text-[11px] mt-0.5">
                     @modelcontextprotocol/sdk TypeScript JSON-RPC 2.0 Engine
                   </div>
                 </div>
-                <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] text-amber-300">
+                <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] text-amber-300 border border-amber-500/30 font-semibold">
                   Node 22 + Express
                 </span>
               </div>
 
-              <div className="rounded-2xl bg-white/5 p-3.5 border border-white/10 flex items-center justify-between">
+              <div className="rounded-2xl bg-indigo-950/40 p-3.5 border border-indigo-500/25 flex items-center justify-between">
                 <div>
                   <span className="text-purple-400 font-bold">5. Embedded SQLite (WAL Mode)</span>
-                  <div className="text-white/60 text-[11px] mt-0.5">
+                  <div className="text-purple-100/70 text-[11px] mt-0.5">
                     Sub-millisecond local-first academic database with zero cloud bills
                   </div>
                 </div>
-                <span className="rounded-full bg-purple-500/20 px-2.5 py-0.5 text-[10px] text-purple-300">
+                <span className="rounded-full bg-purple-500/20 px-2.5 py-0.5 text-[10px] text-purple-300 border border-purple-500/30 font-semibold">
                   node:sqlite
                 </span>
               </div>
@@ -1477,7 +1486,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <button
                 type="button"
                 onClick={() => setIsArchModalOpen(false)}
-                className="px-5 py-2 text-xs font-semibold text-white/70 hover:text-white"
+                className="px-5 py-2 text-xs font-semibold text-white/70 hover:text-white cursor-pointer"
               >
                 Close
               </button>
@@ -1487,7 +1496,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   setIsArchModalOpen(false);
                   if (onOpenDashboard) onOpenDashboard();
                 }}
-                className="px-5 py-2 rounded-full text-xs font-semibold text-white shadow-lg border border-white/20 bg-gradient-to-b from-[#2B2B2B] to-[#101010]"
+                className="px-5 py-2 rounded-full text-xs font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-white/20 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:via-indigo-400 hover:to-purple-500 cursor-pointer active:scale-95 transition-all"
               >
                 Launch Dashboard →
               </button>
