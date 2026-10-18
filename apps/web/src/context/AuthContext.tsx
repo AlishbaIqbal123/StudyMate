@@ -56,6 +56,9 @@ interface AuthContextType {
   logout: () => void;
   openClerkSignIn: () => void;
   openClerkSignUp: () => void;
+  authModalMode: 'sign-in' | 'sign-up';
+  setAuthModalMode: (mode: 'sign-in' | 'sign-up') => void;
+  isClerkLoaded: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -85,14 +88,14 @@ function buildPreviewUser(studentId?: number | null): AuthUser {
         avatar: s.avatar,
         major: s.major,
         year: s.year,
-        studentId: `PREVIEW-${s.id.toString().padStart(4, '0')}`,
+        studentId: `SCHOLAR-${s.id.toString().padStart(4, '0')}`,
         alexaLinked: false,
         role: 'student',
         createdAt: new Date().toISOString(),
-        tier: 'preview',
+        tier: 'member',
         isDemo: true,
         authProvider: 'preview',
-        emailVerified: false,
+        emailVerified: true,
       };
     }
   }
@@ -122,6 +125,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [upgradeReason, setUpgradeReason] = useState<UpgradeReason | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'sign-in' | 'sign-up'>('sign-in');
   const [previewStudentId, setPreviewStudentId] = useState<number | null>(() => {
     if (typeof window !== 'undefined') {
       const raw = localStorage.getItem('studymate_active_persona_id');
@@ -191,20 +195,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const openClerkSignIn = useCallback(() => {
+    setAuthModalMode('sign-in');
+    setIsAuthModalOpen(true);
     try {
-      clerk.openSignIn();
-    } catch {
-      setIsAuthModalOpen(true);
-    }
-  }, [clerk]);
+      if (isClerkLoaded && typeof clerk?.openSignIn === 'function') {
+        clerk.openSignIn();
+      }
+    } catch {}
+  }, [clerk, isClerkLoaded]);
 
   const openClerkSignUp = useCallback(() => {
+    setAuthModalMode('sign-up');
+    setIsAuthModalOpen(true);
     try {
-      clerk.openSignUp();
-    } catch {
-      setIsAuthModalOpen(true);
-    }
-  }, [clerk]);
+      if (isClerkLoaded && typeof clerk?.openSignUp === 'function') {
+        clerk.openSignUp();
+      }
+    } catch {}
+  }, [clerk, isClerkLoaded]);
 
   const openAuthModal = useCallback(() => {
     setUpgradeReason(null);
@@ -362,6 +370,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         openClerkSignIn,
         openClerkSignUp,
+        authModalMode,
+        setAuthModalMode,
+        isClerkLoaded,
       }}
     >
       {children}

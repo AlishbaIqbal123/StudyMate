@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   X,
-  Sparkles,
   ShieldCheck,
   GraduationCap,
-  Radio,
+  Sparkles,
   ArrowRight,
   CheckCircle2,
   Lock,
-  Layers,
-  Database,
 } from 'lucide-react';
+import { SignIn, SignUp } from '@clerk/react';
 import { useAuth } from '../context/AuthContext.js';
 
 export const AuthModal: React.FC = () => {
@@ -18,121 +16,152 @@ export const AuthModal: React.FC = () => {
     isAuthModalOpen,
     closeAuthModal,
     upgradeReason,
-    openClerkSignIn,
-    openClerkSignUp,
-    user,
-    isAuthenticated,
+    authModalMode,
+    setAuthModalMode,
+    isClerkLoaded,
+    loginWithDemoAccount,
   } = useAuth();
 
   if (!isAuthModalOpen) return null;
 
-  const handleSignIn = () => {
+  const handleBypassAsScholar = async () => {
+    await loginWithDemoAccount();
     closeAuthModal();
-    openClerkSignIn();
-  };
-
-  const handleSignUp = () => {
-    closeAuthModal();
-    openClerkSignUp();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-app-card border border-app-border rounded-2xl shadow-2xl p-6 overflow-hidden">
-        {/* Glow decorative blur */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-[#0E121E] border border-white/[0.12] rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] p-6 sm:p-7 overflow-hidden max-h-[92vh] overflow-y-auto">
+        {/* Ambient violet-indigo glow mesh */}
+        <div className="absolute -top-24 -right-24 w-60 h-60 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-1.5 rounded-xl text-app-muted hover:text-app-text hover:bg-app-subtle transition cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/[0.08] transition cursor-pointer z-10"
           aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30 mb-3 shadow-sm shadow-cyan-500/20">
+        <div className="text-center mb-6 relative z-10">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/25 mb-3 shadow-sm">
             <GraduationCap className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-headline font-bold text-app-text">
+          <h2 className="text-xl font-sans font-bold text-white tracking-tight">
             {upgradeReason === 'task-limit'
               ? 'Preview Quota Reached'
               : upgradeReason === 'alexa-link'
               ? 'Pair Alexa+ Hardware'
               : 'StudyMate Student Access'}
           </h2>
-          <p className="text-xs text-app-muted mt-1 max-w-xs mx-auto">
+          <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto leading-relaxed">
             {upgradeReason === 'task-limit'
-              ? 'You have used all 5 tasks in the Academic Preview Pass. Create a free account to unlock unlimited coursework.'
+              ? 'You have used all 5 tasks in the Academic Preview Pass. Sign in to unlock unlimited coursework.'
               : upgradeReason === 'alexa-link'
-              ? 'Linking physical Amazon Echo and Alexa+ devices via OAuth 2.1 PKCE requires a verified student profile.'
-              : 'You are currently using the Academic Preview Pass. Sign in or register to enable persistent cloud sync.'}
+              ? 'Pair physical Amazon Echo devices with end-to-end encrypted student authentication.'
+              : 'Sign in with your student account to sync deadlines, unlock pacing analytics, and save focus logs.'}
           </p>
-        </div>
 
-        {/* Comparison Tier Grid */}
-        <div className="space-y-2 mb-6">
-          <div className="p-3 rounded-xl bg-app-subtle/60 border border-app-border text-xs flex items-center justify-between">
-            <div className="flex items-center space-x-2.5">
-              <span className="w-2 h-2 rounded-full bg-cyan-400" />
-              <span className="font-medium text-app-text">Academic Preview Pass</span>
-            </div>
-            <span className="text-[11px] font-mono text-cyan-400 font-semibold">Active (Sandbox)</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-cyan-500/5 border border-cyan-500/30 text-xs space-y-2">
-            <div className="flex items-center justify-between font-semibold text-cyan-400">
-              <span className="flex items-center space-x-1.5">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Verified Scholar Account</span>
-              </span>
-              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300">
-                100% Free
-              </span>
-            </div>
-            <ul className="space-y-1.5 text-[11px] text-app-muted pl-1">
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>Unlimited courses, assignments & study sessions</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>Pair physical Echo smart speakers via OAuth 2.1 PKCE</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>Encrypted cross-device cloud sync with Clerk</span>
-              </li>
-            </ul>
+          {/* Mode Switcher Tabs */}
+          <div className="inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 text-xs mt-4">
+            <button
+              type="button"
+              onClick={() => setAuthModalMode('sign-in')}
+              className={`px-4 py-1.5 rounded-full transition font-semibold cursor-pointer ${
+                authModalMode === 'sign-in'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => setAuthModalMode('sign-up')}
+              className={`px-4 py-1.5 rounded-full transition font-semibold cursor-pointer ${
+                authModalMode === 'sign-up'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Create Account
+            </button>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-2.5">
-          <button
-            onClick={handleSignIn}
-            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-headline font-bold text-xs shadow-md shadow-cyan-500/25 flex items-center justify-center space-x-2 transition cursor-pointer"
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>Sign In with Clerk</span>
-            <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </button>
+        {/* Embedded Clerk Authentication Form */}
+        <div className="relative z-10 flex justify-center py-2">
+          {authModalMode === 'sign-in' ? (
+            <SignIn
+              routing="hash"
+              appearance={{
+                elements: {
+                  rootBox: 'w-full',
+                  card: 'bg-transparent shadow-none p-0 w-full border-none',
+                  headerTitle: 'hidden',
+                  headerSubtitle: 'hidden',
+                  socialButtonsBlockButton:
+                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition',
+                  formButtonPrimary:
+                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition',
+                  formFieldInput:
+                    'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
+                  formFieldLabel: 'text-slate-300 text-xs font-medium',
+                  footerActionText: 'text-slate-400 text-xs',
+                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs',
+                  dividerLine: 'bg-white/10',
+                  dividerText: 'text-slate-400 text-[11px]',
+                },
+              }}
+            />
+          ) : (
+            <SignUp
+              routing="hash"
+              appearance={{
+                elements: {
+                  rootBox: 'w-full',
+                  card: 'bg-transparent shadow-none p-0 w-full border-none',
+                  headerTitle: 'hidden',
+                  headerSubtitle: 'hidden',
+                  socialButtonsBlockButton:
+                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition',
+                  formButtonPrimary:
+                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition',
+                  formFieldInput:
+                    'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
+                  formFieldLabel: 'text-slate-300 text-xs font-medium',
+                  footerActionText: 'text-slate-400 text-xs',
+                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs',
+                  dividerLine: 'bg-white/10',
+                  dividerText: 'text-slate-400 text-[11px]',
+                },
+              }}
+            />
+          )}
+        </div>
 
+        {/* Quick Scholar Sandbox Access Bypass */}
+        <div className="pt-4 mt-4 border-t border-white/10 text-center relative z-10 space-y-2">
+          <p className="text-[11px] text-slate-400">
+            Testing without Clerk credentials right now?
+          </p>
           <button
-            onClick={handleSignUp}
-            className="w-full py-2.5 px-4 rounded-xl bg-app-subtle hover:bg-app-border text-app-text font-headline font-semibold text-xs border border-app-border flex items-center justify-center space-x-1.5 transition cursor-pointer"
+            type="button"
+            onClick={handleBypassAsScholar}
+            className="w-full py-2.5 px-4 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] text-indigo-300 hover:text-indigo-200 text-xs font-semibold border border-indigo-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Create Free Student Account</span>
+            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+            <span>Continue as Verified Scholar (One-Click Sandbox)</span>
           </button>
-
           <button
+            type="button"
             onClick={closeAuthModal}
-            className="w-full py-2 text-center text-[11px] text-app-muted hover:text-app-text transition cursor-pointer"
+            className="text-[11px] text-slate-500 hover:text-slate-300 transition cursor-pointer pt-1"
           >
-            Continue in Academic Preview Mode
+            Close & Continue in Preview Mode
           </button>
         </div>
       </div>
