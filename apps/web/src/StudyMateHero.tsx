@@ -29,6 +29,7 @@ import {
   ArrowDown,
   Brain,
   Award,
+  Calendar,
 } from 'lucide-react';
 
 export interface StudyMateHeroProps {
@@ -616,7 +617,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               </div>
 
               {/* Dignified Editorial Headline */}
-              <h1 className="font-serif text-4xl sm:text-6xl lg:text-[4.2rem] font-medium tracking-tight leading-[1.08] text-[#F5EFE6]">
+              <h1 className="font-serif text-5xl sm:text-7xl lg:text-[5.4rem] font-medium tracking-tight leading-[1.04] text-[#F5EFE6]">
                 Your academic life, organized through{' '}
                 <em className="font-editorial italic font-normal text-[#E5A952] ">
                   quiet conversation.
@@ -715,68 +716,98 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               )}
             </div>
 
-            {/* Right Column: Double-Bezel Desk Artifacts */}
+            {/* Right Column: Live Interactive Study Sanctum Station */}
             <div
-              className={`flex flex-col sm:flex-row lg:flex-col gap-4 w-full lg:w-80 shrink-0 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
+              className={`flex flex-col gap-4 w-full lg:w-[22rem] shrink-0 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150 ${
                 heroVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'
               }`}
             >
-              {/* Double-Bezel Card 1: Local SQLite Velocity */}
-              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
+              {/* Double-Bezel Card 1: Live Focus Desk Pod */}
+              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08]">
                 <div className="p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06] space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans text-[#E5A952] font-semibold">
-                      Autonomous Ops
-                    </span>
-                    <span className="rounded-full bg-[#4E7A68]/20 px-2 py-0.5 text-[9px] font-sans font-medium text-[#7AB89F] border border-[#4E7A68]/30">
-                      WAL Mode
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#E5A952]" />
+                      <span className="text-xs font-serif font-medium text-[#F5EFE6]">Focus Desk</span>
+                    </div>
+                    <span className="rounded-full bg-[#4E7A68]/20 px-2.5 py-0.5 text-[9px] font-sans font-medium text-[#7AB89F] border border-[#4E7A68]/30">
+                      Live Sprint
                     </span>
                   </div>
 
-                  <div
-                    className="text-3xl font-normal text-[#F5EFE6]"
-                    style={{ fontFamily: "'Silkscreen', cursive" }}
-                  >
-                    42,500+
+                  {/* Giant Tabular Clock */}
+                  <div className="text-center py-2">
+                    <div className="font-sans tabular-nums text-4xl sm:text-5xl font-light text-[#F5EFE6] tracking-wider">
+                      {formatTimer(heroTimerSeconds)}
+                    </div>
+                    <p className="text-[11px] text-[#A8A196] mt-1">
+                      {heroTimerRunning ? 'Interval active: Algorithms & Matrix Theory' : '25-minute calibrated focus block'}
+                    </p>
                   </div>
 
-                  <p className="text-xs text-[#A8A196] leading-relaxed">
-                    Sub-millisecond tool executions with zero cloud database fees. Pure local data sovereignty.
-                  </p>
-
-                  <div className="pt-2 flex flex-wrap gap-1.5">
-                    {['get_tasks', 'add_task', 'create_study_plan'].map((tool) => (
-                      <code
-                        key={tool}
-                        className="text-[9px] rounded-md bg-white/[0.04] px-2 py-0.5 text-[#C8BFB2] border border-white/[0.06]"
-                      >
-                        {tool}
-                      </code>
-                    ))}
+                  {/* Button-in-Button Sprint Controller */}
+                  <div className="pt-1 flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setHeroTimerRunning(!heroTimerRunning)}
+                      className="pl-5 pr-1.5 py-2 rounded-full text-xs font-semibold text-[#0E1117] bg-[#E5A952] hover:bg-[#F2BC66] active:scale-[0.98] transition-colors flex items-center gap-2.5 cursor-pointer group"
+                    >
+                      <span>{heroTimerRunning ? 'Pause Sprint' : 'Start Focus'}</span>
+                      <div className="w-6 h-6 rounded-full bg-black/10 flex items-center justify-center group-hover:scale-105 transition-transform">
+                        {heroTimerRunning ? <Pause className="w-3 h-3 fill-current" /> : <Play className="w-3 h-3 fill-current" />}
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHeroTimerRunning(false);
+                        setHeroTimerSeconds(25 * 60);
+                      }}
+                      className="p-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-[#D8CEBD] border border-white/[0.06] transition-colors cursor-pointer"
+                      title="Reset Sprint"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* Double-Bezel Card 2: Dokseosil Multi-Turn Memory */}
-              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08] ring-1 ring-white/[0.03]">
+              {/* Double-Bezel Card 2: Upcoming Deadlines Radar */}
+              <div className="p-1.5 rounded-[2.2rem] bg-white/[0.03] border border-white/[0.08]">
                 <div className="p-6 rounded-[1.8rem] bg-[#12151F] border border-white/[0.06] space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-serif font-medium text-[#F5EFE6]">
-                    <Sparkles className="h-3.5 w-3.5 text-[#E5A952]" />
-                    <span>Multi-Turn Dialogue Context</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-serif font-medium text-[#F5EFE6]">
+                      <Calendar className="h-3.5 w-3.5 text-[#E5A952]" />
+                      <span>Syllabus Deadlines</span>
+                    </div>
+                    <span className="text-[10px] text-[#8E867A] font-sans">Next 48h</span>
                   </div>
-                  <p className="text-xs text-[#A8A196] italic leading-relaxed font-serif">
-                    "No tedious form fields or kanban dragging. You speak to your Echo, and your academic priorities update instantly."
-                  </p>
-                  <div className="pt-2 flex items-center justify-between text-xs text-[#8B8378] ">
-                    <span className="font-sans text-[10px]">Study Desk Companion</span>
-                    <button
-                      onClick={() => scrollToSection('voice-studio')}
-                      className="text-[#E5A952] hover:underline flex items-center gap-1 cursor-pointer text-xs"
-                    >
-                      <span>Try audio</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </button>
+
+                  <div className="space-y-2 pt-1 text-xs">
+                    {[
+                      { title: 'CS 420 Lab 3: Concurrency', due: 'Friday', priority: 'High', color: 'text-[#E06357] bg-[#C24138]/15 border-[#C24138]/25' },
+                      { title: 'Algorithms Problem Set 4', due: 'Tomorrow', priority: 'Urgent', color: 'text-[#E5A952] bg-[#E5A952]/15 border-[#E5A952]/25' },
+                    ].map((item, idx) => (
+                      <div key={idx} className="p-2.5 rounded-xl bg-black/30 border border-white/[0.04] flex items-center justify-between">
+                        <div className="min-w-0 pr-2">
+                          <p className="font-sans text-[11px] text-[#F5EFE6] truncate font-medium">{item.title}</p>
+                          <span className="text-[10px] text-[#8E867A]">Due {item.due}</span>
+                        </div>
+                        <span className={`text-[9px] px-2 py-0.5 rounded-full border ${item.color} font-medium shrink-0`}>
+                          {item.priority}
+                        </span>
+                      </div>
+                    ))}
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleRunVoiceCommand("Alexa, what's due this week?")}
+                    className="w-full pt-2 flex items-center justify-between text-xs text-[#E5A952] hover:underline cursor-pointer font-sans"
+                  >
+                    <span>Spoken Triage with Alexa+</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
             </div>
