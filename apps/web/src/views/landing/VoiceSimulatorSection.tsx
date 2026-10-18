@@ -46,6 +46,10 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
     return () => {
       if (recognitionRef.current) {
         try {
+          recognitionRef.current.onstart = null;
+          recognitionRef.current.onresult = null;
+          recognitionRef.current.onerror = null;
+          recognitionRef.current.onend = null;
           recognitionRef.current.abort();
         } catch {}
       }
@@ -91,8 +95,14 @@ export const VoiceSimulatorSection: React.FC<VoiceSimulatorSectionProps> = ({
       };
 
       rec.onerror = (e: any) => {
+        if (e.error === 'aborted' || e.error === 'no-speech') {
+          setIsListening(false);
+          return;
+        }
         if (e.error === 'not-allowed') {
           setMicError('Microphone permission denied.');
+        } else {
+          setMicError(`Voice error: ${e.error}`);
         }
         setIsListening(false);
       };

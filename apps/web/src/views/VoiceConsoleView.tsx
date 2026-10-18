@@ -90,6 +90,10 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     return () => {
       if (recognitionRef.current) {
         try {
+          recognitionRef.current.onstart = null;
+          recognitionRef.current.onresult = null;
+          recognitionRef.current.onerror = null;
+          recognitionRef.current.onend = null;
           recognitionRef.current.abort();
         } catch {}
       }
@@ -147,10 +151,17 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       };
 
       recognition.onerror = (event: any) => {
+        // 'aborted' is fired when recognition is stopped by the user or programmatically aborted.
+        // 'no-speech' is fired when silence timeout occurs. Both are normal lifecycle events.
+        if (event.error === 'aborted' || event.error === 'no-speech') {
+          setIsListening(false);
+          return;
+        }
+
         console.warn('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           setSpeechError('Microphone permission denied. Please allow microphone access in your browser settings.');
-        } else if (event.error !== 'no-speech') {
+        } else {
           setSpeechError(`Voice recognition error: ${event.error}`);
         }
         setIsListening(false);
