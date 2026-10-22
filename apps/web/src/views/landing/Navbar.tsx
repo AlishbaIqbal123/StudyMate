@@ -109,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Active Profile Pill / Auth Modal Trigger */}
           <button
             onClick={openClerkSignIn}
-            className="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 text-xs text-slate-300 transition cursor-pointer"
+            className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 text-xs text-slate-300 transition cursor-pointer"
             title="Sign in with Clerk to access full cloud sync"
           >
             <div className="w-5 h-5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 font-mono font-bold text-[10px] flex items-center justify-center overflow-hidden">

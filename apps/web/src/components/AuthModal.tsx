@@ -93,10 +93,9 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Embedded Clerk Authentication Form */}
-        <div className="relative z-10 flex justify-center py-2">
+        <div className="relative z-10 flex justify-center py-2 min-h-[300px]">
           {authModalMode === 'sign-in' ? (
             <SignIn
-              routing="hash"
               appearance={{
                 elements: {
                   rootBox: 'w-full',
@@ -104,14 +103,14 @@ export const AuthModal: React.FC = () => {
                   headerTitle: 'hidden',
                   headerSubtitle: 'hidden',
                   socialButtonsBlockButton:
-                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition',
+                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition cursor-pointer',
                   formButtonPrimary:
-                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition',
+                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition cursor-pointer',
                   formFieldInput:
                     'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
                   formFieldLabel: 'text-slate-300 text-xs font-medium',
                   footerActionText: 'text-slate-400 text-xs',
-                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs',
+                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs cursor-pointer',
                   dividerLine: 'bg-white/10',
                   dividerText: 'text-slate-400 text-[11px]',
                 },
@@ -119,7 +118,6 @@ export const AuthModal: React.FC = () => {
             />
           ) : (
             <SignUp
-              routing="hash"
               appearance={{
                 elements: {
                   rootBox: 'w-full',
@@ -127,14 +125,14 @@ export const AuthModal: React.FC = () => {
                   headerTitle: 'hidden',
                   headerSubtitle: 'hidden',
                   socialButtonsBlockButton:
-                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition',
+                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition cursor-pointer',
                   formButtonPrimary:
-                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition',
+                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition cursor-pointer',
                   formFieldInput:
                     'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
                   formFieldLabel: 'text-slate-300 text-xs font-medium',
                   footerActionText: 'text-slate-400 text-xs',
-                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs',
+                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs cursor-pointer',
                   dividerLine: 'bg-white/10',
                   dividerText: 'text-slate-400 text-[11px]',
                 },

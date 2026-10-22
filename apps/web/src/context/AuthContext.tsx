@@ -197,22 +197,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const openClerkSignIn = useCallback(() => {
     setAuthModalMode('sign-in');
     setIsAuthModalOpen(true);
-    try {
-      if (isClerkLoaded && typeof clerk?.openSignIn === 'function') {
-        clerk.openSignIn();
-      }
-    } catch {}
-  }, [clerk, isClerkLoaded]);
+  }, []);
 
   const openClerkSignUp = useCallback(() => {
     setAuthModalMode('sign-up');
     setIsAuthModalOpen(true);
-    try {
-      if (isClerkLoaded && typeof clerk?.openSignUp === 'function') {
-        clerk.openSignUp();
-      }
-    } catch {}
-  }, [clerk, isClerkLoaded]);
+  }, []);
 
   const openAuthModal = useCallback(() => {
     setUpgradeReason(null);
@@ -266,43 +256,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     try {
-      clerk.openSignIn();
+      openClerkSignIn();
       return { success: true };
     } catch (err: any) {
-      return { success: false, error: err?.message || 'Failed to open Clerk sign in' };
+      return { success: false, error: err?.message || 'Failed to open sign in' };
     }
-  }, [clerk]);
+  }, [openClerkSignIn]);
 
   const loginWithEmail = useCallback(
     async (): Promise<{ success: boolean; error?: string }> => {
       try {
-        clerk.openSignIn();
+        openClerkSignIn();
         return { success: true };
       } catch (err: any) {
-        return { success: false, error: err?.message || 'Failed to open Clerk sign in' };
+        return { success: false, error: err?.message || 'Failed to open sign in' };
       }
     },
-    [clerk]
+    [openClerkSignIn]
   );
 
   const signUpWithEmail = useCallback(
     async (): Promise<{ success: boolean; error?: string; message?: string }> => {
       try {
-        clerk.openSignUp();
+        openClerkSignUp();
         return { success: true };
       } catch (err: any) {
-        return { success: false, error: err?.message || 'Failed to open Clerk sign up' };
+        return { success: false, error: err?.message || 'Failed to open sign up' };
       }
     },
-    [clerk]
+    [openClerkSignUp]
   );
 
   const sendOtp = useCallback(
     async (): Promise<SendOtpResult> => {
-      clerk.openSignIn();
-      return { success: true, message: 'Opening Clerk verification...' };
+      openClerkSignIn();
+      return { success: true, message: 'Opening student authentication...' };
     },
-    [clerk]
+    [openClerkSignIn]
   );
 
   const verifyOtp = useCallback(

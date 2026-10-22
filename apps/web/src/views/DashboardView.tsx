@@ -139,10 +139,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.08] shadow-sm animate-fadeIn">
           <div className="flex items-center gap-3">
             <span className="font-sans text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#E5A952]/15 text-[#B87D28] dark:text-[#E5A952] border border-[#E5A952]/30 uppercase tracking-wider shrink-0">
-              Preview Mode
+              Scholar Preview Pass
             </span>
             <p className="text-xs text-stone-600 dark:text-[#C8BFB2] leading-relaxed">
-              You are exploring StudyMate with <strong className="text-stone-900 dark:text-[#F5EFE6]">zero preloaded dummy data</strong>. You can test Pomodoro and create temporary tasks, but history is not saved. <strong className="text-stone-900 dark:text-[#F5EFE6]">Sign in</strong> to persist your academic workspace.
+              You are exploring StudyMate with an <strong className="text-stone-900 dark:text-[#F5EFE6]">Academic Preview Pass</strong>. Test Pomodoro sprints and manage temporary coursework locally. <strong className="text-stone-900 dark:text-[#F5EFE6]">Sign in</strong> to sync across devices and pair Alexa+.
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
@@ -172,7 +172,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div>
             <span className="font-sans text-[10px] font-semibold px-3 py-1 rounded-full bg-white/10 text-[#E5A952] border border-white/15 tracking-wider">
-              {isPreview ? 'Guest Workspace' : 'Student Workspace'}
+              {isPreview ? 'Academic Preview' : 'Student Workspace'}
             </span>
             <h1 className="font-serif text-2xl sm:text-3xl font-medium tracking-tight mt-3 flex items-center gap-2 text-[#F5EFE6]">
               <span>{isPreview ? 'Welcome to StudyMate' : `Welcome back, ${studentFirstName}`}</span>
@@ -186,7 +186,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               ) : (
                 <>
                   {isPreview
-                    ? "Your guest workspace is clean and ready. Add an assignment or start a Pomodoro focus sprint."
+                    ? "Your academic workspace is clean and ready. Add an assignment or start a Pomodoro focus sprint."
                     : "Welcome to StudyMate! Your workspace is fresh and ready. Click + Add Assignment to begin."}
                 </>
               )}

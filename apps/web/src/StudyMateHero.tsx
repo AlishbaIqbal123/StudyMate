@@ -41,6 +41,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   const { openClerkSignIn, openClerkSignUp, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Interactive Live Pomodoro Desk in Hero Mockup
   const [timerSeconds, setTimerSeconds] = useState(25 * 60);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -119,7 +126,11 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         {/* taste-skill-ignore */}
         <nav className="max-w-6xl mx-auto flex items-center justify-between p-2.5 sm:p-3 rounded-full bg-[#0D101A]/90 backdrop-blur-md border border-white/[0.08]">
           {/* Logo Brand */}
-          <div className="flex items-center space-x-3 pl-2 sm:pl-3">
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center space-x-3 pl-2 sm:pl-3 cursor-pointer text-left focus:outline-none"
+          >
             <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white">
               <GraduationCap className="w-4 h-4" />
             </div>
@@ -129,22 +140,38 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <span className="hidden md:inline-block font-sans text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-slate-300 border border-white/10">
               v2.0
             </span>
-          </div>
+          </button>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-6 text-xs font-medium text-slate-300">
-            <a href="#features" className="hover:text-white transition-colors">
+            <button
+              type="button"
+              onClick={() => scrollToSection('features')}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
               Features
-            </a>
-            <a href="#voice-studio" className="hover:text-white transition-colors">
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('voice-studio')}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
               Voice Studio
-            </a>
-            <a href="#study-desk" className="hover:text-white transition-colors">
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('study-desk')}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
               Study Desk
-            </a>
-            <a href="#architecture" className="hover:text-white transition-colors">
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('architecture')}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
               Architecture
-            </a>
+            </button>
           </div>
 
           {/* Header Actions */}
@@ -448,10 +475,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <p className="text-xs text-slate-400 leading-relaxed">
               Ask your Echo speaker or browser mic to query deadlines, start Pomodoro intervals, or log assignments without switching windows.
             </p>
-            <div className="pt-2 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+            <button
+              type="button"
+              onClick={onOpenVoice}
+              className="pt-2 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1 cursor-pointer hover:underline focus:outline-none"
+            >
               <span>Explore voice integration</span>
               <ChevronRight className="w-4 h-4" />
-            </div>
+            </button>
           </div>
 
           {/* Card 2: Calibrated Pomodoro */}
@@ -465,10 +496,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <p className="text-xs text-slate-400 leading-relaxed">
               Calibrated 25m or 50m deep focus blocks with automated recovery breaks to build mental endurance and defeat academic burnout.
             </p>
-            <div className="pt-2 flex items-center text-xs font-semibold text-amber-400 group-hover:text-amber-300 gap-1">
+            <button
+              type="button"
+              onClick={onOpenPlanner}
+              className="pt-2 flex items-center text-xs font-semibold text-amber-400 group-hover:text-amber-300 gap-1 cursor-pointer hover:underline focus:outline-none"
+            >
               <span>View study planner</span>
               <ChevronRight className="w-4 h-4" />
-            </div>
+            </button>
           </div>
 
           {/* Card 3: Syllabus Radar */}
@@ -482,10 +517,14 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             <p className="text-xs text-slate-400 leading-relaxed">
               Automated course pacing benchmarks that prioritize your heaviest assignments before Canvas or university portals close.
             </p>
-            <div className="pt-2 flex items-center text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 gap-1">
+            <button
+              type="button"
+              onClick={onOpenTelemetry}
+              className="pt-2 flex items-center text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 gap-1 cursor-pointer hover:underline focus:outline-none"
+            >
               <span>Inspect course telemetry</span>
               <ChevronRight className="w-4 h-4" />
-            </div>
+            </button>
           </div>
         </div>
       </section>
@@ -609,7 +648,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             Ready to reclaim your academic focus?
           </h2>
           <p className="text-sm sm:text-base text-slate-400 max-w-md mx-auto leading-relaxed">
-            Get started in seconds with our instant guest sandbox, or create a free scholar account with Clerk.
+            Get started in seconds with our instant Scholar Preview Pass, or create a free student account with Clerk.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <button
@@ -637,11 +676,15 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* 7. REFINED MINIMALIST FOOTER                                   */}
       {/* ============================================================== */}
       <footer className="relative z-10 py-10 px-5 sm:px-8 lg:px-12 max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <div className="flex items-center space-x-2">
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center space-x-2 cursor-pointer hover:text-slate-300 transition-colors text-left"
+        >
           <GraduationCap className="w-4 h-4 text-blue-400" />
           <span className="font-semibold text-slate-300">StudyMate</span>
           <span>· Open Source Academic Intelligence</span>
-        </div>
+        </button>
         <div className="flex items-center space-x-6">
           <button type="button" onClick={onOpenDashboard} className="hover:text-white transition-colors cursor-pointer">
             Dashboard
@@ -651,6 +694,9 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           </button>
           <button type="button" onClick={onOpenPlanner} className="hover:text-white transition-colors cursor-pointer">
             Planner
+          </button>
+          <button type="button" onClick={onOpenVoice} className="hover:text-white transition-colors cursor-pointer">
+            Voice Studio
           </button>
           <button type="button" onClick={onOpenTelemetry} className="hover:text-white transition-colors cursor-pointer">
             Telemetry
