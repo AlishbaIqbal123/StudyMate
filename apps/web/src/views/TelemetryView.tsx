@@ -277,41 +277,41 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* 1. Header Banner & Status Metrics */}
-      <div className="rounded-xl p-6 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      {/* 1. Header Banner & Status Metrics (Sage Green Palette 18 Header) */}
+      <div className="rounded-2xl p-6 bg-gradient-to-br from-[#839758] to-[#ABC270] text-white border border-[#839758]/40 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div>
           <div className="flex items-center space-x-2">
-            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-white">
               MCP Diagnostics & System Health
             </h1>
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+            <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#FEC868] text-[#473C33]">
               {health?.status === 'ok' ? 'Online' : 'Checking'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-white/90 mt-1">
             Validate Model Context Protocol tools, test JSON-RPC payloads, and inspect local SQLite records.
           </p>
         </div>
 
         {/* Status Metrics Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0 text-xs">
-          <div className="px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-            <div className="text-[10px] uppercase font-mono text-slate-400">Endpoint</div>
-            <div className="font-semibold text-slate-900 dark:text-white mt-0.5 font-mono">/mcp (HTTP)</div>
+          <div className="px-3.5 py-2 rounded-xl bg-black/20 border border-white/20">
+            <div className="text-[10px] uppercase font-mono text-white/75">Endpoint</div>
+            <div className="font-semibold text-white mt-0.5 font-mono">/mcp (HTTP)</div>
           </div>
-          <div className="px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-            <div className="text-[10px] uppercase font-mono text-slate-400">Uptime</div>
-            <div className="font-semibold text-slate-900 dark:text-white mt-0.5 font-mono">
+          <div className="px-3.5 py-2 rounded-xl bg-black/20 border border-white/20">
+            <div className="text-[10px] uppercase font-mono text-white/75">Uptime</div>
+            <div className="font-semibold text-white mt-0.5 font-mono">
               {health ? formatUptime(health.uptime_seconds) : '---'}
             </div>
           </div>
-          <div className="px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-            <div className="text-[10px] uppercase font-mono text-slate-400">Tools</div>
-            <div className="font-semibold text-slate-900 dark:text-white mt-0.5 font-mono">5 Registered</div>
+          <div className="px-3.5 py-2 rounded-xl bg-black/20 border border-white/20">
+            <div className="text-[10px] uppercase font-mono text-white/75">Tools</div>
+            <div className="font-semibold text-white mt-0.5 font-mono">5 Registered</div>
           </div>
-          <div className="px-3.5 py-2 rounded-lg bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06]">
-            <div className="text-[10px] uppercase font-mono text-slate-400">Database</div>
-            <div className="font-semibold text-slate-900 dark:text-white mt-0.5 font-mono">SQLite Local</div>
+          <div className="px-3.5 py-2 rounded-xl bg-black/20 border border-white/20">
+            <div className="text-[10px] uppercase font-mono text-white/75">Database</div>
+            <div className="font-semibold text-white mt-0.5 font-mono">SQLite Local</div>
           </div>
         </div>
       </div>
@@ -320,12 +320,12 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Tool Execution Sandbox (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-4">
+          <div className="rounded-2xl p-5 bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-4 shadow-xs">
             <div>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-white">
+              <h2 className="text-sm font-semibold text-[#473C33] dark:text-[#FAF8F1]">
                 Interactive Tool Caller
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-[#7A6C5E] dark:text-[#C2B2A1]">
                 Select an MCP tool schema, configure test parameters, and execute JSON-RPC directly:
               </p>
             </div>
@@ -342,36 +342,36 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                       setResultData(null);
                       setRawOutput(null);
                     }}
-                    className={`p-2.5 rounded-lg text-left transition border cursor-pointer ${
+                    className={`p-2.5 rounded-xl text-left transition border cursor-pointer ${
                       isSelected
-                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold shadow-xs'
-                        : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 dark:bg-white/[0.03] dark:border-white/[0.06] dark:text-slate-300 dark:hover:bg-white/[0.06]'
+                        ? 'bg-[#ABC270] text-white border-[#839758] font-semibold shadow-sm'
+                        : 'bg-[#FAF8F1] border-[#E6E0D0] text-[#473C33] hover:bg-[#F5F2E8] dark:bg-[#393028] dark:border-[#FEC868]/15 dark:text-[#FAF8F1] dark:hover:bg-[#473C33]'
                     }`}
                   >
                     <div className="font-mono text-xs truncate">{action.label}</div>
-                    <div className="text-[10px] opacity-75 truncate">{action.badge}</div>
+                    <div className="text-[10px] opacity-80 truncate">{action.badge}</div>
                   </button>
                 );
               })}
             </div>
 
             {/* Parameter Controls */}
-            <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.06] space-y-3">
-              <div className="text-xs text-slate-500 dark:text-slate-400">
+            <div className="p-3.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-3">
+              <div className="text-xs text-[#7A6C5E] dark:text-[#C2B2A1]">
                 {ACTIONS.find((a) => a.id === activeAction)?.shortDesc}
               </div>
 
               {/* 1. GET TASKS CONTROLS */}
               {activeAction === 'get_tasks' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200 dark:border-white/10 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs">
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Status
                     </label>
                     <select
                       value={filterStatus}
                       onChange={(e) => setFilterStatus(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                     >
                       <option value="all">All Assignments</option>
                       <option value="pending">Pending Only</option>
@@ -380,13 +380,13 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Course Filter
                     </label>
                     <select
                       value={filterCourse}
                       onChange={(e) => setFilterCourse(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                     >
                       <option value="">All Courses</option>
                       {courses.map((c) => (
@@ -401,15 +401,15 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
               {/* 2. CREATE STUDY PLAN CONTROLS */}
               {activeAction === 'create_study_plan' && (
-                <div className="space-y-3 pt-2 border-t border-slate-200 dark:border-white/10 text-xs">
+                <div className="space-y-3 pt-2 border-t border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs">
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Target Course
                     </label>
                     <select
                       value={planCourse}
                       onChange={(e) => setPlanCourse(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                     >
                       {courses.map((c) => (
                         <option key={c.id} value={c.name}>
@@ -420,7 +420,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Available Minutes: <span className="font-mono font-semibold">{planMinutes}m</span>
                     </label>
                     <div className="flex gap-1.5">
@@ -429,10 +429,10 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                           key={mins}
                           type="button"
                           onClick={() => setPlanMinutes(mins)}
-                          className={`px-3 py-1 rounded text-xs font-mono ${
+                          className={`px-3 py-1 rounded-full text-xs font-mono cursor-pointer ${
                             planMinutes === mins
-                              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold'
-                              : 'bg-white dark:bg-white/[0.05] border border-slate-200 dark:border-white/10'
+                              ? 'bg-[#ABC270] text-white font-semibold'
+                              : 'bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-[#473C33] dark:text-[#FAF8F1]'
                           }`}
                         >
                           {mins}m
@@ -445,28 +445,28 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
               {/* 3. ADD TASK CONTROLS */}
               {activeAction === 'add_task' && (
-                <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-white/10 text-xs">
+                <div className="space-y-2.5 pt-2 border-t border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs">
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Assignment Title
                     </label>
                     <input
                       type="text"
                       value={newTaskTitle}
                       onChange={(e) => setNewTaskTitle(e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                         Course
                       </label>
                       <select
                         value={newTaskCourse}
                         onChange={(e) => setNewTaskCourse(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                       >
                         {courses.map((c) => (
                           <option key={c.id} value={c.name}>
@@ -477,14 +477,14 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                         Due Date
                       </label>
                       <input
                         type="date"
                         value={newTaskDue}
                         onChange={(e) => setNewTaskDue(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                       />
                     </div>
                   </div>
@@ -493,14 +493,14 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
               {/* 4. COURSE PROGRESS CONTROLS */}
               {activeAction === 'get_course_progress' && (
-                <div className="pt-2 border-t border-slate-200 dark:border-white/10 text-xs">
-                  <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <div className="pt-2 border-t border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs">
+                  <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                     Select Course
                   </label>
                   <select
                     value={progressCourse}
                     onChange={(e) => setProgressCourse(e.target.value)}
-                    className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                   >
                     <option value="">All Enrolled Courses</option>
                     {courses.map((c) => (
@@ -514,15 +514,15 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
               {/* 5. UPDATE PROGRESS CONTROLS */}
               {activeAction === 'update_progress' && (
-                <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-white/10 text-xs">
+                <div className="space-y-2.5 pt-2 border-t border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs">
                   <div>
-                    <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                       Assignment to Update
                     </label>
                     <select
                       value={updateTaskId}
                       onChange={(e) => setUpdateTaskId(Number(e.target.value))}
-                      className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                     >
                       {tasks.map((t) => (
                         <option key={t.id} value={t.id}>
@@ -534,13 +534,13 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
                   <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                         New Status
                       </label>
                       <select
                         value={updateStatus}
                         onChange={(e) => setUpdateStatus(e.target.value as any)}
-                        className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1]"
                       >
                         <option value="pending">Pending</option>
                         <option value="in_progress">In Progress</option>
@@ -549,14 +549,14 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      <label className="block font-medium text-[#473C33] dark:text-[#FAF8F1] mb-1">
                         Minutes Spent
                       </label>
                       <input
                         type="number"
                         value={updateMinutes}
                         onChange={(e) => setUpdateMinutes(Number(e.target.value))}
-                        className="w-full px-2.5 py-1.5 rounded-md bg-white dark:bg-[#141926] border border-slate-200 dark:border-white/10 text-xs text-slate-900 dark:text-white font-mono"
+                        className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-xs text-[#473C33] dark:text-[#FAF8F1] font-mono"
                         min={0}
                         step={15}
                       />
@@ -571,7 +571,7 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               <button
                 onClick={handleRunAction}
                 disabled={executing}
-                className="px-4 py-2 rounded-lg text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 transition flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-[#473C33] bg-[#FEC868] hover:bg-[#F5B84D] transition flex items-center space-x-1.5 cursor-pointer disabled:opacity-50 shadow-sm"
               >
                 {executing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -582,8 +582,8 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               </button>
 
               {latency !== null && (
-                <div className="text-xs text-slate-500 font-mono flex items-center space-x-1">
-                  <Clock className="w-3.5 h-3.5" />
+                <div className="text-xs text-[#7A6C5E] font-mono flex items-center space-x-1">
+                  <Clock className="w-3.5 h-3.5 text-[#ABC270]" />
                   <span>Latency: {latency}ms</span>
                 </div>
               )}
@@ -591,15 +591,15 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
 
             {/* Output Card */}
             {resultData && (
-              <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.08] space-y-2 text-xs">
+              <div className="p-3.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900 dark:text-white flex items-center space-x-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-semibold text-[#473C33] dark:text-[#FAF8F1] flex items-center space-x-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#ABC270]" />
                     <span>Response Payload</span>
                   </span>
                   <button
                     onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-                    className="text-[11px] text-slate-600 dark:text-slate-400 hover:underline cursor-pointer"
+                    className="text-[11px] text-[#586738] dark:text-[#ABC270] hover:underline cursor-pointer"
                   >
                     {showTechnicalDetails ? 'Collapse Raw' : 'View Raw JSON'}
                   </button>
@@ -610,18 +610,18 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                     <div className="flex justify-end">
                       <button
                         onClick={handleCopyRaw}
-                        className="text-[10px] text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer font-mono"
+                        className="text-[10px] text-[#7A6C5E] hover:text-[#473C33] flex items-center gap-1 cursor-pointer font-mono"
                       >
-                        {copiedRaw ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                        {copiedRaw ? <Check className="w-3 h-3 text-[#ABC270]" /> : <Copy className="w-3 h-3" />}
                         <span>{copiedRaw ? 'Copied' : 'Copy'}</span>
                       </button>
                     </div>
-                    <pre className="p-3 rounded bg-slate-900 text-slate-100 text-[11px] font-mono overflow-x-auto max-h-48">
+                    <pre className="p-3 rounded-lg bg-[#473C33] text-[#FAF8F1] text-[11px] font-mono overflow-x-auto max-h-48">
                       {rawOutput}
                     </pre>
                   </div>
                 ) : (
-                  <div className="p-2.5 rounded bg-white dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 font-mono text-[11px] max-h-48 overflow-y-auto">
+                  <div className="p-2.5 rounded-lg bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 font-mono text-[11px] max-h-48 overflow-y-auto">
                     {typeof resultData === 'string' ? resultData : JSON.stringify(resultData, null, 2)}
                   </div>
                 )}
@@ -630,24 +630,24 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
           </div>
 
           {/* Activity Feed Card */}
-          <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+          <div className="rounded-2xl p-5 bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-3 shadow-xs">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#473C33] dark:text-[#FAF8F1]">
               Recent Protocol Activity
             </h3>
             <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
               {activityFeed.map((item) => (
                 <div
                   key={item.id}
-                  className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 text-xs flex items-start justify-between"
+                  className="p-2.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 text-xs flex items-start justify-between"
                 >
                   <div>
-                    <div className="font-medium text-slate-900 dark:text-white flex items-center space-x-1.5">
-                      <span className={`w-1.5 h-1.5 rounded-full ${item.success ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    <div className="font-medium text-[#473C33] dark:text-[#FAF8F1] flex items-center space-x-1.5">
+                      <span className={`w-2 h-2 rounded-full ${item.success ? 'bg-[#ABC270]' : 'bg-[#FDA769]'}`} />
                       <span>{item.title}</span>
                     </div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 pl-3 mt-0.5">{item.subtitle}</div>
+                    <div className="text-[11px] text-[#7A6C5E] dark:text-[#C2B2A1] pl-3.5 mt-0.5">{item.subtitle}</div>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-400 ml-2">{item.time}</span>
+                  <span className="text-[10px] font-mono text-[#87796B] ml-2">{item.time}</span>
                 </div>
               ))}
             </div>
@@ -662,15 +662,15 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
             compact
             feature="Database Sync"
           >
-            <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/[0.08]">
+            <div className="rounded-2xl p-5 bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E6E0D0] dark:border-[#FEC868]/15">
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                  <h3 className="text-sm font-semibold text-[#473C33] dark:text-[#FAF8F1]">
                     SQLite Store Records
                   </h3>
-                  <p className="text-xs text-slate-500">Local persistent tables</p>
+                  <p className="text-xs text-[#7A6C5E]">Local persistent tables</p>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-slate-400">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ABC270]/20 text-[#586738] dark:text-[#ABC270] font-semibold">
                   SQLite
                 </span>
               </div>
@@ -679,30 +679,30 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               <div className="flex items-center gap-1 text-xs">
                 <button
                   onClick={() => setActiveDbTab('tasks')}
-                  className={`flex-1 py-1 rounded-md text-xs font-medium transition cursor-pointer text-center ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
                     activeDbTab === 'tasks'
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold'
-                      : 'bg-slate-100 text-slate-600 dark:bg-white/[0.04] dark:text-slate-400'
+                      ? 'bg-[#ABC270] text-white'
+                      : 'bg-[#FAF8F1] text-[#63574B] dark:bg-[#393028] dark:text-[#C2B2A1]'
                   }`}
                 >
                   Tasks ({tasks.length})
                 </button>
                 <button
                   onClick={() => setActiveDbTab('courses')}
-                  className={`flex-1 py-1 rounded-md text-xs font-medium transition cursor-pointer text-center ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
                     activeDbTab === 'courses'
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold'
-                      : 'bg-slate-100 text-slate-600 dark:bg-white/[0.04] dark:text-slate-400'
+                      ? 'bg-[#ABC270] text-white'
+                      : 'bg-[#FAF8F1] text-[#63574B] dark:bg-[#393028] dark:text-[#C2B2A1]'
                   }`}
                 >
                   Courses ({courses.length})
                 </button>
                 <button
                   onClick={() => setActiveDbTab('progress')}
-                  className={`flex-1 py-1 rounded-md text-xs font-medium transition cursor-pointer text-center ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-center ${
                     activeDbTab === 'progress'
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold'
-                      : 'bg-slate-100 text-slate-600 dark:bg-white/[0.04] dark:text-slate-400'
+                      ? 'bg-[#ABC270] text-white'
+                      : 'bg-[#FAF8F1] text-[#63574B] dark:bg-[#393028] dark:text-[#C2B2A1]'
                   }`}
                 >
                   Pacing ({progressList.length})
@@ -713,28 +713,28 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
               <div className="max-h-72 overflow-y-auto space-y-2 pr-1 text-xs">
                 {activeDbTab === 'tasks' &&
                   (tasks.length === 0 ? (
-                    <div className="py-6 text-center text-slate-400 font-mono">No tasks recorded.</div>
+                    <div className="py-6 text-center text-[#87796B] font-mono">No tasks recorded.</div>
                   ) : (
                     tasks.map((t) => (
                       <div
                         key={t.id}
-                        className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 space-y-1"
+                        className="p-2.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-1"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-medium text-slate-900 dark:text-white truncate">
+                          <span className="font-medium text-[#473C33] dark:text-[#FAF8F1] truncate">
                             {t.title}
                           </span>
                           <span
-                            className={`text-[9px] font-mono px-1.5 py-0.2 rounded uppercase ${
+                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase ${
                               t.status === 'done'
-                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                                : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400'
+                                ? 'bg-[#FDA769] text-white'
+                                : 'bg-[#ABC270] text-white'
                             }`}
                           >
                             {t.status}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-500 flex items-center justify-between">
+                        <div className="text-[11px] text-[#7A6C5E] flex items-center justify-between">
                           <span>{t.course_name}</span>
                           <span>{t.due_date || 'No due date'}</span>
                         </div>
@@ -746,12 +746,12 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   courses.map((c) => (
                     <div
                       key={c.id}
-                      className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10"
+                      className="p-2.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15"
                     >
-                      <div className="font-medium text-slate-900 dark:text-white">
+                      <div className="font-medium text-[#473C33] dark:text-[#FAF8F1]">
                         {c.code || c.name}
                       </div>
-                      <div className="text-[11px] text-slate-500">{c.name}</div>
+                      <div className="text-[11px] text-[#7A6C5E]">{c.name}</div>
                     </div>
                   ))}
 
@@ -759,13 +759,13 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
                   progressList.map((p) => (
                     <div
                       key={p.course_id}
-                      className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/10 space-y-1"
+                      className="p-2.5 rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-1"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-slate-900 dark:text-white">{p.course_name}</span>
-                        <span className="font-mono font-semibold">{p.completed_pct}%</span>
+                        <span className="font-medium text-[#473C33] dark:text-[#FAF8F1]">{p.course_name}</span>
+                        <span className="font-mono font-semibold text-[#586738] dark:text-[#ABC270]">{p.completed_pct}%</span>
                       </div>
-                      <div className="text-[11px] text-slate-500">
+                      <div className="text-[11px] text-[#7A6C5E]">
                         {p.completed_tasks}/{p.total_tasks} tasks • {p.hours_this_week}h logged
                       </div>
                     </div>
@@ -775,24 +775,24 @@ export const TelemetryView: React.FC<TelemetryViewProps> = ({
           </AuthGate>
 
           {/* Cloudflared Tunnel Guide */}
-          <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-3 text-xs">
-            <div className="flex items-center space-x-2 pb-2 border-b border-slate-200 dark:border-white/[0.08]">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+          <div className="rounded-2xl p-5 bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-3 text-xs shadow-xs">
+            <div className="flex items-center space-x-2 pb-2 border-b border-[#E6E0D0] dark:border-[#FEC868]/15">
+              <ShieldCheck className="w-4 h-4 text-[#839758] dark:text-[#ABC270]" />
+              <h3 className="text-sm font-semibold text-[#473C33] dark:text-[#FAF8F1]">
                 Pair Physical Amazon Echo
               </h3>
             </div>
-            <p className="text-slate-600 dark:text-slate-400 leading-normal">
+            <p className="text-[#7A6C5E] dark:text-[#C2B2A1] leading-normal">
               To pair a physical Amazon Echo or mobile phone to your local StudyMate MCP server, create a tunnel:
             </p>
-            <div className="p-2.5 rounded-md bg-slate-900 text-slate-200 font-mono text-[11px] flex items-center justify-between">
+            <div className="p-2.5 rounded-xl bg-[#473C33] text-[#FEC868] font-mono text-[11px] flex items-center justify-between">
               <span className="truncate">./bin/cloudflared.exe tunnel --url http://localhost:3000</span>
               <button
                 onClick={handleCopyTunnel}
-                className="p-1 rounded text-slate-400 hover:text-white shrink-0 ml-2 cursor-pointer"
+                className="p-1 rounded text-white/70 hover:text-white shrink-0 ml-2 cursor-pointer"
                 title="Copy Command"
               >
-                {copiedTunnel ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedTunnel ? <Check className="w-3.5 h-3.5 text-[#ABC270]" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
           </div>

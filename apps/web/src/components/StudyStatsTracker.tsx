@@ -228,7 +228,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                 <h2 className="text-base font-semibold text-foreground tracking-tight">
                   Focus Time & Habit Analytics
                 </h2>
-                <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 uppercase">
+                <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#ABC270] text-white uppercase">
                   Live Sync
                 </span>
               </div>
@@ -281,7 +281,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
           <button
             type="button"
             onClick={() => setShowLogModal(true)}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-background bg-foreground hover:bg-foreground/90 transition shadow-sm flex items-center space-x-1.5 cursor-pointer active:scale-95"
+            className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-[#473C33] bg-[#FEC868] hover:bg-[#F5BC56] transition shadow-sm flex items-center space-x-1.5 cursor-pointer active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Log Time</span>
@@ -330,7 +330,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
               </span>
             )}
           </div>
-          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+          <div className="text-[11px] text-[#839758] dark:text-[#ABC270] font-semibold">
             Target: 2h daily
           </div>
         </div>
@@ -447,7 +447,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                 ? `Monthly Total: ${(liveMonthMinutes / 60).toFixed(1)} hrs`
                 : `Target: 2h daily · ${(liveWeekMinutes / 60).toFixed(1)} hrs this week`}
             </span>
-            <span className="font-medium text-emerald-600 dark:text-emerald-400">
+            <span className="font-semibold text-[#839758] dark:text-[#ABC270]">
               Active Streak: {stats?.streakDays || 0} {(stats?.streakDays || 0) === 1 ? 'Day' : 'Days'}
             </span>
           </div>

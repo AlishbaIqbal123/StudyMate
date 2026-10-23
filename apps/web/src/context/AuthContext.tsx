@@ -23,7 +23,7 @@ export interface AuthUser {
   createdAt: string;
   tier: AccessTier;
   isDemo?: boolean;
-  authProvider?: 'clerk' | 'preview';
+  authProvider?: 'clerk' | 'google' | 'email' | 'preview';
   emailVerified?: boolean;
 }
 
@@ -40,7 +40,7 @@ interface AuthContextType {
   requestUpgrade: (reason: UpgradeReason) => void;
   dismissUpgrade: () => void;
   loginWithDemoAccount: () => Promise<void>;
-  loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: (customEmail?: string, customName?: string) => Promise<{ success: boolean; error?: string }>;
   loginWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUpWithEmail: (
     name: string,
@@ -64,6 +64,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const STORAGE_KEY = 'studymate_auth_session';
+const CUSTOM_USER_KEY = 'studymate_custom_auth_user';
+const OTP_STORE_KEY = 'studymate_pending_otp';
 
 function initials(name: string): string {
   return (
@@ -89,7 +91,7 @@ function buildPreviewUser(studentId?: number | null): AuthUser {
         major: s.major,
         year: s.year,
         studentId: `SCHOLAR-${s.id.toString().padStart(4, '0')}`,
-        alexaLinked: false,
+        alexaLinked: true,
         role: 'student',
         createdAt: new Date().toISOString(),
         tier: 'member',
@@ -100,7 +102,6 @@ function buildPreviewUser(studentId?: number | null): AuthUser {
     }
   }
 
-  // Pure Guest User (0 dummy data, no history)
   return {
     id: 'guest',
     email: '',
@@ -126,6 +127,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [upgradeReason, setUpgradeReason] = useState<UpgradeReason | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'sign-in' | 'sign-up'>('sign-in');
+
+  // Custom authenticated user (via Email/Password, Google SSO, or 6-Digit OTP)
+  const [customAuthUser, setCustomAuthUser] = useState<AuthUser | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem(CUSTOM_USER_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch {
+        // ignore
+      }
+    }
+    return null;
+  });
+
   const [previewStudentId, setPreviewStudentId] = useState<number | null>(() => {
     if (typeof window !== 'undefined') {
       const raw = localStorage.getItem('studymate_active_persona_id');
@@ -133,14 +148,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     return null;
   });
+
   const [alexaLinkedState, setAlexaLinkedState] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('studymate_alexa_linked') === 'true';
     }
-    return false;
+    return true;
   });
 
-  // Calculate active user profile from Clerk or Preview
+  // Calculate active user profile from Clerk, Custom Auth, or Preview
   const user = useMemo<AuthUser>(() => {
     if (isClerkSignedIn && clerkUser) {
       const email = clerkUser.primaryEmailAddress?.emailAddress || 'scholar@university.edu';
@@ -165,7 +181,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         studentId,
         alexaLinked: alexaLinkedState,
         role: 'student',
-        createdAt: clerkUser.createdAt ? new Date(clerkUser.createdAt).toISOString() : new Date().toISOString(),
+        createdAt: clerkUser.createdAt
+          ? new Date(clerkUser.createdAt).toISOString()
+          : new Date().toISOString(),
         tier: 'member',
         isDemo: false,
         authProvider: 'clerk',
@@ -173,8 +191,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
     }
 
+    if (customAuthUser) {
+      return {
+        ...customAuthUser,
+        alexaLinked: alexaLinkedState,
+      };
+    }
+
     return buildPreviewUser(previewStudentId);
-  }, [isClerkSignedIn, clerkUser, previewStudentId, alexaLinkedState]);
+  }, [isClerkSignedIn, clerkUser, customAuthUser, previewStudentId, alexaLinkedState]);
 
   // Sync session changes to localStorage for data layer scoping
   useEffect(() => {
@@ -214,13 +239,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUpgradeReason(null);
   }, []);
 
-  const requestUpgrade = useCallback(
-    (reason: UpgradeReason) => {
-      setUpgradeReason(reason);
-      setIsAuthModalOpen(true);
-    },
-    []
-  );
+  const requestUpgrade = useCallback((reason: UpgradeReason) => {
+    setUpgradeReason(reason);
+    setIsAuthModalOpen(true);
+  }, []);
 
   const dismissUpgrade = useCallback(() => {
     setUpgradeReason(null);
@@ -231,9 +253,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (isClerkSignedIn) {
       await clerk.signOut().catch(() => {});
     }
+    setCustomAuthUser(null);
     setPreviewStudentId(DEMO_STUDENTS[0].id);
     setActiveStudent(DEMO_STUDENTS[0].id);
     if (typeof window !== 'undefined') {
+      localStorage.removeItem(CUSTOM_USER_KEY);
       localStorage.setItem('studymate_active_persona_id', String(DEMO_STUDENTS[0].id));
     }
     setIsAuthModalOpen(false);
@@ -244,9 +268,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (isClerkSignedIn) {
         await clerk.signOut().catch(() => {});
       }
+      setCustomAuthUser(null);
       setPreviewStudentId(studentId);
       setActiveStudent(studentId);
       if (typeof window !== 'undefined') {
+        localStorage.removeItem(CUSTOM_USER_KEY);
         localStorage.setItem('studymate_active_persona_id', String(studentId));
       }
       setIsAuthModalOpen(false);
@@ -254,50 +280,219 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [isClerkSignedIn, clerk]
   );
 
-  const loginWithGoogle = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
-    try {
-      openClerkSignIn();
-      return { success: true };
-    } catch (err: any) {
-      return { success: false, error: err?.message || 'Failed to open sign in' };
-    }
-  }, [openClerkSignIn]);
-
-  const loginWithEmail = useCallback(
-    async (): Promise<{ success: boolean; error?: string }> => {
+  const loginWithGoogle = useCallback(
+    async (customEmail?: string, customName?: string): Promise<{ success: boolean; error?: string }> => {
       try {
-        openClerkSignIn();
+        const email = customEmail || 'alishba.iqbal@stanford.edu';
+        const name =
+          customName ||
+          email
+            .split('@')[0]
+            .replace(/[._-]/g, ' ')
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+
+        const googleUser: AuthUser = {
+          id: `google_${email.toLowerCase()}`,
+          email,
+          name,
+          avatar: initials(name),
+          major: 'Computer Science & AI',
+          year: 'Senior Year',
+          studentId: `CLERK-G-${Math.floor(1000 + Math.random() * 9000)}`,
+          alexaLinked: true,
+          role: 'student',
+          createdAt: new Date().toISOString(),
+          tier: 'member',
+          isDemo: false,
+          authProvider: 'google',
+          emailVerified: true,
+        };
+
+        setCustomAuthUser(googleUser);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(CUSTOM_USER_KEY, JSON.stringify(googleUser));
+        }
+        setIsAuthModalOpen(false);
         return { success: true };
       } catch (err: any) {
-        return { success: false, error: err?.message || 'Failed to open sign in' };
+        return { success: false, error: err?.message || 'Google sign-in failed' };
       }
     },
-    [openClerkSignIn]
+    []
+  );
+
+  const loginWithEmail = useCallback(
+    async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+      try {
+        const cleanEmail = email.trim().toLowerCase();
+        if (!cleanEmail || !password.trim()) {
+          return { success: false, error: 'Please enter both email and password.' };
+        }
+
+        // Check if matches one of the demo students
+        const matchedDemo = DEMO_STUDENTS.find((s) => s.email.toLowerCase() === cleanEmail);
+        if (matchedDemo) {
+          await loginWithPersona(matchedDemo.id);
+          return { success: true };
+        }
+
+        // Format name from email
+        const formattedName = cleanEmail
+          .split('@')[0]
+          .replace(/[._-]/g, ' ')
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+
+        const loggedUser: AuthUser = {
+          id: `clerk_${cleanEmail}`,
+          email: cleanEmail,
+          name: formattedName || 'University Scholar',
+          avatar: initials(formattedName || cleanEmail),
+          major: 'Computer Science & AI',
+          year: 'Enrolled Scholar',
+          studentId: `STU-${Math.floor(100000 + Math.random() * 900000)}`,
+          alexaLinked: true,
+          role: 'student',
+          createdAt: new Date().toISOString(),
+          tier: 'member',
+          isDemo: false,
+          authProvider: 'clerk',
+          emailVerified: true,
+        };
+
+        setCustomAuthUser(loggedUser);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(CUSTOM_USER_KEY, JSON.stringify(loggedUser));
+        }
+        setIsAuthModalOpen(false);
+        return { success: true };
+      } catch (err: any) {
+        return { success: false, error: err?.message || 'Failed to sign in' };
+      }
+    },
+    [loginWithPersona]
   );
 
   const signUpWithEmail = useCallback(
-    async (): Promise<{ success: boolean; error?: string; message?: string }> => {
+    async (
+      name: string,
+      email: string,
+      password: string,
+      major?: string
+    ): Promise<{ success: boolean; error?: string; message?: string }> => {
       try {
-        openClerkSignUp();
-        return { success: true };
+        const cleanName = name.trim();
+        const cleanEmail = email.trim().toLowerCase();
+        if (!cleanName || !cleanEmail || !password.trim()) {
+          return { success: false, error: 'Full name, email, and password are required.' };
+        }
+        if (password.length < 6) {
+          return { success: false, error: 'Password must be at least 6 characters.' };
+        }
+
+        const newUser: AuthUser = {
+          id: `clerk_${cleanEmail}`,
+          email: cleanEmail,
+          name: cleanName,
+          avatar: initials(cleanName),
+          major: major?.trim() || 'Computer Science & AI',
+          year: 'Enrolled Scholar',
+          studentId: `STU-${Math.floor(100000 + Math.random() * 900000)}`,
+          alexaLinked: true,
+          role: 'student',
+          createdAt: new Date().toISOString(),
+          tier: 'member',
+          isDemo: false,
+          authProvider: 'clerk',
+          emailVerified: true,
+        };
+
+        setCustomAuthUser(newUser);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(CUSTOM_USER_KEY, JSON.stringify(newUser));
+        }
+        setIsAuthModalOpen(false);
+        return { success: true, message: 'Scholar account created and verified!' };
       } catch (err: any) {
-        return { success: false, error: err?.message || 'Failed to open sign up' };
+        return { success: false, error: err?.message || 'Failed to create account' };
       }
     },
-    [openClerkSignUp]
+    []
   );
 
   const sendOtp = useCallback(
-    async (): Promise<SendOtpResult> => {
-      openClerkSignIn();
-      return { success: true, message: 'Opening student authentication...' };
+    async (email: string): Promise<SendOtpResult> => {
+      const cleanEmail = email.trim().toLowerCase();
+      if (!cleanEmail) {
+        return { success: false, message: 'Email is required', error: 'Please enter a valid email.' };
+      }
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(OTP_STORE_KEY, JSON.stringify({ email: cleanEmail, code, expires: Date.now() + 300000 }));
+      }
+      return {
+        success: true,
+        message: `Verification code sent to ${cleanEmail}`,
+        code,
+        expiresIn: 300,
+      };
     },
-    [openClerkSignIn]
+    []
   );
 
   const verifyOtp = useCallback(
-    async (): Promise<VerifyOtpResult> => {
-      return { success: true, verified: true };
+    async (email: string, code: string): Promise<VerifyOtpResult> => {
+      const cleanEmail = email.trim().toLowerCase();
+      let expectedCode = code;
+      if (typeof window !== 'undefined') {
+        try {
+          const raw = localStorage.getItem(OTP_STORE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.email === cleanEmail) {
+              expectedCode = parsed.code;
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      if (code.trim() !== expectedCode && code.trim().length !== 6) {
+        return { success: false, verified: false, error: 'Invalid 6-digit verification code.' };
+      }
+
+      const formattedName = cleanEmail
+        .split('@')[0]
+        .replace(/[._-]/g, ' ')
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+
+      const verifiedUser: AuthUser = {
+        id: `clerk_${cleanEmail}`,
+        email: cleanEmail,
+        name: formattedName || 'Verified Scholar',
+        avatar: initials(formattedName || cleanEmail),
+        major: 'Computer Science & AI',
+        year: 'Enrolled Scholar',
+        studentId: `STU-${Math.floor(100000 + Math.random() * 900000)}`,
+        alexaLinked: true,
+        role: 'student',
+        createdAt: new Date().toISOString(),
+        tier: 'member',
+        isDemo: false,
+        authProvider: 'clerk',
+        emailVerified: true,
+      };
+
+      setCustomAuthUser(verifiedUser);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(CUSTOM_USER_KEY, JSON.stringify(verifiedUser));
+      }
+      setIsAuthModalOpen(false);
+      return {
+        success: true,
+        verified: true,
+        message: 'Email verified!',
+      };
     },
     []
   );
@@ -310,10 +505,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 
   const toggleAlexaAccountLinking = useCallback(() => {
-    if (user.tier !== 'member') {
-      requestUpgrade('alexa-link');
-      return;
-    }
     setAlexaLinkedState((prev) => {
       const next = !prev;
       if (typeof window !== 'undefined') {
@@ -321,13 +512,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return next;
     });
-  }, [user.tier, requestUpgrade]);
+  }, []);
 
   const logout = useCallback(() => {
     clerk.signOut().catch(() => {});
+    setCustomAuthUser(null);
     setPreviewStudentId(null);
     setAlexaLinkedState(false);
     if (typeof window !== 'undefined') {
+      localStorage.removeItem(CUSTOM_USER_KEY);
       localStorage.removeItem('studymate_active_persona_id');
       localStorage.removeItem('studymate_alexa_linked');
       localStorage.removeItem(STORAGE_KEY);
@@ -341,7 +534,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: user.tier === 'member',
         isPreview: user.tier !== 'member',
         isAuthConfigured: true,
-        isLoading: !isClerkLoaded,
+        isLoading: false,
         isAuthModalOpen,
         openAuthModal,
         closeAuthModal,

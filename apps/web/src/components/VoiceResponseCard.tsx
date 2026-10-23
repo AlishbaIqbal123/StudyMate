@@ -194,8 +194,8 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE B: Timer Started Confirmation Card */}
       {isTimerStarted && (
-        <div className="rounded-lg p-3 bg-emerald-500/10 border border-emerald-500/20 text-foreground space-y-1.5">
-          <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
+        <div className="rounded-lg p-3 bg-[#ABC270]/15 border border-[#ABC270]/35 text-foreground space-y-1.5">
+          <div className="flex items-center space-x-1.5 text-[#839758] dark:text-[#ABC270] font-semibold text-xs">
             <CheckCircle2 className="w-4 h-4" />
             <span>Focus Timer Started</span>
           </div>
@@ -268,7 +268,7 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
                   <div className="flex items-center space-x-2 shrink-0">
                     {task.priority === 'high' && (
-                      <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 font-mono text-[9px] font-medium uppercase">
+                      <span className="px-1.5 py-0.5 rounded-full bg-[#FDA769] text-[#473C33] font-mono text-[9px] font-bold uppercase">
                         High
                       </span>
                     )}
@@ -319,7 +319,7 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
               <h5 className="font-semibold text-xs text-foreground">
                 {(result.data as any).topTask?.title || 'Review course material'}
               </h5>
-              <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-[10px] font-mono font-medium uppercase">
+              <span className="px-1.5 py-0.5 rounded-full bg-[#FDA769] text-[#473C33] text-[10px] font-mono font-bold uppercase">
                 High Priority
               </span>
             </div>

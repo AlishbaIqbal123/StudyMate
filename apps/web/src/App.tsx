@@ -182,7 +182,7 @@ export function App() {
 
   // 2. Inner App Views (Dashboard, Assignments, Planner, Voice, Telemetry)
   return (
-    <div className="min-h-screen bg-[#F8F9FA] dark:bg-[#090B10] text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-slate-200 dark:selection:bg-slate-800 relative transition-colors duration-200">
+    <div className="min-h-screen bg-[#FAF8F1] dark:bg-[#231D19] text-[#473C33] dark:text-[#FAF8F1] font-sans antialiased selection:bg-[#FEC868]/40 dark:selection:bg-[#ABC270]/30 relative transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar
         activeScreen={activeScreen}

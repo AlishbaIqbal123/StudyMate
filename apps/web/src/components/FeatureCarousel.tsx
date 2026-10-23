@@ -100,14 +100,14 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
       theme: 'blue',
       onAction: onOpenVoice,
       renderPreview: () => (
-        <div className="rounded-xl bg-slate-900/90 dark:bg-black/80 border border-white/10 p-4 space-y-3 shadow-inner">
-          <div className="flex items-center justify-between text-[11px] text-white/50 font-mono">
+        <div className="rounded-xl bg-[#2E2620] border border-[#5C4E43] p-4 space-y-3 shadow-inner">
+          <div className="flex items-center justify-between text-[11px] text-[#B0A494] font-mono">
             <span>Query Transcript</span>
-            <span className="text-blue-400">00:01:24</span>
+            <span className="text-[#FEC868]">00:01:24</span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-blue-500/15 border border-blue-500/25 text-white text-xs">
-            <span className="text-[10px] text-blue-300 font-mono block">Student:</span>
+          <div className="p-2.5 rounded-lg bg-[#ABC270]/15 border border-[#ABC270]/30 text-[#FAF8F1] text-xs">
+            <span className="text-[10px] text-[#ABC270] font-mono block font-semibold">Student:</span>
             "What should I focus on for my Operating Systems lab tonight?"
           </div>
 
@@ -116,7 +116,7 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
             {[40, 70, 30, 90, 60, 100, 45, 80, 55, 95, 35, 65].map((h, i) => (
               <span
                 key={i}
-                className="w-1 bg-blue-500/80 rounded-full animate-pulse"
+                className="w-1 bg-[#FDA769] rounded-full animate-pulse"
                 style={{
                   height: `${h}%`,
                   animationDelay: `${i * 0.08}s`,
@@ -126,8 +126,8 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
             ))}
           </div>
 
-          <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-white/90 text-xs font-sans">
-            <span className="text-[10px] text-emerald-400 font-mono block">StudyMate Response:</span>
+          <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-[#FAF8F1] text-xs font-sans">
+            <span className="text-[10px] text-[#FEC868] font-mono block font-semibold">StudyMate Response:</span>
             Schedule a 45m block on Virtual Memory Paging. Due in 48 hours.
           </div>
         </div>
@@ -143,30 +143,30 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
       theme: 'indigo',
       onAction: onOpenPlanner,
       renderPreview: () => (
-        <div className="rounded-xl bg-slate-900/90 dark:bg-black/80 border border-white/10 p-4 space-y-4 shadow-inner text-center">
-          <div className="flex items-center justify-between text-[11px] text-white/50 font-mono">
+        <div className="rounded-xl bg-[#2E2620] border border-[#5C4E43] p-4 space-y-4 shadow-inner text-center">
+          <div className="flex items-center justify-between text-[11px] text-[#B0A494] font-mono">
             <span>Interval Timer</span>
-            <span className="text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            <span className="text-[#ABC270] flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ABC270] animate-ping" />
               Active
             </span>
           </div>
 
           <div className="py-1">
-            <div className="font-mono text-4xl font-bold tracking-widest text-white tabular-nums">
+            <div className="font-mono text-4xl font-bold tracking-widest text-[#FAF8F1] tabular-nums">
               24:45
             </div>
-            <span className="text-[10px] font-mono uppercase text-white/50 mt-1 block">
+            <span className="text-[10px] font-mono uppercase text-[#B0A494] mt-1 block">
               Deep Work • CS 420 Distributed Systems
             </span>
           </div>
 
-          <div className="p-2 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between text-xs text-white">
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between text-xs text-[#FAF8F1]">
             <div className="flex items-center space-x-2">
-              <Volume2 className="w-4 h-4 text-cyan-400" />
+              <Volume2 className="w-4 h-4 text-[#FEC868]" />
               <span className="text-[11px]">Brown Noise Synthesizer</span>
             </div>
-            <span className="text-[10px] font-mono text-emerald-400">Playing</span>
+            <span className="text-[10px] font-mono text-[#ABC270]">Playing</span>
           </div>
 
           <div className="flex justify-center gap-1.5">
@@ -175,8 +175,8 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
                 key={m}
                 className={`px-3 py-1 rounded text-[11px] font-mono ${
                   i === 0
-                    ? 'bg-blue-600 text-white font-semibold'
-                    : 'bg-white/10 text-white/60'
+                    ? 'bg-[#ABC270] text-[#473C33] font-bold'
+                    : 'bg-white/10 text-[#FAF8F1]/60'
                 }`}
               >
                 {m}
@@ -196,21 +196,21 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
       theme: 'emerald',
       onAction: onOpenAssignments,
       renderPreview: () => (
-        <div className="rounded-xl bg-slate-900/90 dark:bg-black/80 border border-white/10 p-3.5 space-y-3 shadow-inner">
-          <div className="flex items-center justify-between text-[11px] text-white/50 font-mono">
+        <div className="rounded-xl bg-[#2E2620] border border-[#5C4E43] p-3.5 space-y-3 shadow-inner">
+          <div className="flex items-center justify-between text-[11px] text-[#B0A494] font-mono">
             <span>Kanban Pipeline</span>
-            <span className="text-emerald-400">4 Active</span>
+            <span className="text-[#ABC270]">4 Active</span>
           </div>
 
           <div className="space-y-2">
             <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-xs space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-white">Distributed Consensus Lab</span>
-                <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                <span className="font-semibold text-[#FAF8F1]">Distributed Consensus Lab</span>
+                <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-[#FDA769] text-[#473C33] font-bold">
                   High
                 </span>
               </div>
-              <div className="flex items-center justify-between text-[10px] text-white/50 font-mono">
+              <div className="flex items-center justify-between text-[10px] text-[#B0A494] font-mono">
                 <span>CS 420</span>
                 <span>Due in 2 days</span>
               </div>
@@ -218,23 +218,23 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
 
             <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-xs space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-white">Real Analysis Problem Set 4</span>
-                <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="font-semibold text-[#FAF8F1]">Real Analysis Problem Set 4</span>
+                <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-[#FEC868] text-[#473C33] font-bold">
                   Med
                 </span>
               </div>
-              <div className="flex items-center justify-between text-[10px] text-white/50 font-mono">
+              <div className="flex items-center justify-between text-[10px] text-[#B0A494] font-mono">
                 <span>MATH 312</span>
                 <span>Due Friday</span>
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs flex items-center justify-between text-emerald-300">
+            <div className="p-2 rounded-lg bg-[#ABC270]/20 border border-[#ABC270]/30 text-xs flex items-center justify-between text-[#ABC270]">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Compiler Optimization Quiz</span>
               </span>
-              <span className="font-mono text-[10px]">Done</span>
+              <span className="font-mono text-[10px] font-bold">Done</span>
             </div>
           </div>
         </div>
@@ -250,50 +250,50 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
       theme: 'amber',
       onAction: onOpenDashboard,
       renderPreview: () => (
-        <div className="rounded-xl bg-slate-900/90 dark:bg-black/80 border border-white/10 p-4 space-y-3.5 shadow-inner">
-          <div className="flex items-center justify-between text-[11px] text-white/50 font-mono">
+        <div className="rounded-xl bg-[#2E2620] border border-[#5C4E43] p-4 space-y-3.5 shadow-inner">
+          <div className="flex items-center justify-between text-[11px] text-[#B0A494] font-mono">
             <span>Weekly Velocity</span>
-            <span className="text-amber-400 flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-[#FEC868] flex items-center gap-1">
+              <Flame className="w-3.5 h-3.5 text-[#FDA769]" />
               7 Day Streak
             </span>
           </div>
 
           <div className="space-y-2">
             <div>
-              <div className="flex justify-between text-xs text-white mb-1">
+              <div className="flex justify-between text-xs text-[#FAF8F1] mb-1">
                 <span>Algorithms & Complexity</span>
-                <span className="font-mono text-cyan-400">84%</span>
+                <span className="font-mono text-[#ABC270]">84%</span>
               </div>
               <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-full w-[84%]" />
+                <div className="bg-[#ABC270] h-full w-[84%]" />
               </div>
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-white mb-1">
+              <div className="flex justify-between text-xs text-[#FAF8F1] mb-1">
                 <span>Operating Systems</span>
-                <span className="font-mono text-cyan-400">68%</span>
+                <span className="font-mono text-[#FEC868]">68%</span>
               </div>
               <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-500 to-indigo-400 h-full w-[68%]" />
+                <div className="bg-[#FEC868] h-full w-[68%]" />
               </div>
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-white mb-1">
+              <div className="flex justify-between text-xs text-[#FAF8F1] mb-1">
                 <span>Linear Algebra</span>
-                <span className="font-mono text-cyan-400">92%</span>
+                <span className="font-mono text-[#FDA769]">92%</span>
               </div>
               <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full w-[92%]" />
+                <div className="bg-[#FDA769] h-full w-[92%]" />
               </div>
             </div>
           </div>
 
-          <div className="p-2 rounded-lg bg-white/5 border border-white/10 flex justify-between text-[11px] text-white/60 font-mono">
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 flex justify-between text-[11px] text-[#B0A494] font-mono">
             <span>Total Study: 14.5 hrs</span>
-            <span className="text-emerald-400">+2.5 hrs vs last wk</span>
+            <span className="text-[#ABC270]">+2.5 hrs vs last wk</span>
           </div>
         </div>
       ),
@@ -308,16 +308,16 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
       theme: 'cyan',
       onAction: onOpenTelemetry,
       renderPreview: () => (
-        <div className="rounded-xl bg-slate-900/90 dark:bg-black/80 border border-white/10 p-3.5 space-y-2.5 shadow-inner font-mono text-[11px]">
-          <div className="flex items-center justify-between text-[10px] text-white/50 border-b border-white/10 pb-1.5">
-            <span className="flex items-center gap-1.5 text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <div className="rounded-xl bg-[#2E2620] border border-[#5C4E43] p-3.5 space-y-2.5 shadow-inner font-mono text-[11px]">
+          <div className="flex items-center justify-between text-[10px] text-[#B0A494] border-b border-white/10 pb-1.5">
+            <span className="flex items-center gap-1.5 text-[#ABC270]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ABC270]" />
               POST /mcp
             </span>
             <span>200 OK • 0.4ms</span>
           </div>
 
-          <pre className="text-emerald-400 text-[10px] leading-tight overflow-x-auto p-2 rounded bg-black/60 border border-white/5">
+          <pre className="text-[#FEC868] text-[10px] leading-tight overflow-x-auto p-2 rounded bg-[#231D19] border border-white/5">
 {`{
   "jsonrpc": "2.0",
   "method": "tools/call",
@@ -330,9 +330,9 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
 }`}
           </pre>
 
-          <div className="flex items-center justify-between text-[10px] text-white/60 pt-1">
+          <div className="flex items-center justify-between text-[10px] text-[#B0A494] pt-1">
             <span>DB: SQLite Local</span>
-            <span className="text-cyan-300 font-semibold">Zero Cloud Dependency</span>
+            <span className="text-[#FDA769] font-semibold">Zero Cloud Dependency</span>
           </div>
         </div>
       ),
@@ -355,32 +355,32 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
               key={card.id}
               whileHover={{ y: -6 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="min-w-[310px] sm:min-w-[350px] max-w-[360px] rounded-3xl bg-slate-950 text-white border border-white/10 hover:border-blue-500/40 p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group snap-start transition-all"
+              className="min-w-[310px] sm:min-w-[350px] max-w-[360px] rounded-3xl bg-[#473C33] text-[#FAF8F1] border border-[#5C4E43] hover:border-[#ABC270] p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group snap-start transition-all"
             >
               {/* Card Ambient Highlight Glow */}
-              <div className="absolute top-0 right-0 w-44 h-44 bg-blue-600/10 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-600/20 transition-all duration-500" />
+              <div className="absolute top-0 right-0 w-44 h-44 bg-[#ABC270]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#ABC270]/20 transition-all duration-500" />
 
               {/* Card Top: Header & Badge */}
               <div className="relative z-10 space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-white">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-[#FEC868]">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="font-mono text-[10px] font-semibold text-white/60 uppercase tracking-wider">
+                    <span className="font-mono text-[10px] font-semibold text-[#D6CEBF] uppercase tracking-wider">
                       {card.category}
                     </span>
                   </div>
 
-                  <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                  <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#ABC270]/20 text-[#ABC270] border border-[#ABC270]/35 font-semibold">
                     {card.badge}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-white tracking-tight pt-1">
+                <h3 className="text-lg font-semibold text-[#FAF8F1] tracking-tight pt-1">
                   {card.title}
                 </h3>
-                <p className="text-xs text-white/60 leading-relaxed">
+                <p className="text-xs text-[#D6CEBF] leading-relaxed">
                   {card.subtitle}
                 </p>
               </div>
@@ -392,14 +392,14 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
 
               {/* Card Bottom: Circular Action Button */}
               <div className="relative z-10 pt-2 flex items-center justify-between border-t border-white/10">
-                <span className="text-[11px] font-mono text-white/40">
+                <span className="text-[11px] font-mono text-[#B0A494]">
                   Feature 0{idx + 1}
                 </span>
 
                 <button
                   type="button"
                   onClick={card.onAction || onOpenDashboard}
-                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition shadow-lg group-hover:scale-110 active:scale-95 cursor-pointer"
+                  className="w-10 h-10 rounded-full bg-[#FEC868] hover:bg-[#F5BC56] text-[#473C33] flex items-center justify-center transition shadow-lg group-hover:scale-110 active:scale-95 cursor-pointer"
                   title={`Open ${card.title}`}
                 >
                   <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -421,8 +421,8 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
               onClick={() => scrollToCard(idx)}
               className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 activeIndex === idx
-                  ? 'w-6 bg-blue-600'
-                  : 'w-2 bg-slate-300 dark:bg-white/20 hover:bg-slate-400 dark:hover:bg-white/40'
+                  ? 'w-6 bg-[#ABC270]'
+                  : 'w-2 bg-[#D6CEBF] dark:bg-white/20 hover:bg-[#839758]'
               }`}
               aria-label={`Go to slide ${idx + 1}`}
             />
@@ -435,7 +435,7 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
             type="button"
             onClick={() => scrollBy(-360)}
             disabled={!canScrollLeft}
-            className="w-9 h-9 rounded-full bg-white dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/20 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed shadow-xs cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white dark:bg-[#2E2620] hover:bg-[#FAF8F1] dark:hover:bg-[#3A3028] text-[#473C33] dark:text-[#FAF8F1] border border-[#E6E0D0] dark:border-[#473C33] flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed shadow-xs cursor-pointer"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -444,7 +444,7 @@ export const FeatureCarousel: React.FC<FeatureCarouselProps> = ({
             type="button"
             onClick={() => scrollBy(360)}
             disabled={!canScrollRight}
-            className="w-9 h-9 rounded-full bg-white dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/20 text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed shadow-xs cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white dark:bg-[#2E2620] hover:bg-[#FAF8F1] dark:hover:bg-[#3A3028] text-[#473C33] dark:text-[#FAF8F1] border border-[#E6E0D0] dark:border-[#473C33] flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed shadow-xs cursor-pointer"
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4" />

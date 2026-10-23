@@ -17,6 +17,21 @@ export default {
         mono: ["'Geist Mono'", '"JetBrains Mono"', 'monospace'],
       },
       colors: {
+        background: 'var(--background-50)',
+        foreground: 'var(--text-900)',
+        card: {
+          DEFAULT: 'var(--card-bg)',
+          foreground: 'var(--text-900)',
+        },
+        muted: {
+          DEFAULT: 'var(--card-subtle)',
+          foreground: 'var(--text-400)',
+        },
+        border: 'var(--card-border)',
+        primary: {
+          DEFAULT: 'var(--primary-500)',
+          foreground: '#ffffff',
+        },
         // Semantic Application Tokens linked to user variables
         app: {
           bg: 'var(--background-50)',

@@ -53,8 +53,8 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
       role: 'Cognitive Science & Pre-Law',
       actionText: 'Launch Focus Timer',
       icon: Clock,
-      bgGradient: 'from-blue-900/90 via-slate-900/95 to-[#090B10]',
-      badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      bgGradient: 'from-[#839758]/80 via-[#473C33]/95 to-[#2E2620]',
+      badgeColor: 'bg-[#ABC270]/25 text-[#ABC270] border-[#ABC270]/40',
       miniStats: { label: 'Session Length', value: '45m Sprint' },
       onAction: onOpenPlanner,
     },
@@ -68,8 +68,8 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
       role: 'Computer Systems Engineering',
       actionText: 'Try Voice Console',
       icon: Mic,
-      bgGradient: 'from-indigo-900/90 via-slate-900/95 to-[#090B10]',
-      badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+      bgGradient: 'from-[#FDA769]/40 via-[#473C33]/95 to-[#2E2620]',
+      badgeColor: 'bg-[#FDA769]/25 text-[#FDA769] border-[#FDA769]/40',
       miniStats: { label: 'Latency', value: '85ms Local' },
       onAction: onOpenVoice,
     },
@@ -83,8 +83,8 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
       role: 'Applied Mathematics & Statistics',
       actionText: 'Open Coursework Board',
       icon: BookOpen,
-      bgGradient: 'from-emerald-950/90 via-slate-900/95 to-[#090B10]',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      bgGradient: 'from-[#FEC868]/35 via-[#473C33]/95 to-[#2E2620]',
+      badgeColor: 'bg-[#FEC868]/25 text-[#FEC868] border-[#FEC868]/40',
       miniStats: { label: 'Tracked Pace', value: '94% On-Time' },
       onAction: onOpenAssignments,
     },
@@ -98,8 +98,8 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
       role: 'Cybersecurity & Networks',
       actionText: 'Inspect Protocol',
       icon: Cpu,
-      bgGradient: 'from-cyan-950/90 via-slate-900/95 to-[#090B10]',
-      badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+      bgGradient: 'from-[#ABC270]/50 via-[#473C33]/95 to-[#2E2620]',
+      badgeColor: 'bg-[#ABC270]/25 text-[#ABC270] border-[#ABC270]/40',
       miniStats: { label: 'Data Privacy', value: '100% Local DB' },
       onAction: onOpenDashboard,
     },
@@ -124,21 +124,21 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
               onClick={() => setActiveIndex(index)}
               className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 border ${
                 isActive
-                  ? 'lg:flex-[4] flex-1 border-white/20 shadow-2xl bg-slate-900'
-                  : 'lg:flex-1 flex-none h-20 lg:h-full border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 bg-slate-100 dark:bg-white/[0.04]'
+                  ? 'lg:flex-[4] flex-1 border-[#839758]/40 shadow-2xl bg-[#473C33]'
+                  : 'lg:flex-1 flex-none h-20 lg:h-full border-[#E6E0D0] dark:border-[#473C33] hover:border-[#ABC270] bg-white dark:bg-[#2E2620]'
               }`}
             >
               {/* Collapsed Strip View (Desktop) */}
               {!isActive && (
                 <div className="h-full w-full p-4 flex lg:flex-col items-center justify-between transition-opacity duration-300">
-                  <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-white/10 border border-slate-300 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-white shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-[#FAF8F1] dark:bg-[#3A3028] border border-[#E6E0D0] dark:border-[#5C4E43] flex items-center justify-center text-[#473C33] dark:text-[#FAF8F1] shrink-0">
                     <Icon className="w-4 h-4" />
                   </div>
 
                   {/* Vertical rotated text label on desktop */}
                   <div className="hidden lg:flex items-center justify-center flex-1 py-6">
                     <span
-                      className="font-mono text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-white/60 whitespace-nowrap"
+                      className="font-mono text-xs font-semibold uppercase tracking-widest text-[#786B5E] dark:text-[#B0A494] whitespace-nowrap"
                       style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
                     >
                       {item.category}
@@ -147,15 +147,15 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
 
                   {/* Horizontal text label on mobile/tablet */}
                   <div className="lg:hidden flex-1 px-3 text-left">
-                    <span className="font-semibold text-xs text-slate-900 dark:text-white block">
+                    <span className="font-semibold text-xs text-[#473C33] dark:text-[#FAF8F1] block">
                       {item.category}
                     </span>
-                    <span className="text-[11px] text-slate-500 dark:text-white/50 truncate block">
+                    <span className="text-[11px] text-[#786B5E] dark:text-[#B0A494] truncate block">
                       {item.title}
                     </span>
                   </div>
 
-                  <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-white/10 flex items-center justify-center text-slate-500 dark:text-white/60 shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-[#FAF8F1] dark:bg-[#3A3028] flex items-center justify-center text-[#786B5E] dark:text-[#B0A494] shrink-0">
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -163,10 +163,10 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
 
               {/* Expanded Card View */}
               {isActive && (
-                <div className="relative h-full w-full p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-[#0A0D14] text-white">
+                <div className="relative h-full w-full p-6 sm:p-8 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#473C33] via-[#3A3028] to-[#231D19] text-[#FAF8F1]">
                   {/* Subtle Background Accent & Vignette */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.bgGradient} opacity-60 pointer-events-none`} />
-                  <div className="absolute inset-0 bg-radial-at-c from-transparent via-black/40 to-black/80 pointer-events-none" />
+                  <div className="absolute inset-0 bg-radial-at-c from-transparent via-black/20 to-black/50 pointer-events-none" />
 
                   {/* Card Header */}
                   <div className="relative z-10 flex items-start justify-between gap-4">
@@ -175,30 +175,30 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
                         <span className={`font-mono text-[10px] font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wider ${item.badgeColor}`}>
                           {item.category}
                         </span>
-                        <span className="font-mono text-[10px] text-white/50 px-2 py-0.5 rounded bg-white/10 border border-white/10">
+                        <span className="font-mono text-[10px] text-[#FAF8F1]/70 px-2 py-0.5 rounded bg-white/10 border border-white/15">
                           {item.miniStats.label}: {item.miniStats.value}
                         </span>
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-white leading-tight max-w-xl">
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-[#FAF8F1] leading-tight max-w-xl">
                         {item.title}
                       </h3>
                     </div>
 
-                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white shrink-0 shadow-lg">
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-[#FEC868] shrink-0 shadow-lg">
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>
 
                   {/* Card Center: Authentic Quote & Mini Preview */}
                   <div className="relative z-10 py-4 my-auto max-w-2xl">
-                    <blockquote className="text-sm sm:text-base text-slate-200/90 leading-relaxed font-light italic border-l-2 border-white/30 pl-4 py-1">
+                    <blockquote className="text-sm sm:text-base text-[#FAF8F1]/90 leading-relaxed font-light italic border-l-2 border-[#ABC270] pl-4 py-1">
                       "{item.quote}"
                     </blockquote>
                     <div className="mt-3 pl-4 flex items-center space-x-2 text-xs">
-                      <span className="font-semibold text-white">{item.author}</span>
-                      <span className="text-white/40">•</span>
-                      <span className="text-white/60 font-mono">{item.role}</span>
+                      <span className="font-semibold text-[#FAF8F1]">{item.author}</span>
+                      <span className="text-[#FAF8F1]/40">•</span>
+                      <span className="text-[#D6CEBF] font-mono">{item.role}</span>
                     </div>
                   </div>
 
@@ -211,15 +211,15 @@ export const WorkflowAccordion: React.FC<WorkflowAccordionProps> = ({
                         if (item.onAction) item.onAction();
                         else if (onOpenDashboard) onOpenDashboard();
                       }}
-                      className="px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center space-x-2 transition cursor-pointer shadow-lg active:scale-95 group"
+                      className="px-5 py-2.5 rounded-full bg-[#FEC868] hover:bg-[#F5BC56] text-[#473C33] font-bold text-xs flex items-center space-x-2 transition cursor-pointer shadow-lg active:scale-95 group"
                     >
                       <span>{item.actionText}</span>
-                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                        <ArrowUpRight className="w-3 h-3 text-white" />
+                      <div className="w-5 h-5 rounded-full bg-[#473C33]/15 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                        <ArrowUpRight className="w-3 h-3 text-[#473C33]" />
                       </div>
                     </button>
 
-                    <div className="flex items-center space-x-1.5 text-xs text-white/50 font-mono">
+                    <div className="flex items-center space-x-1.5 text-xs text-[#FAF8F1]/60 font-mono">
                       <span>0{index + 1}</span>
                       <span>/</span>
                       <span>0{workflows.length}</span>
