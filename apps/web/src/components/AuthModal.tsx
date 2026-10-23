@@ -3,10 +3,6 @@ import {
   X,
   ShieldCheck,
   GraduationCap,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Lock,
 } from 'lucide-react';
 import { SignIn, SignUp } from '@clerk/react';
 import { useAuth } from '../context/AuthContext.js';
@@ -18,7 +14,6 @@ export const AuthModal: React.FC = () => {
     upgradeReason,
     authModalMode,
     setAuthModalMode,
-    isClerkLoaded,
     loginWithDemoAccount,
   } = useAuth();
 
@@ -30,50 +25,46 @@ export const AuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-[#0E121E] border border-white/[0.12] rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] p-6 sm:p-7 overflow-hidden max-h-[92vh] overflow-y-auto">
-        {/* Ambient violet-indigo glow mesh */}
-        <div className="absolute -top-24 -right-24 w-60 h-60 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md bg-card border border-border rounded-xl shadow-2xl p-6 overflow-hidden max-h-[92vh] overflow-y-auto">
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/[0.08] transition cursor-pointer z-10"
+          className="absolute top-4 right-4 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition cursor-pointer z-10"
           aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Header */}
-        <div className="text-center mb-6 relative z-10">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/25 mb-3 shadow-sm">
-            <GraduationCap className="w-6 h-6" />
+        <div className="text-center mb-5 relative z-10">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted text-foreground border border-border mb-3">
+            <GraduationCap className="w-5 h-5" />
           </div>
-          <h2 className="text-xl font-sans font-bold text-white tracking-tight">
+          <h2 className="text-base font-semibold text-foreground tracking-tight">
             {upgradeReason === 'task-limit'
               ? 'Preview Quota Reached'
               : upgradeReason === 'alexa-link'
-              ? 'Pair Alexa+ Hardware'
-              : 'StudyMate Student Access'}
+              ? 'Pair Alexa Device'
+              : 'Sign in to StudyMate'}
           </h2>
-          <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto leading-relaxed">
+          <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto leading-relaxed">
             {upgradeReason === 'task-limit'
-              ? 'You have used all 5 tasks in the Academic Preview Pass. Sign in to unlock unlimited coursework.'
+              ? 'You have reached the preview task limit. Sign in to sync unlimited coursework.'
               : upgradeReason === 'alexa-link'
-              ? 'Pair physical Amazon Echo devices with end-to-end encrypted student authentication.'
-              : 'Sign in with your student account to sync deadlines, unlock pacing analytics, and save focus logs.'}
+              ? 'Authenticate to link voice study habits with your account.'
+              : 'Sign in to sync your deadlines, study sessions, and course progress.'}
           </p>
 
           {/* Mode Switcher Tabs */}
-          <div className="inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 text-xs mt-4">
+          <div className="inline-flex items-center p-1 rounded-lg bg-muted border border-border text-xs mt-4">
             <button
               type="button"
               onClick={() => setAuthModalMode('sign-in')}
-              className={`px-4 py-1.5 rounded-full transition font-semibold cursor-pointer ${
+              className={`px-3 py-1 rounded-md transition font-medium cursor-pointer ${
                 authModalMode === 'sign-in'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Sign In
@@ -81,10 +72,10 @@ export const AuthModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setAuthModalMode('sign-up')}
-              className={`px-4 py-1.5 rounded-full transition font-semibold cursor-pointer ${
+              className={`px-3 py-1 rounded-md transition font-medium cursor-pointer ${
                 authModalMode === 'sign-up'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Create Account
@@ -93,7 +84,7 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Embedded Clerk Authentication Form */}
-        <div className="relative z-10 flex justify-center py-2 min-h-[300px]">
+        <div className="relative z-10 flex justify-center py-2 min-h-[280px]">
           {authModalMode === 'sign-in' ? (
             <SignIn
               appearance={{
@@ -103,16 +94,16 @@ export const AuthModal: React.FC = () => {
                   headerTitle: 'hidden',
                   headerSubtitle: 'hidden',
                   socialButtonsBlockButton:
-                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition cursor-pointer',
+                    'bg-muted hover:bg-muted/80 border-border text-foreground text-xs py-2 rounded-lg transition cursor-pointer',
                   formButtonPrimary:
-                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition cursor-pointer',
+                    'bg-foreground hover:bg-foreground/90 text-background text-xs font-medium py-2 rounded-lg transition cursor-pointer',
                   formFieldInput:
-                    'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
-                  formFieldLabel: 'text-slate-300 text-xs font-medium',
-                  footerActionText: 'text-slate-400 text-xs',
-                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs cursor-pointer',
-                  dividerLine: 'bg-white/10',
-                  dividerText: 'text-slate-400 text-[11px]',
+                    'bg-background border-border text-foreground text-xs rounded-lg focus:ring-1 focus:ring-primary',
+                  formFieldLabel: 'text-foreground text-xs font-medium',
+                  footerActionText: 'text-muted-foreground text-xs',
+                  footerActionLink: 'text-primary hover:underline text-xs cursor-pointer',
+                  dividerLine: 'bg-border',
+                  dividerText: 'text-muted-foreground text-[11px]',
                 },
               }}
             />
@@ -125,16 +116,16 @@ export const AuthModal: React.FC = () => {
                   headerTitle: 'hidden',
                   headerSubtitle: 'hidden',
                   socialButtonsBlockButton:
-                    'bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white text-xs py-2.5 rounded-xl transition cursor-pointer',
+                    'bg-muted hover:bg-muted/80 border-border text-foreground text-xs py-2 rounded-lg transition cursor-pointer',
                   formButtonPrimary:
-                    'bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2.5 rounded-xl transition cursor-pointer',
+                    'bg-foreground hover:bg-foreground/90 text-background text-xs font-medium py-2 rounded-lg transition cursor-pointer',
                   formFieldInput:
-                    'bg-white/[0.04] border-white/10 text-white text-xs rounded-xl focus:border-indigo-400',
-                  formFieldLabel: 'text-slate-300 text-xs font-medium',
-                  footerActionText: 'text-slate-400 text-xs',
-                  footerActionLink: 'text-indigo-400 hover:text-indigo-300 text-xs cursor-pointer',
-                  dividerLine: 'bg-white/10',
-                  dividerText: 'text-slate-400 text-[11px]',
+                    'bg-background border-border text-foreground text-xs rounded-lg focus:ring-1 focus:ring-primary',
+                  formFieldLabel: 'text-foreground text-xs font-medium',
+                  footerActionText: 'text-muted-foreground text-xs',
+                  footerActionLink: 'text-primary hover:underline text-xs cursor-pointer',
+                  dividerLine: 'bg-border',
+                  dividerText: 'text-muted-foreground text-[11px]',
                 },
               }}
             />
@@ -142,24 +133,24 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Quick Scholar Sandbox Access Bypass */}
-        <div className="pt-4 mt-4 border-t border-white/10 text-center relative z-10 space-y-2">
-          <p className="text-[11px] text-slate-400">
-            Testing without Clerk credentials right now?
+        <div className="pt-4 mt-3 border-t border-border text-center relative z-10 space-y-2">
+          <p className="text-[11px] text-muted-foreground">
+            Evaluating without an account?
           </p>
           <button
             type="button"
             onClick={handleBypassAsScholar}
-            className="w-full py-2.5 px-4 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] text-indigo-300 hover:text-indigo-200 text-xs font-semibold border border-indigo-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-2 px-3 rounded-lg bg-muted hover:bg-muted/80 text-foreground text-xs font-medium border border-border transition flex items-center justify-center gap-2 cursor-pointer"
           >
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
-            <span>Continue as Verified Scholar (One-Click Sandbox)</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+            <span>Continue in Sandbox Demo Mode</span>
           </button>
           <button
             type="button"
             onClick={closeAuthModal}
-            className="text-[11px] text-slate-500 hover:text-slate-300 transition cursor-pointer pt-1"
+            className="text-[11px] text-muted-foreground hover:text-foreground transition cursor-pointer pt-0.5 block mx-auto"
           >
-            Close & Continue in Preview Mode
+            Dismiss
           </button>
         </div>
       </div>

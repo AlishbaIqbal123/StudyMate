@@ -17,8 +17,8 @@ import { Sidebar } from './components/Sidebar.js';
 import { AddTaskModal } from './components/AddTaskModal.js';
 import { MiniPomodoroWidget } from './components/MiniPomodoroWidget.js';
 import { AuthModal } from './components/AuthModal.js';
-import { NexumHero } from './NexumHero.js';
 import { useAuth } from './context/AuthContext.js';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Dedicated Screens
 import { LandingPageView } from './views/LandingPageView.js';
@@ -182,11 +182,7 @@ export function App() {
 
   // 2. Inner App Views (Dashboard, Assignments, Planner, Voice, Telemetry)
   return (
-    <div className="min-h-screen bg-[#F8F9FA] dark:bg-[#08090E] text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-indigo-500/25 selection:text-indigo-400 relative overflow-x-hidden transition-colors duration-200">
-      {/* Subtle Ambient Radial Glow Mesh */}
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.06),transparent)] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.12),transparent)] z-0" />
-      <div className="fixed top-1/4 -right-48 w-96 h-96 rounded-full bg-indigo-500/[0.04] blur-3xl pointer-events-none" />
-      <div className="fixed bottom-10 -left-48 w-96 h-96 rounded-full bg-cyan-500/[0.04] blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#F8F9FA] dark:bg-[#090B10] text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-slate-200 dark:selection:bg-slate-800 relative transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar
         activeScreen={activeScreen}
@@ -214,54 +210,64 @@ export function App() {
           onStudentChanged={loadData}
         />
 
-        {/* Dynamic Screen View Router */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
-          {activeScreen === 'dashboard' && (
-            <DashboardView
-              tasks={tasks}
-              courses={courses}
-              progressList={progressList}
-              onToggleStatus={handleToggleStatus}
-              onOpenAddModal={() => setIsAddModalOpen(true)}
-              onFocusTask={handleFocusTask}
-              onParseNlp={handleParseNlp}
-              onDataChanged={loadData}
-              onNavigateToScreen={setActiveScreen}
-            />
-          )}
+        {/* Dynamic Screen View Router with calm, smooth transition */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1500px] w-full mx-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeScreen}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            >
+              {activeScreen === 'dashboard' && (
+                <DashboardView
+                  tasks={tasks}
+                  courses={courses}
+                  progressList={progressList}
+                  onToggleStatus={handleToggleStatus}
+                  onOpenAddModal={() => setIsAddModalOpen(true)}
+                  onFocusTask={handleFocusTask}
+                  onParseNlp={handleParseNlp}
+                  onDataChanged={loadData}
+                  onNavigateToScreen={setActiveScreen}
+                />
+              )}
 
-          {activeScreen === 'assignments' && (
-            <AssignmentsView
-              tasks={tasks}
-              courses={courses}
-              onToggleStatus={handleToggleStatus}
-              onUpdateStatus={handleUpdateTaskStatus}
-              onOpenAddModal={() => setIsAddModalOpen(true)}
-              onFocusTask={handleFocusTask}
-            />
-          )}
+              {activeScreen === 'assignments' && (
+                <AssignmentsView
+                  tasks={tasks}
+                  courses={courses}
+                  onToggleStatus={handleToggleStatus}
+                  onUpdateStatus={handleUpdateTaskStatus}
+                  onOpenAddModal={() => setIsAddModalOpen(true)}
+                  onFocusTask={handleFocusTask}
+                />
+              )}
 
-          {activeScreen === 'planner' && (
-            <PlannerView
-              courses={courses}
-              progressList={progressList}
-              focusCourse={focusCourse}
-              focusTitle={focusTitle}
-            />
-          )}
+              {activeScreen === 'planner' && (
+                <PlannerView
+                  courses={courses}
+                  progressList={progressList}
+                  focusCourse={focusCourse}
+                  focusTitle={focusTitle}
+                />
+              )}
 
-          {activeScreen === 'voice' && (
-            <VoiceConsoleView onDataChanged={loadData} />
-          )}
+              {activeScreen === 'voice' && (
+                <VoiceConsoleView onDataChanged={loadData} />
+              )}
 
-          {activeScreen === 'telemetry' && (
-            <TelemetryView
-              tasks={tasks}
-              courses={courses}
-              progressList={progressList}
-              onDataChanged={loadData}
-            />
-          )}
+              {activeScreen === 'telemetry' && (
+                <TelemetryView
+                  tasks={tasks}
+                  courses={courses}
+                  progressList={progressList}
+                  onDataChanged={loadData}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 

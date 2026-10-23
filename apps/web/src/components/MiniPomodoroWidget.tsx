@@ -5,14 +5,9 @@ import {
   RotateCcw,
   X,
   Minus,
-  Maximize2,
-  Minimize2,
   ExternalLink,
-  Sparkles,
-  Coffee,
   Volume2,
   VolumeX,
-  Flame,
   ArrowUpRight,
 } from 'lucide-react';
 import { usePomodoro } from '../context/PomodoroContext.js';
@@ -43,7 +38,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
   const [ambientSoundActive, setAmbientSoundActive] = useState<boolean>(false);
 
-  // Web Audio Ambient Vibe Synthesizer (Zero-cost, browser-native soothing brown noise / rain vibe)
+  // Web Audio Ambient Synthesizer
   const audioCtxRef = useRef<AudioContext | null>(null);
   const noiseNodeRef = useRef<AudioNode | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
@@ -71,7 +66,6 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
         ctx.resume();
       }
 
-      // Generate brown noise buffer (calming deep ambient rain/ocean study vibe)
       const bufferSize = 2 * ctx.sampleRate;
       const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = noiseBuffer.getChannelData(0);
@@ -80,14 +74,13 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
         const white = Math.random() * 2 - 1;
         output[i] = (lastOut + 0.02 * white) / 1.02;
         lastOut = output[i];
-        output[i] *= 3.5; // Gain boost
+        output[i] *= 3.5;
       }
 
       const whiteNoise = ctx.createBufferSource();
       whiteNoise.buffer = noiseBuffer;
       whiteNoise.loop = true;
 
-      // Lowpass filter for cozy ambient warmth
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(450, ctx.currentTime);
@@ -105,7 +98,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
       gainNodeRef.current = gain;
       setAmbientSoundActive(true);
     } catch (err) {
-      console.warn('Could not start ambient vibe:', err);
+      console.warn('Could not start ambient sound:', err);
     }
   }, []);
 
@@ -117,7 +110,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     }
   };
 
-  // Canvas PiP Support for OS-level floating window
+  // Canvas PiP Support
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -125,66 +118,51 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
   const elapsed = totalSeconds - secondsRemaining;
   const progressPct = Math.min(100, Math.max(0, (elapsed / totalSeconds) * 100));
 
-  // Circular progress math (Radius: 28, Circumference = 2 * PI * 28 ≈ 175.93)
-  const radius = 28;
+  const radius = 24;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progressPct / 100) * circumference;
 
-  // Real-time canvas renderer for Picture-in-Picture window
   const renderPiPCanvas = useCallback(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Background
-    ctx.fillStyle = '#050508';
+    ctx.fillStyle = '#090B10';
     ctx.fillRect(0, 0, 340, 190);
 
-    // Accent line at top
-    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
-    ctx.fillRect(0, 0, 340, 4);
+    ctx.fillStyle = mode === 'focus' ? '#4f46e5' : '#d97706';
+    ctx.fillRect(0, 0, 340, 3);
 
-    // Mode title
-    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
-    ctx.font = 'bold 12px "Geist", -apple-system, sans-serif';
-    ctx.fillText(mode === 'focus' ? 'STUDYMATE FOCUS POD' : 'REST BREAK', 22, 32);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 11px monospace';
+    ctx.fillText(mode === 'focus' ? 'FOCUS SESSION' : 'REST INTERVAL', 20, 30);
 
-    // Status pill (RUNNING vs PAUSED)
     ctx.fillStyle = timerRunning ? '#10b981' : '#f59e0b';
     ctx.beginPath();
-    ctx.arc(280, 28, 4, 0, Math.PI * 2);
+    ctx.arc(280, 26, 4, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 10px monospace';
-    ctx.fillText(timerRunning ? 'ACTIVE' : 'PAUSED', 290, 32);
+    ctx.font = '10px monospace';
+    ctx.fillText(timerRunning ? 'ACTIVE' : 'PAUSED', 290, 30);
 
-    // Large Countdown
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 46px monospace';
-    ctx.fillText(formatTime(secondsRemaining), 22, 94);
+    ctx.font = 'bold 44px monospace';
+    ctx.fillText(formatTime(secondsRemaining), 20, 90);
 
-    // Course / Task name
-    ctx.fillStyle = '#a5f3fc';
-    ctx.font = '12px "Geist", sans-serif';
-    const label = focusTitle ? `${focusTitle}` : `${selectedCourse || 'Academic Session'}`;
-    ctx.fillText(label.slice(0, 34), 22, 130);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '12px sans-serif';
+    const label = focusTitle ? `${focusTitle}` : `${selectedCourse || 'Academic Sprint'}`;
+    ctx.fillText(label.slice(0, 34), 20, 126);
 
-    // Progress percentage label
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'bold 11px monospace';
-    ctx.fillText(`${Math.round(progressPct)}%`, 290, 130);
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(20, 146, 300, 6);
 
-    // Progress Bar Background & Active Bar
-    ctx.fillStyle = '#181824';
-    ctx.fillRect(22, 150, 296, 8);
-
-    ctx.fillStyle = mode === 'focus' ? '#06b6d4' : '#f59e0b';
-    ctx.fillRect(22, 150, Math.max(4, (296 * progressPct) / 100), 8);
+    ctx.fillStyle = '#4f46e5';
+    ctx.fillRect(20, 146, Math.max(4, (300 * progressPct) / 100), 6);
   }, [mode, timerRunning, secondsRemaining, focusTitle, selectedCourse, progressPct, formatTime]);
 
-  // Keep canvas continuously redrawn on countdown change
   useEffect(() => {
     renderPiPCanvas();
   }, [renderPiPCanvas, secondsRemaining, timerRunning, mode, progressPct]);
@@ -218,7 +196,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
         await video.requestPictureInPicture();
       }
     } catch (err) {
-      console.warn('Picture in Picture error:', err);
+      console.warn('PiP error:', err);
     }
   };
 
@@ -228,10 +206,6 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
     };
   }, [stopAmbientSound]);
 
-  if (!isFloatingWidgetOpen && !timerRunning) {
-    return null;
-  }
-
   if (!isFloatingWidgetOpen) {
     return null;
   }
@@ -239,167 +213,98 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
   return (
     <div className="fixed bottom-6 right-6 z-[9999] animate-fadeIn select-none">
       {isMinimized ? (
-        /* Obsidian Dynamic Island Capsule / Light Mode Ivory Pill */
-        <div className="flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-white/95 dark:bg-[#0c0c14]/90 border border-slate-200/90 dark:border-white/20 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl transition-all duration-300 hover:border-blue-400/50 dark:hover:border-cyan-400/50">
-          {/* Cyan/Blue Glowing / Pulsing Dot */}
-          <div className="relative flex items-center justify-center pl-0.5">
-            {timerRunning && (
-              <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 animate-ping opacity-75 absolute" />
-            )}
-            <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-          </div>
-
-          {/* Live Countdown in Bold Crisp Text */}
-          <span className="font-mono text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none">
+        <div className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/15 shadow-lg">
+          <span className={`w-2 h-2 rounded-full ${timerRunning ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+          <span className="font-mono text-xs font-semibold text-slate-900 dark:text-white tabular-nums">
             {formatTime(secondsRemaining)}
           </span>
-
-          {/* Subtle Vertical Divider */}
-          <span className="h-3.5 w-[1px] bg-slate-200 dark:bg-white/20 mx-0.5 shrink-0" />
-
-          {/* Quick Play/Pause */}
           <button
             type="button"
             onClick={toggleTimer}
-            className="p-1 rounded-md text-blue-600 hover:text-blue-700 dark:text-[#E5A952] dark:hover:text-cyan-200 hover:bg-slate-100 dark:hover:bg-white/10 transition cursor-pointer"
-            title={timerRunning ? 'Pause timer' : 'Resume timer'}
+            className="p-1 rounded text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
           >
-            {timerRunning ? (
-              <Pause className="w-3.5 h-3.5 fill-current" />
-            ) : (
-              <Play className="w-3.5 h-3.5 fill-current" />
-            )}
+            {timerRunning ? <Pause className="w-3 h-3 fill-current" /> : <Play className="w-3 h-3 fill-current" />}
           </button>
-
-          {/* Expand / Maximize */}
           <button
             type="button"
             onClick={() => setIsMinimized(false)}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-900 dark:text-white/40 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition cursor-pointer"
-            title="Expand timer pod"
+            className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
+            title="Expand"
           >
-            <svg
-              className="w-3.5 h-3.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="15 3 21 3 21 9" />
-              <polyline points="9 21 3 21 3 15" />
-              <line x1="21" y1="3" x2="14" y2="10" />
-              <line x1="3" y1="21" x2="10" y2="14" />
-            </svg>
+            <ExternalLink className="w-3 h-3" />
           </button>
-
-          {/* Close Cross */}
           <button
             type="button"
             onClick={() => setFloatingWidgetOpen(false)}
-            className="p-1 rounded-md text-slate-400 hover:text-rose-600 dark:text-white/40 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-white/10 transition cursor-pointer"
-            title="Close popup"
+            className="p-1 rounded text-slate-400 hover:text-rose-600 cursor-pointer"
           >
-            <X className="w-3.5 h-3.5 stroke-[2.2]" />
+            <X className="w-3 h-3" />
           </button>
         </div>
       ) : (
-        /* Obsidian Dark Glass / Ivory Focus Pod */
-        <div className="w-[340px] rounded-3xl bg-white/95 dark:bg-[#0c0c14]/95 backdrop-blur-2xl border border-slate-200/90 dark:border-white/15 shadow-[0_25px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_70px_rgba(0,0,0,0.9)] ring-1 ring-slate-900/5 dark:ring-white/10 overflow-hidden transition-all duration-300">
-          {/* Glowing Ambient Top Highlight Bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400" />
-
-          {/* Top Header Row */}
-          <div
-            onDoubleClick={() => setIsMinimized(true)}
-            className="px-4 py-3 bg-slate-50/50 dark:bg-white/[0.02] border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between cursor-default"
-            title="Double click to minimize"
-          >
-            {/* Status Aura Badge */}
+        <div className="w-[320px] rounded-xl bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] shadow-xl overflow-hidden">
+          {/* Header */}
+          <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-white/[0.02] border-b border-slate-200 dark:border-white/[0.08] flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="relative flex h-2.5 w-2.5">
-                {timerRunning && (
-                  <span
-                    className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                      mode === 'focus' ? 'bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400' : 'bg-amber-500 dark:bg-amber-400'
-                    }`}
-                  />
-                )}
-                <span
-                  className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    mode === 'focus' ? 'bg-[#E5A952] text-[#0E1117] dark:bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'bg-amber-500 dark:bg-amber-400 shadow-[0_0_8px_#fbbf24]'
-                  }`}
-                />
+              <span className={`w-2 h-2 rounded-full ${timerRunning ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                {mode === 'focus' ? 'Focus Sprint' : 'Break'}
               </span>
-
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                {mode === 'focus' ? 'Deep Focus' : 'Rest Break'}
-              </span>
-
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-cyan-500/15 text-blue-700 dark:text-[#E5A952] border border-blue-200 dark:border-cyan-400/30">
-                {totalDuration}m
-              </span>
+              <span className="text-[10px] font-mono text-slate-400">({totalDuration}m)</span>
             </div>
 
-            {/* Quick Action Icons */}
             <div className="flex items-center space-x-1">
-              {/* Ambient Rain / Brown Noise Vibe Toggle */}
               <button
                 type="button"
                 onClick={toggleAmbientSound}
-                className={`p-1.5 rounded-xl transition cursor-pointer ${
+                className={`p-1.5 rounded text-xs transition cursor-pointer ${
                   ambientSoundActive
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-[#E5A952] dark:border-cyan-400/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100 dark:text-white/40 dark:hover:text-white dark:hover:bg-white/10'
+                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10'
+                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-white'
                 }`}
-                title={ambientSoundActive ? 'Turn off ambient sound' : 'Turn on relaxing study white noise'}
+                title={ambientSoundActive ? 'Rain audio active' : 'Turn on rain audio'}
               >
-                {ambientSoundActive ? <Volume2 className="w-3.5 h-3.5 animate-pulse" /> : <VolumeX className="w-3.5 h-3.5" />}
+                {ambientSoundActive ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
               </button>
 
-              {/* Popout Picture-in-Picture */}
               <button
                 type="button"
                 onClick={triggerPictureInPicture}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:text-white/40 dark:hover:text-[#E5A952] dark:hover:bg-white/10 transition cursor-pointer"
-                title="Pop out desktop Picture-in-Picture (Always on top)"
+                className="p-1.5 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
+                title="Picture-in-Picture window"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
               </button>
 
-              {/* Minimize to Pill */}
               <button
                 type="button"
                 onClick={() => setIsMinimized(true)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 dark:text-white/40 dark:hover:text-white dark:hover:bg-white/10 transition cursor-pointer"
-                title="Minimize to capsule pill"
+                className="p-1.5 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
+                title="Minimize"
               >
-                <Minus className="w-4 h-4 stroke-[2.5]" />
+                <Minus className="w-3.5 h-3.5" />
               </button>
 
-              {/* Close */}
               <button
                 type="button"
                 onClick={() => setFloatingWidgetOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:text-white/40 dark:hover:text-rose-400 dark:hover:bg-rose-500/10 transition cursor-pointer"
-                title="Close floating pod"
+                className="p-1.5 rounded text-slate-400 hover:text-rose-600 cursor-pointer"
+                title="Close"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* Main Body */}
-          <div className="p-4 space-y-4">
-            {/* Subject / Task Information Pill */}
-            <div className="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/10">
+          {/* Body */}
+          <div className="p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs">
               <div className="min-w-0 flex-1">
-                <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                  {focusTitle || selectedCourse || 'Academic Study Session'}
+                <div className="font-medium text-slate-900 dark:text-white truncate">
+                  {focusTitle || selectedCourse || 'Study Session'}
                 </div>
-                <div className="text-[10px] font-mono text-slate-500 dark:text-white/50 truncate mt-0.5">
-                  {focusTitle ? selectedCourse : 'Active Pomodoro Interval'}
+                <div className="text-[10px] text-slate-400 truncate">
+                  {focusTitle ? selectedCourse : 'Active Pomodoro'}
                 </div>
               </div>
 
@@ -407,7 +312,7 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
                 <button
                   type="button"
                   onClick={onNavigateToPlanner}
-                  className="px-2.5 py-1 rounded-full text-[10px] font-bold text-blue-600 dark:text-[#E5A952] bg-blue-50 dark:bg-white/[0.05] border border-blue-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-cyan-400/40 hover:text-blue-700 dark:hover:text-white transition flex items-center space-x-1 shrink-0 cursor-pointer"
+                  className="px-2 py-0.5 rounded text-[10px] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10 flex items-center space-x-1 cursor-pointer shrink-0"
                 >
                   <span>Planner</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -415,112 +320,55 @@ export const MiniPomodoroWidget: React.FC<MiniPomodoroWidgetProps> = ({
               )}
             </div>
 
-            {/* Circular Timer & Controls Centerpiece */}
-            <div className="flex items-center justify-between px-1">
-              {/* Left: Animated Circular Progress Clock */}
-              <div className="flex items-center space-x-3.5">
-                <div className="relative flex items-center justify-center">
-                  <svg className="w-16 h-16 transform -rotate-90">
-                    <circle
-                      cx="32"
-                      cy="32"
-                      r={radius}
-                      className="stroke-slate-200 dark:stroke-white/10"
-                      strokeWidth="5"
-                      fill="transparent"
-                    />
-                    <circle
-                      cx="32"
-                      cy="32"
-                      r={radius}
-                      className="transition-all duration-700 ease-out"
-                      stroke={mode === 'focus' ? '#06b6d4' : '#f59e0b'}
-                      strokeWidth="5"
-                      strokeDasharray={circumference}
-                      strokeDashoffset={strokeDashoffset}
-                      strokeLinecap="round"
-                      fill="transparent"
-                    />
-                  </svg>
-                  <div className="absolute flex flex-col items-center">
-                    <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-white/50">
-                      {Math.round(progressPct)}%
-                    </span>
-                  </div>
-                </div>
+            {/* Countdown & Controls */}
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center space-x-3">
+                <svg className="w-12 h-12 transform -rotate-90">
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r={radius}
+                    className="stroke-slate-200 dark:stroke-white/10"
+                    strokeWidth="4"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r={radius}
+                    className="transition-all duration-500 ease-out stroke-slate-900 dark:stroke-white"
+                    strokeWidth="4"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    fill="transparent"
+                  />
+                </svg>
 
-                {/* Live Countdown Numbers */}
-                <div>
-                  <div className="font-mono text-3xl font-black tracking-tight text-slate-900 dark:text-white drop-shadow-[0_0_20px_rgba(6,182,212,0.15)] dark:drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                    {formatTime(secondsRemaining)}
-                  </div>
-                  <div className="text-[10px] font-medium text-slate-500 dark:text-white/50 flex items-center space-x-1">
-                    <Flame className="w-3 h-3 text-amber-500 dark:text-amber-400" />
-                    <span>{mode === 'focus' ? (timerRunning ? 'Keep momentum' : 'Paused') : 'Breathe & relax'}</span>
-                  </div>
+                <div className="font-mono text-3xl font-light text-slate-900 dark:text-white tracking-widest tabular-nums">
+                  {formatTime(secondsRemaining)}
                 </div>
               </div>
 
-              {/* Right: Primary Play/Pause & Reset Action */}
               <div className="flex items-center space-x-1.5">
                 <button
                   type="button"
                   onClick={toggleTimer}
-                  style={{
-                    background: timerRunning ? 'linear-gradient(to bottom, #d97706, #92400e)' : 'linear-gradient(to bottom, #2B2B2B, #101010)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                  }}
-                  className="px-4 py-2.5 rounded-full text-xs font-bold text-white transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center space-x-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 transition cursor-pointer"
                 >
-                  {timerRunning ? (
-                    <>
-                      <Pause className="w-3.5 h-3.5 fill-current" />
-                      <span>Pause</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>Start</span>
-                    </>
-                  )}
+                  {timerRunning ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
                 </button>
 
                 <button
                   type="button"
                   onClick={resetTimer}
-                  className="p-2.5 rounded-full bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer"
-                  title="Reset Timer"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white border border-slate-200 dark:border-white/10 transition cursor-pointer"
+                  title="Reset"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
-
-            {/* Quick footer with minimize toggle */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-200/80 dark:border-white/10 text-[10px] text-slate-500 dark:text-white/40">
-              <span className="font-mono">StudyMate Studio Pod</span>
-              <button
-                type="button"
-                onClick={() => setIsMinimized(true)}
-                className="transition flex items-center space-x-1 cursor-pointer font-semibold text-slate-600 dark:text-white/50 hover:text-blue-600 dark:hover:text-[#E5A952]"
-                title="Minimize into compact floating pill"
-              >
-                <span>Minimize to pill</span>
-                <Minus className="w-3 h-3 stroke-[2.5]" />
-              </button>
-            </div>
-          </div>
-
-          {/* Segmented Bottom Glow Bar */}
-          <div className="w-full bg-slate-200 dark:bg-white/5 h-1 overflow-hidden">
-            <div
-              className={`h-1 transition-all duration-500 ease-out ${
-                mode === 'focus'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-indigo-500'
-                  : 'bg-gradient-to-r from-amber-400 to-amber-600'
-              }`}
-              style={{ width: `${progressPct}%` }}
-            />
           </div>
         </div>
       )}

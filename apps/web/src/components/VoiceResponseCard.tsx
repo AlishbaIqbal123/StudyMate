@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import {
   Volume2,
-  VolumeX,
   Play,
   CheckCircle2,
   Clock,
   Calendar,
-  BookOpen,
   Target,
-  Sparkles,
   Code2,
   ChevronRight,
   ArrowRight,
-  Activity,
-  Flame,
   Check,
+  BookOpen,
 } from 'lucide-react';
 import type { VoiceSimulationResponse } from '../api.js';
 
@@ -34,7 +30,6 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
   onToggleTask,
   onOpenPlanner,
   onOpenDashboard,
-  ttsEnabled = true,
   onSpeak,
 }) => {
   const [showMcpPayload, setShowMcpPayload] = useState(false);
@@ -94,14 +89,14 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
   );
 
   return (
-    <div className="space-y-3.5 w-full">
-      {/* 1. Speech bubble header with Voice Synthesizer audio button */}
-      <div className="flex items-center justify-between gap-2 pb-2 border-b border-white/10">
+    <div className="space-y-3 w-full">
+      {/* 1. Header with Tool & Intent metadata */}
+      <div className="flex items-center justify-between gap-2 pb-2 border-b border-border">
         <div className="flex items-center space-x-2">
-          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+          <span className="text-[10px] font-mono font-medium uppercase px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
             {result.intent}
           </span>
-          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.06] text-white/60 border border-white/10">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
             {result.tool}
           </span>
         </div>
@@ -109,36 +104,36 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
         {onSpeak && (
           <button
             onClick={() => onSpeak(result.speechResponse)}
-            className="p-1 rounded-lg hover:bg-white/10 text-white/50 hover:text-cyan-300 transition cursor-pointer flex items-center space-x-1 text-[11px]"
+            className="p-1 rounded text-muted-foreground hover:text-foreground transition cursor-pointer flex items-center space-x-1 text-[11px]"
             title="Read aloud"
           >
-            <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
+            <Volume2 className="w-3.5 h-3.5 text-primary" />
             <span className="font-mono text-[10px]">Readback</span>
           </button>
         )}
       </div>
 
       {/* 2. Conversational Voice Speech Summary */}
-      <p className="text-sm font-sans text-white/90 leading-relaxed font-normal">
+      <p className="text-xs text-foreground leading-relaxed">
         {result.speechResponse}
       </p>
 
       {/* 3. Rich Visual Interactive Cards */}
 
-      {/* CASE A: Study Plan with Visual Timeline & 1-Click Launch */}
+      {/* CASE A: Study Plan with Timeline & 1-Click Launch */}
       {isStudyPlan && (
-        <div className="rounded-2xl p-4 bg-white/[0.04] border border-cyan-500/30 shadow-lg space-y-3 mt-2">
+        <div className="rounded-lg p-3.5 bg-card border border-border space-y-3 mt-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
-              <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center text-cyan-300">
-                <Clock className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-md bg-muted border border-border flex items-center justify-center text-foreground">
+                <Clock className="w-3.5 h-3.5" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">
-                  {(result.data as any).focus_course || 'Focused Study Plan'}
+                <h4 className="text-xs font-semibold text-foreground">
+                  {(result.data as any).focus_course || 'Study Plan'}
                 </h4>
-                <span className="text-[10px] font-mono text-white/50">
-                  {(result.data as any).total_minutes || 45} Minutes Total Session
+                <span className="text-[11px] font-mono text-muted-foreground">
+                  {(result.data as any).total_minutes || 45} mins total
                 </span>
               </div>
             </div>
@@ -149,11 +144,10 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
                   onStartTimer(
                     (result.data as any).blocks?.[0]?.duration_minutes || 25,
                     (result.data as any).focus_course || 'Coursework',
-                    'Block 1 Deep Work'
+                    'Block 1 Focus'
                   )
                 }
-                className="px-3.5 py-1.5 rounded-full text-white font-semibold text-xs shadow-lg border border-white/20 flex items-center space-x-1.5 cursor-pointer hover:opacity-90 active:scale-95 transition"
-                style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+                className="px-3 py-1 rounded-md text-background bg-foreground hover:bg-foreground/90 font-medium text-xs flex items-center space-x-1.5 cursor-pointer transition shadow-sm"
               >
                 <Play className="w-3 h-3 fill-current" />
                 <span>Start Timer</span>
@@ -162,37 +156,33 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
           </div>
 
           {/* Timeline Blocks */}
-          <div className="space-y-2 pt-1">
+          <div className="space-y-1.5 pt-1">
             {(result.data as any).blocks?.map((block: any, idx: number) => {
               const isStudy = block.type === 'study';
               return (
                 <div
                   key={idx}
-                  className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-3 ${
+                  className={`p-2 rounded-md border text-xs flex items-center justify-between gap-3 ${
                     isStudy
-                      ? 'bg-white/[0.04] border-white/10 text-white'
-                      : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300'
+                      ? 'bg-muted/30 border-border text-foreground'
+                      : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
                   }`}
                 >
-                  <div className="flex items-center space-x-2.5 min-w-0">
-                    <span
-                      className={`w-5 h-5 rounded-md flex items-center justify-center font-mono font-bold text-[10px] shrink-0 ${
-                        isStudy ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/40' : 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/40'
-                      }`}
-                    >
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <span className="w-5 h-5 rounded flex items-center justify-center font-mono font-medium text-[10px] shrink-0 bg-muted border border-border text-foreground">
                       {block.order || idx + 1}
                     </span>
                     <div className="min-w-0">
-                      <span className="font-semibold text-white block truncate">
+                      <span className="font-medium text-foreground block truncate">
                         {block.description}
                       </span>
-                      <span className="text-[10px] text-white/50 font-mono uppercase">
-                        {isStudy ? 'Deep Focus Interval' : 'Cognitive Break'}
+                      <span className="text-[10px] text-muted-foreground font-mono uppercase">
+                        {isStudy ? 'Focus Interval' : 'Break'}
                       </span>
                     </div>
                   </div>
 
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-full bg-white/[0.06] text-white/70 border border-white/10 shrink-0">
+                  <span className="font-mono text-xs text-muted-foreground shrink-0 tabular-nums">
                     {block.duration_minutes}m
                   </span>
                 </div>
@@ -204,20 +194,20 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE B: Timer Started Confirmation Card */}
       {isTimerStarted && (
-        <div className="rounded-2xl p-4 bg-emerald-500/10 border border-emerald-500/30 text-white space-y-2 shadow-lg">
-          <div className="flex items-center space-x-2 text-emerald-300 font-bold text-xs">
+        <div className="rounded-lg p-3 bg-emerald-500/10 border border-emerald-500/20 text-foreground space-y-1.5">
+          <div className="flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Pomodoro Focus Session Active</span>
+            <span>Focus Timer Started</span>
           </div>
-          <p className="text-xs text-white/70">
-            The timer has been started for {(result.data as any).duration_minutes || 25} minutes on {(result.data as any).course || 'your course'}.
+          <p className="text-xs text-muted-foreground">
+            Timer set for {(result.data as any).duration_minutes || 25} minutes for {(result.data as any).course || 'your coursework'}.
           </p>
           {onOpenPlanner && (
             <button
               onClick={onOpenPlanner}
-              className="text-xs font-semibold text-cyan-300 hover:underline flex items-center space-x-1 pt-1 cursor-pointer"
+              className="text-xs font-medium text-primary hover:underline flex items-center space-x-1 pt-1 cursor-pointer"
             >
-              <span>View Full Screen Timer in Planner</span>
+              <span>View in Planner</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           )}
@@ -226,16 +216,16 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE C: Interactive Task List */}
       {isTaskList && (
-        <div className="rounded-2xl p-4 bg-white/[0.04] border border-white/10 shadow-lg space-y-2.5 mt-2">
-          <div className="flex items-center justify-between text-xs font-bold text-white mb-1">
+        <div className="rounded-lg p-3 bg-card border border-border space-y-2 mt-2">
+          <div className="flex items-center justify-between text-xs font-medium text-foreground mb-1">
             <span className="flex items-center space-x-1.5">
-              <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+              <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
               <span>Pending Assignments ({(result.data as any[]).length})</span>
             </span>
             {onOpenDashboard && (
               <button
                 onClick={onOpenDashboard}
-                className="text-[11px] text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer font-medium"
+                className="text-[11px] text-primary hover:underline flex items-center space-x-0.5 cursor-pointer font-medium"
               >
                 <span>Dashboard</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -243,34 +233,34 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
             )}
           </div>
 
-          <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+          <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
             {(result.data as any[]).map((task: any) => {
               const isChecked = completedTaskIds.includes(task.id) || task.status === 'done';
               return (
                 <div
                   key={task.id}
-                  className={`p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2.5 text-xs ${
+                  className={`p-2 rounded-md border transition-all flex items-center justify-between gap-2 text-xs ${
                     isChecked
-                      ? 'bg-emerald-500/10 border-emerald-500/25 line-through opacity-70'
-                      : 'bg-white/[0.03] border-white/10 hover:border-cyan-400/40'
+                      ? 'bg-muted/40 border-border line-through opacity-60'
+                      : 'bg-background border-border hover:border-primary/40'
                   }`}
                 >
-                  <div className="flex items-center space-x-2.5 min-w-0">
+                  <div className="flex items-center space-x-2 min-w-0">
                     <button
                       onClick={() => handleTaskCheck(task.id)}
                       className={`w-4 h-4 rounded border flex items-center justify-center transition cursor-pointer shrink-0 ${
                         isChecked
-                          ? 'bg-emerald-500 border-emerald-500 text-white'
-                          : 'border-white/20 hover:border-cyan-400'
+                          ? 'bg-primary border-primary text-background'
+                          : 'border-border hover:border-primary'
                       }`}
                     >
                       {isChecked && <Check className="w-3 h-3" />}
                     </button>
                     <div className="min-w-0">
-                      <span className="font-semibold text-white block truncate">
+                      <span className="font-medium text-foreground block truncate">
                         {task.title}
                       </span>
-                      <span className="text-[10px] text-cyan-300 font-medium font-mono">
+                      <span className="text-[10px] text-muted-foreground font-mono">
                         {task.course_name}
                       </span>
                     </div>
@@ -278,11 +268,11 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
                   <div className="flex items-center space-x-2 shrink-0">
                     {task.priority === 'high' && (
-                      <span className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 font-mono text-[9px] font-bold uppercase">
+                      <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 font-mono text-[9px] font-medium uppercase">
                         High
                       </span>
                     )}
-                    <span className="font-mono text-[10px] text-white/50">
+                    <span className="font-mono text-[10px] text-muted-foreground">
                       {task.due_date ? `Due ${task.due_date}` : 'No deadline'}
                     </span>
                   </div>
@@ -295,20 +285,20 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE D: Single Task Created Confirmation */}
       {isSingleTask && (
-        <div className="rounded-2xl p-4 bg-emerald-500/10 border border-emerald-500/25 shadow-lg space-y-2 mt-2">
+        <div className="rounded-lg p-3 bg-card border border-border space-y-2 mt-2">
           <div className="flex items-center justify-between">
-            <span className="flex items-center space-x-1.5 text-xs font-bold text-emerald-300">
+            <span className="flex items-center space-x-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>Assignment Created</span>
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold uppercase border border-emerald-500/30">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border font-medium uppercase">
               {(result.data as any).priority || 'Normal'}
             </span>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.04] border border-white/10 text-xs space-y-1">
-            <span className="font-bold text-white block">{(result.data as any).title}</span>
-            <div className="flex items-center justify-between text-[11px] text-white/50 font-mono">
+          <div className="p-2.5 rounded-md bg-muted/40 border border-border text-xs space-y-1">
+            <span className="font-semibold text-foreground block">{(result.data as any).title}</span>
+            <div className="flex items-center justify-between text-[11px] text-muted-foreground font-mono">
               <span>{(result.data as any).course_name || 'General'}</span>
               <span>Due {(result.data as any).due_date || 'Upcoming'}</span>
             </div>
@@ -318,23 +308,23 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE E: Next Action Recommendation Spotlight */}
       {isRecommendation && (
-        <div className="rounded-2xl p-4 bg-white/[0.04] border border-amber-500/30 shadow-lg space-y-3 mt-2">
-          <div className="flex items-center space-x-2 text-xs font-bold font-mono text-amber-300 uppercase tracking-wider">
-            <Target className="w-4 h-4 text-amber-400" />
-            <span>Top Academic Priority</span>
+        <div className="rounded-lg p-3.5 bg-card border border-border space-y-3 mt-2">
+          <div className="flex items-center space-x-1.5 text-xs font-medium font-mono text-muted-foreground uppercase tracking-wider">
+            <Target className="w-3.5 h-3.5 text-primary" />
+            <span>Recommended Focus</span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+          <div className="p-3 rounded-md bg-muted/40 border border-border space-y-1.5">
             <div className="flex items-center justify-between">
-              <h5 className="font-bold text-sm text-white">
+              <h5 className="font-semibold text-xs text-foreground">
                 {(result.data as any).topTask?.title || 'Review course material'}
               </h5>
-              <span className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-mono font-bold uppercase">
+              <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-[10px] font-mono font-medium uppercase">
                 High Priority
               </span>
             </div>
-            <p className="text-xs text-white/60">
-              Course: <span className="text-white font-semibold">{(result.data as any).topTask?.course_name}</span> · Due {(result.data as any).topTask?.due_date}
+            <p className="text-xs text-muted-foreground">
+              Course: <span className="text-foreground font-medium">{(result.data as any).topTask?.course_name}</span> · Due {(result.data as any).topTask?.due_date}
             </p>
           </div>
 
@@ -347,11 +337,10 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
                   (result.data as any).topTask?.title
                 )
               }
-              className="w-full py-2.5 rounded-full text-white font-semibold text-xs shadow-lg border border-white/20 flex items-center justify-center space-x-1.5 cursor-pointer hover:opacity-90 active:scale-95 transition"
-              style={{ background: 'linear-gradient(to bottom, #2B2B2B, #101010)' }}
+              className="w-full py-1.5 rounded-md text-background bg-foreground hover:bg-foreground/90 font-medium text-xs flex items-center justify-center space-x-1.5 cursor-pointer transition shadow-sm"
             >
-              <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Start Recommended 45m Focus Session</span>
+              <Play className="w-3 h-3 fill-current" />
+              <span>Start 45m Focus Session</span>
             </button>
           )}
         </div>
@@ -359,10 +348,10 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
 
       {/* CASE F: Academic Guidance & Tutoring Advice */}
       {isAcademicAdvice && (
-        <div className="rounded-2xl p-4 bg-white/[0.04] border border-cyan-500/30 shadow-lg space-y-3 mt-2">
-          <div className="flex items-center space-x-2 text-xs font-bold text-cyan-300">
-            <Sparkles className="w-4 h-4" />
-            <span>Academic Concepts & Study Strategy</span>
+        <div className="rounded-lg p-3.5 bg-card border border-border space-y-2 mt-2">
+          <div className="flex items-center space-x-1.5 text-xs font-semibold text-foreground">
+            <BookOpen className="w-3.5 h-3.5 text-primary" />
+            <span>Key Study Points</span>
           </div>
 
           {(result.data as any).keyPoints && (
@@ -370,9 +359,9 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
               {(result.data as any).keyPoints.map((pt: string, idx: number) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-xs flex items-start space-x-2 text-white/90"
+                  className="p-2 rounded-md bg-muted/40 border border-border text-xs flex items-start space-x-2 text-foreground"
                 >
-                  <ChevronRight className="w-3.5 h-3.5 text-cyan-400 mt-0.5 shrink-0" />
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
                   <span>{pt}</span>
                 </div>
               ))}
@@ -381,29 +370,29 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
         </div>
       )}
 
-      {/* CASE G: Course Mastery Progress */}
+      {/* CASE G: Course Progress */}
       {isProgressList && (
-        <div className="rounded-2xl p-4 bg-white/[0.04] border border-white/10 shadow-lg space-y-2 mt-2">
-          <span className="text-xs font-bold text-white block">Course Progress & Mastery</span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div className="rounded-lg p-3.5 bg-card border border-border space-y-2 mt-2">
+          <span className="text-xs font-semibold text-foreground block">Course Progress</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {(result.data as any[]).map((course: any, idx: number) => (
               <div
                 key={idx}
-                className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs space-y-1.5"
+                className="p-2.5 rounded-md bg-muted/30 border border-border text-xs space-y-1.5"
               >
-                <div className="flex justify-between font-bold text-white">
+                <div className="flex justify-between font-medium text-foreground">
                   <span className="truncate">{course.course_name}</span>
-                  <span className="font-mono text-cyan-300">{course.completed_pct}%</span>
+                  <span className="font-mono text-primary tabular-nums">{course.completed_pct}%</span>
                 </div>
-                <div className="w-full bg-white/[0.06] h-1.5 rounded-full overflow-hidden border border-white/10">
+                <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden border border-border/50">
                   <div
-                    className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                    className="h-full bg-primary rounded-full transition-all duration-300"
                     style={{ width: `${course.completed_pct}%` }}
                   />
                 </div>
-                <div className="flex justify-between text-[10px] text-white/50 font-mono">
+                <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
                   <span>{course.completed_tasks}/{course.total_tasks} tasks</span>
-                  <span>{course.hours_this_week} hrs this week</span>
+                  <span>{course.hours_this_week} hrs</span>
                 </div>
               </div>
             ))}
@@ -411,18 +400,18 @@ export const VoiceResponseCard: React.FC<VoiceResponseCardProps> = ({
         </div>
       )}
 
-      {/* 4. Hackathon MCP JSON Inspector Toggle */}
+      {/* 4. MCP JSON Inspector Toggle */}
       <div className="pt-1">
         <button
           onClick={() => setShowMcpPayload(!showMcpPayload)}
-          className="text-[11px] font-mono text-white/50 hover:text-cyan-300 flex items-center space-x-1.5 cursor-pointer transition-colors"
+          className="text-[11px] font-mono text-muted-foreground hover:text-foreground flex items-center space-x-1.5 cursor-pointer transition-colors"
         >
-          <Code2 className="w-3 h-3 text-cyan-400" />
+          <Code2 className="w-3 h-3 text-muted-foreground" />
           <span>{showMcpPayload ? 'Hide MCP Payload' : 'Inspect MCP Tool Payload'}</span>
         </button>
 
         {showMcpPayload && (
-          <pre className="mt-2 p-3.5 rounded-2xl bg-black/80 text-emerald-400 font-mono text-[10px] leading-relaxed overflow-x-auto border border-white/15 max-h-48">
+          <pre className="mt-2 p-3 rounded-md bg-muted text-foreground font-mono text-[10px] leading-relaxed overflow-x-auto border border-border max-h-48">
             {JSON.stringify(
               {
                 tool: result.tool,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Clock, CheckCircle2, TrendingUp, AlertCircle, Award } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { Course, CourseProgress, Task } from '@studymate/types';
 
 interface KpiCardsProps {
@@ -34,88 +34,85 @@ export const KpiCards: React.FC<KpiCardsProps> = ({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* 1. Pending Tasks */}
-      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
-            Pending Tasks
-          </span>
-          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 dark:bg-white/10 dark:text-white/70 dark:border-white/10 uppercase tracking-wider">
-            {pendingCount > 0 ? 'Active' : 'All Clear'}
-          </span>
+      <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <span className="font-medium text-[11px] uppercase tracking-wider">Pending Tasks</span>
+            <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white font-mono tabular-nums">
+              {pendingCount}
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">assignments</span>
+          </div>
         </div>
-        <div className="flex items-baseline space-x-2">
-          <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight tabular-nums">
-            {pendingCount}
-          </span>
-          <span className="text-xs text-slate-500 dark:text-white/50 font-sans">active items</span>
+        <div className="pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs">
+          {highPriorityCount > 0 ? (
+            <span className="text-rose-600 dark:text-rose-400 font-medium">
+              {highPriorityCount} high priority
+            </span>
+          ) : (
+            <span className="text-slate-500 dark:text-slate-400">No urgent deadlines</span>
+          )}
         </div>
-        <p className="mt-2 text-xs font-mono text-rose-600 dark:text-rose-400 flex items-center space-x-1">
-          <span className={`w-1.5 h-1.5 rounded-full ${highPriorityCount > 0 ? 'bg-rose-500 animate-pulse' : 'bg-slate-400'} mr-1`} />
-          <span>{highPriorityCount} High priority assignments</span>
-        </p>
       </div>
 
       {/* 2. Active Courses */}
-      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
-            Active Courses
-          </span>
-          <div className="p-1.5 rounded-lg bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/20 dark:bg-white/10 dark:text-white dark:border-white/15">
-            <BookOpen className="w-4 h-4" />
+      <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <span className="font-medium text-[11px] uppercase tracking-wider">Active Courses</span>
+            <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white font-mono tabular-nums">
+              {courses.length}
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">enrolled</span>
           </div>
         </div>
-        <div className="flex items-baseline space-x-2">
-          <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight tabular-nums">
-            {courses.length}
-          </span>
-          <span className="text-xs text-slate-500 dark:text-white/50 font-sans">Enrolled</span>
+        <div className="pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs text-slate-500 dark:text-slate-400 truncate">
+          {courseCodes ? courseCodes : 'No courses registered'}
         </div>
-        <p className="mt-2 text-xs font-mono text-slate-500 dark:text-white/50 truncate">
-          {courseCodes ? `${courseCodes}${courses.length > 3 ? ', ...' : ''}` : 'No courses enrolled yet'}
-        </p>
       </div>
 
       {/* 3. Weekly Study Time */}
-      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
-            Weekly Study Time
-          </span>
-          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#E5A952]/10 text-[#E5A952] border border-[#E5A952]/25 uppercase tracking-wider">
-            {totalHoursWeek > 0 ? `${totalHoursWeek.toFixed(1)}h logged` : 'Real-Time'}
-          </span>
+      <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <span className="font-medium text-[11px] uppercase tracking-wider">Study Time</span>
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white font-mono tabular-nums">
+              {Math.round(totalHoursWeek * 10) / 10}
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">hours this week</span>
+          </div>
         </div>
-        <div className="flex items-baseline space-x-2">
-          <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight tabular-nums">
-            {Math.round(totalHoursWeek * 10) / 10}
-          </span>
-          <span className="text-xs text-slate-500 dark:text-white/50 font-sans">hrs logged</span>
+        <div className="pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs text-slate-500 dark:text-slate-400">
+          Target: 20 hrs / week
         </div>
-        <p className="mt-2 text-xs font-mono text-slate-500 dark:text-white/50">
-          {courses.length > 0 ? 'Target: 20 hrs / week' : 'Add courses to track study velocity'}
-        </p>
       </div>
 
       {/* 4. Avg Completion Rate */}
-      <div className="rounded-2xl p-5 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] transition-all hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-white/[0.07] relative overflow-hidden group">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-mono font-semibold text-slate-500 dark:text-white/50 uppercase tracking-wider">
-            Avg Completion Rate
-          </span>
-          <div className="p-1 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20">
-            <TrendingUp className="w-4 h-4" />
+      <div className="rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <span className="font-medium text-[11px] uppercase tracking-wider">Syllabus Progress</span>
+            <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white font-mono tabular-nums">
+              {avgCompletion}%
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">overall completion</span>
           </div>
         </div>
-        <div className="flex items-baseline space-x-1">
-          <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight tabular-nums">
-            {avgCompletion}%
-          </span>
+        <div className="pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs text-slate-500 dark:text-slate-400">
+          Across all syllabus modules
         </div>
-        <p className="mt-2 text-xs font-mono text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
-          <Award className="w-3.5 h-3.5 mr-1 inline" />
-          <span>{courses.length > 0 ? 'Coursework progress' : 'Awaiting course assignments'}</span>
-        </p>
       </div>
     </div>
   );

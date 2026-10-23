@@ -215,26 +215,25 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
   }, [chartData]);
 
   return (
-    <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200/90 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-6 transition-all duration-300">
+    <div className="rounded-xl p-6 bg-card border border-border shadow-sm space-y-6">
       {/* Header with Horizon Switcher & Log Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 dark:bg-white/[0.08] dark:border-white/15 dark:text-cyan-300 flex items-center justify-center shadow-sm dark:shadow-lg">
+            <div className="w-8 h-8 rounded-lg bg-muted text-foreground flex items-center justify-center border border-border">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
-                  Focus Time & Habit Velocity
+                <h2 className="text-base font-semibold text-foreground tracking-tight">
+                  Focus Time & Habit Analytics
                 </h2>
-                <span className="font-mono text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/20 uppercase flex items-center space-x-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse" />
-                  <span>Real-Time Sync</span>
+                <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 uppercase">
+                  Live Sync
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
-                Pomodoro intervals & habit tracking across days, weeks, and semesters
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Session intervals and study habits across days, weeks, and terms
               </p>
             </div>
           </div>
@@ -242,14 +241,14 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
         <div className="flex items-center space-x-2.5">
           {/* Interactive Horizon Switcher (Day, Week, Month) */}
-          <div className="flex items-center p-1 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs">
+          <div className="flex items-center p-1 rounded-lg bg-muted border border-border text-xs">
             <button
               type="button"
               onClick={() => setTimeHorizon('day')}
-              className={`px-3.5 py-1.5 rounded-full transition cursor-pointer font-semibold ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer font-medium ${
                 timeHorizon === 'day'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200 dark:bg-white/15 dark:text-white dark:border-white/20'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-white/60 dark:hover:text-white'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Day
@@ -257,10 +256,10 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
             <button
               type="button"
               onClick={() => setTimeHorizon('week')}
-              className={`px-3.5 py-1.5 rounded-full transition cursor-pointer font-semibold ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer font-medium ${
                 timeHorizon === 'week'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200 dark:bg-white/15 dark:text-white dark:border-white/20'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-white/60 dark:hover:text-white'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Week
@@ -268,10 +267,10 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
             <button
               type="button"
               onClick={() => setTimeHorizon('month')}
-              className={`px-3.5 py-1.5 rounded-full transition cursor-pointer font-semibold ${
+              className={`px-3 py-1 rounded-md transition cursor-pointer font-medium ${
                 timeHorizon === 'month'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200 dark:bg-white/15 dark:text-white dark:border-white/20'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-white/60 dark:hover:text-white'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Month
@@ -282,7 +281,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
           <button
             type="button"
             onClick={() => setShowLogModal(true)}
-            className="px-4 py-2 rounded-full text-xs font-semibold text-white transition shadow-md border border-transparent dark:border-white/20 flex items-center space-x-1.5 cursor-pointer hover:opacity-90 active:scale-95 bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
+            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-background bg-foreground hover:bg-foreground/90 transition shadow-sm flex items-center space-x-1.5 cursor-pointer active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Log Time</span>
@@ -292,136 +291,136 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
       {/* Real-Time Live Focus Session Status Banner */}
       {timerRunning && (
-        <div className="p-4 rounded-2xl bg-blue-50 dark:bg-cyan-500/10 border border-blue-200 dark:border-cyan-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+        <div className="p-3.5 rounded-lg bg-primary/5 border border-primary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 dark:bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 dark:bg-cyan-400" />
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
             </span>
             <div>
-              <span className="text-xs font-bold text-blue-700 dark:text-cyan-300 block">
-                Live Focus Session Running: {selectedCourse}
+              <span className="text-xs font-semibold text-foreground block">
+                Active Session: {selectedCourse}
               </span>
-              <span className="text-[10px] text-slate-500 dark:text-white/50 font-mono">
+              <span className="text-[11px] text-muted-foreground font-mono">
                 Real-time tracking: Active minutes stream directly into your daily metrics
               </span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 font-mono text-xs font-semibold text-blue-700 dark:text-cyan-300 bg-blue-100/80 dark:bg-white/[0.06] px-3.5 py-1.5 rounded-full border border-blue-200 dark:border-cyan-500/30 self-start sm:self-auto">
-            <Clock className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '4s' }} />
-            <span>{formatTime(secondsRemaining)} left · +{liveElapsedMinutes}m logged live</span>
+          <div className="flex items-center space-x-2 font-mono text-xs font-medium text-foreground bg-muted/80 px-3 py-1 rounded-md border border-border self-start sm:self-auto">
+            <Clock className="w-3.5 h-3.5 text-primary" />
+            <span>{formatTime(secondsRemaining)} remaining · +{liveElapsedMinutes}m active</span>
           </div>
         </div>
       )}
 
       {/* 4 Overview Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Today */}
-        <div className="p-4 rounded-2xl bg-slate-50/70 hover:bg-slate-100/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-slate-200/80 hover:border-slate-300 dark:border-white/10 dark:hover:border-white/20 space-y-1 transition-all shadow-sm dark:shadow-lg">
+        <div className="p-4 rounded-lg bg-card border border-border space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500 dark:text-white/50">Today</span>
-            <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+            <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Today</span>
+            <Clock className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
-          <div className="font-mono text-2xl font-bold text-slate-900 dark:text-white flex items-baseline space-x-1.5">
+          <div className="font-mono text-2xl font-bold text-foreground flex items-baseline space-x-1.5 tabular-nums">
             <span>{formatHoursMins(liveTodayMinutes)}</span>
             {timerRunning && (
-              <span className="text-xs font-semibold text-blue-600 dark:text-cyan-400 animate-pulse font-mono">
+              <span className="text-xs font-semibold text-primary font-mono">
                 (+{liveElapsedMinutes}m)
               </span>
             )}
           </div>
-          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
             Target: 2h daily
           </div>
         </div>
 
         {/* This Week */}
-        <div className="p-4 rounded-2xl bg-slate-50/70 hover:bg-slate-100/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-slate-200/80 hover:border-slate-300 dark:border-white/10 dark:hover:border-white/20 space-y-1 transition-all shadow-sm dark:shadow-lg">
+        <div className="p-4 rounded-lg bg-card border border-border space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500 dark:text-white/50">This Week</span>
-            <Calendar className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+            <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">This Week</span>
+            <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
-          <div className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
+          <div className="font-mono text-2xl font-bold text-foreground tabular-nums">
             {(liveWeekMinutes / 60).toFixed(1)} hrs
           </div>
-          <div className="text-[10px] text-slate-500 dark:text-white/50">
+          <div className="text-[11px] text-muted-foreground">
             Past 7 days active
           </div>
         </div>
 
         {/* This Month */}
-        <div className="p-4 rounded-2xl bg-slate-50/70 hover:bg-slate-100/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-slate-200/80 hover:border-slate-300 dark:border-white/10 dark:hover:border-white/20 space-y-1 transition-all shadow-sm dark:shadow-lg">
+        <div className="p-4 rounded-lg bg-card border border-border space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500 dark:text-white/50">This Month</span>
-            <BarChart3 className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-300" />
+            <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">This Month</span>
+            <BarChart3 className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
-          <div className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
+          <div className="font-mono text-2xl font-bold text-foreground tabular-nums">
             {(liveMonthMinutes / 60).toFixed(1)} hrs
           </div>
-          <div className="text-[10px] text-blue-600 dark:text-cyan-400 font-medium">
+          <div className="text-[11px] text-muted-foreground">
             30-day focus time
           </div>
         </div>
 
         {/* Study Streak */}
-        <div className="p-4 rounded-2xl bg-slate-50/70 hover:bg-slate-100/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-slate-200/80 hover:border-slate-300 dark:border-white/10 dark:hover:border-white/20 space-y-1 transition-all shadow-sm dark:shadow-lg">
+        <div className="p-4 rounded-lg bg-card border border-border space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500 dark:text-white/50">Streak</span>
-            <Flame className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+            <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Streak</span>
+            <Flame className="w-3.5 h-3.5 text-amber-500" />
           </div>
-          <div className="font-mono text-2xl font-bold text-amber-600 dark:text-amber-300 flex items-center space-x-1">
+          <div className="font-mono text-2xl font-bold text-foreground flex items-center space-x-1.5 tabular-nums">
             <span>{stats?.streakDays || 0}</span>
-            <span className="text-xs font-semibold text-slate-500 dark:text-white/50 font-sans">Days</span>
+            <span className="text-xs font-medium text-muted-foreground font-sans">days</span>
           </div>
-          <div className="text-[10px] text-slate-500 dark:text-white/50">
+          <div className="text-[11px] text-muted-foreground">
             Consistency streak
           </div>
         </div>
       </div>
 
-      {/* 2-Column Real-Time Visualization: Dynamic Chart & Subject Allocation */}
+      {/* 2-Column Visualization: Focus Chart & Subject Allocation */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Dynamic Focus Chart (7 cols) */}
-        <div className="lg:col-span-7 p-6 rounded-3xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10 shadow-sm dark:shadow-lg space-y-4">
+        <div className="lg:col-span-7 p-5 rounded-lg bg-card border border-border space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+              <BarChart3 className="w-4 h-4 text-muted-foreground" />
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">
                 {timeHorizon === 'day'
                   ? 'Hourly Focus Distribution (Today)'
                   : timeHorizon === 'month'
-                  ? 'Weekly Focus Velocity (30 Days)'
+                  ? 'Weekly Focus Trend (30 Days)'
                   : 'Daily Focus Breakdown (7 Days)'}
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-slate-500 dark:text-white/50">
+            <span className="text-[11px] font-mono text-muted-foreground">
               {timeHorizon === 'day' ? 'Minutes / Hour' : timeHorizon === 'month' ? 'Minutes / Week' : 'Minutes / Day'}
             </span>
           </div>
 
-          {/* Real-Time Interactive Visual Bar Chart */}
-          <div className="flex items-end justify-between gap-2 pt-6 pb-2 h-48 px-2">
+          {/* Bar Chart */}
+          <div className="flex items-end justify-between gap-2 pt-6 pb-2 h-44 px-2">
             {chartData.map((item, idx) => {
               const heightPct = Math.max(6, Math.min(100, Math.round((item.minutes / maxChartMinutes) * 100)));
               return (
                 <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group relative">
                   {/* Hover tooltip */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 text-[10px] font-mono font-semibold text-white bg-slate-900 dark:text-cyan-300 dark:bg-[#0c0c14] px-2 py-1 rounded-lg shadow-xl border border-slate-700 dark:border-white/15 whitespace-nowrap absolute -top-8 z-20 pointer-events-none">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono font-medium text-background bg-foreground px-2 py-1 rounded shadow-md whitespace-nowrap absolute -top-8 z-20 pointer-events-none">
                     {item.minutes}m {item.minutes >= 60 ? `(${(item.minutes / 60).toFixed(1)}h)` : ''}
                   </div>
 
                   {/* Bar pillar container */}
-                  <div className="w-full max-w-[38px] bg-slate-200/50 dark:bg-white/[0.03] rounded-2xl h-full flex items-end p-1 overflow-hidden border border-slate-200 dark:border-white/10 transition-all group-hover:border-blue-400/50 dark:group-hover:border-cyan-400/50">
+                  <div className="w-full max-w-[32px] bg-muted/60 rounded-md h-full flex items-end p-0.5 overflow-hidden border border-border/40">
                     <div
-                      className={`w-full rounded-xl transition-all duration-500 ${
+                      className={`w-full rounded-sm transition-all duration-300 ${
                         item.live
-                          ? 'bg-gradient-to-t from-blue-600 via-sky-500 to-indigo-600 dark:from-cyan-500 dark:via-sky-400 dark:to-blue-500 shadow-md shadow-blue-500/30 dark:shadow-cyan-500/30 animate-pulse'
+                          ? 'bg-primary'
                           : item.highlight
-                          ? 'bg-gradient-to-t from-blue-600 to-indigo-600 dark:from-cyan-500 dark:to-blue-600 shadow-sm shadow-blue-500/20 dark:shadow-cyan-500/20'
+                          ? 'bg-foreground'
                           : item.minutes > 0
-                          ? 'bg-blue-500/70 group-hover:bg-blue-600 dark:bg-cyan-500/60 dark:group-hover:bg-cyan-500 transition-colors'
-                          : 'bg-slate-300/40 dark:bg-white/[0.06]'
+                          ? 'bg-muted-foreground/50 group-hover:bg-muted-foreground transition-colors'
+                          : 'bg-muted/40'
                       }`}
                       style={{ height: `${heightPct}%` }}
                     />
@@ -429,8 +428,8 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
                   {/* Axis label */}
                   <span
-                    className={`text-[10px] font-mono font-semibold transition-colors ${
-                      item.highlight ? 'text-blue-600 dark:text-cyan-300' : 'text-slate-400 dark:text-white/50'
+                    className={`text-[10px] font-mono font-medium transition-colors ${
+                      item.highlight ? 'text-foreground font-semibold' : 'text-muted-foreground'
                     }`}
                   >
                     {item.label}
@@ -440,27 +439,27 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
             })}
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-white/50 pt-2 border-t border-slate-200/80 dark:border-white/10">
+          <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-2 border-t border-border">
             <span>
               {timeHorizon === 'day'
-                ? `Target: 120 mins daily · ${liveTodayMinutes > 0 ? `${liveTodayMinutes}m completed today` : 'No study logged today yet'}`
+                ? `Daily target: 120m · ${liveTodayMinutes > 0 ? `${liveTodayMinutes}m completed today` : 'No study logged today yet'}`
                 : timeHorizon === 'month'
-                ? `Monthly Total: ${(liveMonthMinutes / 60).toFixed(1)} hrs · ${liveMonthMinutes > 0 ? 'On pace for semester targets' : 'Start your first focus session'}`
-                : `Target: 2h daily · Current pace: ${(liveWeekMinutes / 60).toFixed(1)} hrs this week`}
+                ? `Monthly Total: ${(liveMonthMinutes / 60).toFixed(1)} hrs`
+                : `Target: 2h daily · ${(liveWeekMinutes / 60).toFixed(1)} hrs this week`}
             </span>
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+            <span className="font-medium text-emerald-600 dark:text-emerald-400">
               Active Streak: {stats?.streakDays || 0} {(stats?.streakDays || 0) === 1 ? 'Day' : 'Days'}
             </span>
           </div>
         </div>
 
         {/* Subject Study Distribution (5 cols) */}
-        <div className="lg:col-span-5 p-6 rounded-3xl bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10 shadow-sm dark:shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-white/10">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+        <div className="lg:col-span-5 p-5 rounded-lg bg-card border border-border space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-border">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">
               Subject Study Distribution
             </h3>
-            <span className="text-[10px] font-mono text-slate-500 dark:text-white/50">Hours Logged</span>
+            <span className="text-[11px] font-mono text-muted-foreground">Hours Logged</span>
           </div>
 
           <div className="space-y-3.5">
@@ -469,25 +468,19 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                 const totalMins = Math.max(1, liveMonthMinutes);
                 const courseMins = c.course_name === selectedCourse ? c.minutes + liveElapsedMinutes : c.minutes;
                 const pct = Math.max(2, Math.round((courseMins / totalMins) * 100));
-                const colors = [
-                  'from-blue-600 to-indigo-600 dark:from-cyan-500 dark:to-blue-500',
-                  'from-sky-500 to-blue-600 dark:from-sky-500 dark:to-indigo-500',
-                  'from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500',
-                  'from-purple-600 to-pink-600 dark:from-purple-500 dark:to-pink-500',
-                ];
                 return (
                   <div key={idx} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-800 dark:text-white truncate max-w-[180px]">
+                      <span className="font-medium text-foreground truncate max-w-[180px]">
                         {c.course_name}
                       </span>
-                      <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-cyan-300">
+                      <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
                         {(courseMins / 60).toFixed(1)}h ({pct}%)
                       </span>
                     </div>
-                    <div className="w-full bg-slate-200/60 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden border border-slate-200 dark:border-white/10">
+                    <div className="w-full bg-muted h-2 rounded-full overflow-hidden border border-border/50">
                       <div
-                        className={`h-full rounded-full bg-gradient-to-r ${colors[idx % colors.length]} transition-all duration-500`}
+                        className="h-full rounded-full bg-primary transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -495,18 +488,18 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                 );
               })
             ) : (
-              <div className="py-6 text-center text-xs text-slate-400 dark:text-white/40 font-mono">
+              <div className="py-6 text-center text-xs text-muted-foreground font-mono">
                 No course study history yet. Start your first session above!
               </div>
             )}
           </div>
 
-          <div className="pt-2 border-t border-slate-200/80 dark:border-white/10">
+          <div className="pt-2 border-t border-border">
             <button
               onClick={() => setShowRecentSessions(!showRecentSessions)}
-              className="text-xs font-semibold text-blue-600 dark:text-cyan-300 hover:underline flex items-center space-x-1 cursor-pointer"
+              className="text-xs font-medium text-foreground hover:underline flex items-center space-x-1 cursor-pointer"
             >
-              <span>{showRecentSessions ? 'Hide Focus Sessions' : 'Recent Focus Sessions'}</span>
+              <span>{showRecentSessions ? 'Hide Sessions' : 'Recent Sessions'}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
 
@@ -516,23 +509,23 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                   stats.recentSessions.map((session, i) => (
                     <div
                       key={i}
-                      className="p-2.5 rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs flex justify-between items-center shadow-sm"
+                      className="p-2.5 rounded-lg bg-muted/50 border border-border text-xs flex justify-between items-center"
                     >
                       <div className="truncate mr-2">
-                        <span className="font-semibold text-slate-900 dark:text-white block truncate">
+                        <span className="font-medium text-foreground block truncate">
                           {session.course_name}
                         </span>
-                        <span className="text-[10px] text-slate-500 dark:text-white/50 truncate">
+                        <span className="text-[11px] text-muted-foreground truncate">
                           {session.notes || 'Pomodoro deep work'}
                         </span>
                       </div>
-                      <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-cyan-300 shrink-0">
+                      <span className="font-mono text-[11px] font-semibold text-foreground shrink-0 tabular-nums">
                         {session.duration_minutes}m
                       </span>
                     </div>
                   ))
                 ) : (
-                  <span className="text-[11px] text-slate-400 dark:text-white/40 block">
+                  <span className="text-[11px] text-muted-foreground block">
                     No recent sessions logged yet today.
                   </span>
                 )}
@@ -544,16 +537,16 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
       {/* Manual Time Logging Modal */}
       {showLogModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-md bg-white dark:bg-[#0c0c14] border border-slate-200 dark:border-white/15 rounded-3xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
-              <h3 className="font-bold text-base text-slate-900 dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-md bg-card border border-border rounded-xl p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <h3 className="font-semibold text-sm text-foreground">
                 Log Offline Study Session
               </h3>
               <button
                 type="button"
                 onClick={() => setShowLogModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:text-white/50 dark:hover:text-white transition cursor-pointer"
+                className="p-1 rounded-md text-muted-foreground hover:text-foreground transition cursor-pointer"
               >
                 ✕
               </button>
@@ -561,16 +554,16 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
 
             <form onSubmit={handleLogSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-white/70 mb-1.5">
+                <label className="block text-xs font-medium text-foreground mb-1.5">
                   Course / Subject
                 </label>
                 <select
                   value={logCourse}
                   onChange={(e) => setLogCourse(e.target.value)}
-                  className="w-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400"
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 >
                   {courses.map((c) => (
-                    <option key={c.id} value={c.name} className="bg-white text-slate-900 dark:bg-[#0c0c12] dark:text-white">
+                    <option key={c.id} value={c.name}>
                       {c.name} ({c.code})
                     </option>
                   ))}
@@ -578,7 +571,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-white/70 mb-1.5">
+                <label className="block text-xs font-medium text-foreground mb-1.5">
                   Duration (Minutes)
                 </label>
                 <input
@@ -588,13 +581,13 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                   step="5"
                   value={logMinutes}
                   onChange={(e) => setLogMinutes(parseInt(e.target.value, 10) || 0)}
-                  className="w-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400 font-mono"
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono tabular-nums"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-white/70 mb-1.5">
+                <label className="block text-xs font-medium text-foreground mb-1.5">
                   Notes / Study Topics
                 </label>
                 <input
@@ -602,7 +595,7 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                   value={logNotes}
                   onChange={(e) => setLogNotes(e.target.value)}
                   placeholder="e.g. Chapter 4 review & practice proofs"
-                  className="w-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/30 focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400"
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -610,14 +603,14 @@ export const StudyStatsTracker: React.FC<StudyStatsTrackerProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowLogModal(false)}
-                  className="px-4 py-2 rounded-full text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-white/60 dark:hover:text-white transition cursor-pointer"
+                  className="px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2.5 rounded-full text-xs font-semibold text-white transition shadow-md border border-transparent dark:border-white/20 cursor-pointer disabled:opacity-50 hover:opacity-90 active:scale-95 bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
+                  className="px-4 py-2 rounded-lg text-xs font-medium text-background bg-foreground hover:bg-foreground/90 transition shadow-sm cursor-pointer disabled:opacity-50"
                 >
                   {submitting ? 'Saving...' : 'Save Session'}
                 </button>

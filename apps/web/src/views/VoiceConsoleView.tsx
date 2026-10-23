@@ -6,15 +6,10 @@ import {
   Volume2,
   VolumeX,
   Bot,
-  User,
-  Activity,
-  Sparkles,
-  Sliders,
   RotateCcw,
-  CheckCircle2,
   AlertCircle,
-  Clock,
   Radio,
+  Clock,
 } from 'lucide-react';
 import {
   simulateVoice,
@@ -25,8 +20,6 @@ import {
 } from '../api.js';
 import { usePomodoro } from '../context/PomodoroContext.js';
 import { VoiceResponseCard } from '../components/VoiceResponseCard.js';
-import { AnimatedContent } from '../components/animated/index.js';
-import { motion } from 'framer-motion';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -47,7 +40,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: `Hello ${studentFirstName}! I am StudyMate, your Alexa+ conversational academic assistant. How can I help organize your studies today? You can ask what's due, request a 45-minute study plan, or ask what to do next.`,
+      content: `Hello ${studentFirstName}. I am your Alexa+ study companion. You can ask what assignments are due, request a 45-minute focus plan, or mark completed tasks.`,
       timestamp: 'Just now',
     },
   ]);
@@ -79,7 +72,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     'What should I do next?',
     'How am I doing in Algorithms?',
     'Add a task: Finish OS Lab due Friday',
-    'How should I study for exams?',
   ];
 
   // Auto-scroll chat to bottom
@@ -114,7 +106,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
   const handleToggleListening = () => {
     setSpeechError(null);
 
-    // If currently listening, stop it
     if (isListening) {
       if (recognitionRef.current) {
         try {
@@ -125,12 +116,11 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       return;
     }
 
-    // Check for browser Web Speech API support
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      setSpeechError('Microphone speech recognition is not supported in this browser. Please type your question.');
+      setSpeechError('Microphone speech recognition is not supported in this browser. Please type your query.');
       return;
     }
 
@@ -153,16 +143,13 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       };
 
       recognition.onerror = (event: any) => {
-        // 'aborted' is fired when recognition is stopped by the user or programmatically aborted.
-        // 'no-speech' is fired when silence timeout occurs. Both are normal lifecycle events.
         if (event.error === 'aborted' || event.error === 'no-speech') {
           setIsListening(false);
           return;
         }
 
-        console.warn('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
-          setSpeechError('Microphone permission denied. Please allow microphone access in your browser settings.');
+          setSpeechError('Microphone permission denied. Please allow microphone access in browser settings.');
         } else {
           setSpeechError(`Voice recognition error: ${event.error}`);
         }
@@ -177,7 +164,7 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       recognition.start();
     } catch (err) {
       console.error('Failed to start speech recognition:', err);
-      setSpeechError('Could not initialize microphone. Please check permissions.');
+      setSpeechError('Could not initialize microphone.');
       setIsListening(false);
     }
   };
@@ -213,7 +200,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     setInputUtterance('');
     setLoading(true);
 
-    // Stop listening if user hits send
     if (isListening && recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -237,7 +223,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
       setMessages((prev) => [...prev, assistantMsg]);
       handleSpeak(result.speechResponse);
 
-      // If the intent confirms starting a study plan, trigger the timer!
       if (result.intent === 'ConfirmStartStudyPlanIntent' && result.data?.action === 'start_timer') {
         const dur = result.data.duration_minutes || 25;
         const crs = result.data.course || 'Coursework';
@@ -257,261 +242,252 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     setMessages([
       {
         role: 'assistant',
-        content: `Chat session reset! Ready for a fresh start, ${studentFirstName}. How can I help you today?`,
+        content: `Chat session reset. What would you like to review, ${studentFirstName}?`,
         timestamp: 'Just now',
       },
     ]);
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn max-w-[1400px] mx-auto">
+    <div className="space-y-6 max-w-[1400px] mx-auto">
       {/* Top Banner */}
-      <AnimatedContent direction="up" fadeIn duration={0.5}>
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#121520] border border-white/[0.08] text-[#F5EFE6] flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
-          <div className="relative z-10">
-            <div className="flex items-center space-x-3">
-              <h1 className="font-serif text-2xl font-medium tracking-tight text-[#F5EFE6]">
-                Voice Assistant Console
-              </h1>
-              <span className="font-mono text-xs font-semibold px-3 py-0.5 rounded-full bg-white/15 text-white border border-white/20 uppercase tracking-wider flex items-center space-x-1.5">
-                <Radio className="w-3 h-3 animate-pulse text-[#E5A952]" />
-                <span>Multi-Turn Dialogue</span>
-              </span>
-            </div>
-            <p className="text-xs text-blue-100/90 dark:text-white/60 mt-1">
-              Real-time conversational intelligence for {currentStudent.name} ({currentStudent.major})
-            </p>
+      <div className="rounded-xl p-6 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center space-x-2.5">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              Alexa+ Voice Console
+            </h1>
+            <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10 flex items-center space-x-1.5">
+              <Radio className="w-3 h-3 text-emerald-500" />
+              <span>Multi-Turn Dialogue</span>
+            </span>
           </div>
-
-          {/* Audio & Session Controls */}
-          <div className="flex flex-wrap items-center gap-3 relative z-10">
-            <div className="flex items-center space-x-2 text-xs font-mono text-white/80 bg-white/15 px-3.5 py-1.5 rounded-full border border-white/20">
-              <span>Speed:</span>
-              <input
-                type="range"
-                min="0.8"
-                max="1.3"
-                step="0.05"
-                value={speechRate}
-                onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-                className="w-16 accent-[#E5A952]"
-              />
-              <span className="text-white font-semibold">{speechRate}x</span>
-            </div>
-
-            <button
-              onClick={() => setTtsEnabled(!ttsEnabled)}
-              className={`px-3.5 py-1.5 rounded-full text-xs border transition flex items-center space-x-1.5 cursor-pointer font-semibold font-mono ${ttsEnabled
-                ? 'bg-white text-slate-900 border-white shadow-sm'
-                : 'bg-white/15 text-white/70 border-white/20'
-                }`}
-            >
-              {ttsEnabled ? <Volume2 className="w-3.5 h-3.5 text-[#E5A952] dark:text-[#E5A952]" /> : <VolumeX className="w-3.5 h-3.5" />}
-              <span>{ttsEnabled ? 'Readback ON' : 'Readback OFF'}</span>
-            </button>
-
-            <button
-              onClick={handleClearChat}
-              className="p-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:bg-white/15 transition cursor-pointer"
-              title="Clear conversation history"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Simulate spoken queries to the Alexa+ StudyMate skill. Responses execute deterministic MCP tools against SQLite.
+          </p>
         </div>
-      </AnimatedContent>
+
+        {/* Audio & Session Controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex items-center space-x-2 text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.05] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10">
+            <span>Speed:</span>
+            <input
+              type="range"
+              min="0.8"
+              max="1.3"
+              step="0.05"
+              value={speechRate}
+              onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+              className="w-16 accent-slate-900 dark:accent-white"
+            />
+            <span className="font-semibold">{speechRate}x</span>
+          </div>
+
+          <button
+            onClick={() => setTtsEnabled(!ttsEnabled)}
+            className={`px-3 py-1.5 rounded-lg text-xs border transition flex items-center space-x-1.5 cursor-pointer font-medium ${
+              ttsEnabled
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:text-slate-900 dark:bg-white/[0.06] dark:text-slate-400 dark:hover:text-white border-slate-200 dark:border-white/10'
+            }`}
+          >
+            {ttsEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            <span>{ttsEnabled ? 'Spoken Readback ON' : 'Readback OFF'}</span>
+          </button>
+
+          <button
+            onClick={handleClearChat}
+            className="p-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition cursor-pointer"
+            title="Reset conversation"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
 
       {/* Main Conversation Canvas */}
-      <AnimatedContent direction="up" fadeIn duration={0.5} delay={0.1}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Column: Chat Feed & Input (8 cols) */}
-          <div className="lg:col-span-8 p-6 sm:p-8 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] space-y-4 flex flex-col justify-between min-h-[620px]">
-            {/* Chat Messages Feed */}
-            <div className="space-y-5 min-h-[440px] max-h-[560px] overflow-y-auto pr-2">
-              {messages.map((msg, i) => (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Chat Feed & Input (8 cols) */}
+        <div className="lg:col-span-8 rounded-xl p-5 bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between min-h-[580px] space-y-4">
+          {/* Chat Messages Feed */}
+          <div className="space-y-4 min-h-[420px] max-h-[540px] overflow-y-auto pr-1">
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                className={`flex items-start space-x-2.5 ${
+                  msg.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                {/* Assistant Avatar */}
+                {msg.role === 'assistant' && (
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center shrink-0">
+                    <Bot className="w-3.5 h-3.5" />
+                  </div>
+                )}
+
+                {/* Message Content Container */}
                 <div
-                  key={i}
-                  className={`flex items-start space-x-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'
-                    }`}
+                  className={`rounded-lg p-3 text-xs leading-relaxed transition ${
+                    msg.role === 'user'
+                      ? 'max-w-[80%] bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-medium'
+                      : 'w-full max-w-[90%] bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.06] text-slate-800 dark:text-slate-100'
+                  }`}
                 >
-                  {/* Assistant Avatar */}
-                  {msg.role === 'assistant' && (
-                    <div className="w-9 h-9 rounded-2xl bg-blue-50 text-[#E5A952] border border-blue-200 dark:bg-white/[0.08] dark:border-white/15 dark:text-[#E5A952] flex items-center justify-center shrink-0 shadow-sm dark:shadow-lg">
-                      <Bot className="w-4 h-4" />
+                  {msg.role === 'user' ? (
+                    <div>
+                      <p>{msg.content}</p>
+                      <span className="text-[10px] opacity-60 block text-right mt-1 font-mono">
+                        {msg.timestamp}
+                      </span>
                     </div>
-                  )}
-
-                  {/* Message Content Container */}
-                  <div
-                    className={`rounded-2xl p-4 transition-all ${msg.role === 'user'
-                      ? 'max-w-[80%] text-white border border-transparent dark:border-white/20 shadow-md bg-slate-900 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]'
-                      : 'w-full max-w-[88%] bg-slate-50 dark:bg-white/[0.04] border border-slate-200/90 dark:border-white/10 text-slate-800 dark:text-white shadow-sm dark:shadow-lg'
-                      }`}
-                  >
-                    {msg.role === 'user' ? (
-                      <div>
-                        <p className="text-sm font-sans font-medium leading-relaxed">{msg.content}</p>
-                        <span className="text-[10px] font-mono opacity-60 block text-right mt-1.5">
-                          {msg.timestamp}
-                        </span>
-                      </div>
-                    ) : msg.result ? (
-                      <VoiceResponseCard
-                        result={msg.result}
-                        onStartTimer={handleStartPomodoro}
-                        onToggleTask={handleToggleTask}
-                        onSpeak={handleSpeak}
-                      />
-                    ) : (
-                      <div>
-                        <p className="text-sm font-sans leading-relaxed text-slate-900 dark:text-white">
-                          {msg.content}
-                        </p>
-                        <span className="text-[10px] font-mono text-slate-500 dark:text-white/50 block mt-1.5">
-                          {msg.timestamp}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* User Avatar with Student Initials */}
-                  {msg.role === 'user' && (
-                    <div className="w-9 h-9 rounded-2xl bg-slate-200 text-slate-800 dark:bg-white/15 dark:border dark:border-white/20 dark:text-white flex items-center justify-center shrink-0 shadow-sm text-xs font-bold font-mono">
-                      {studentInitials}
+                  ) : msg.result ? (
+                    <VoiceResponseCard
+                      result={msg.result}
+                      onStartTimer={handleStartPomodoro}
+                      onToggleTask={handleToggleTask}
+                      onSpeak={handleSpeak}
+                    />
+                  ) : (
+                    <div>
+                      <p>{msg.content}</p>
+                      <span className="text-[10px] text-slate-400 block mt-1 font-mono">
+                        {msg.timestamp}
+                      </span>
                     </div>
                   )}
                 </div>
-              ))}
 
-              {/* Loading Indicator */}
-              {loading && (
-                <div className="flex items-start space-x-3">
-                  <div className="w-9 h-9 rounded-2xl bg-blue-100 text-blue-700 dark:bg-[#E5A952]/20 dark:text-[#E5A952] border border-blue-200 dark:border-cyan-500/30 flex items-center justify-center shrink-0 animate-pulse">
-                    <Bot className="w-4 h-4" />
+                {/* User Avatar */}
+                {msg.role === 'user' && (
+                  <div className="w-7 h-7 rounded-lg bg-slate-200 text-slate-700 dark:bg-white/15 dark:text-white flex items-center justify-center shrink-0 text-xs font-mono font-medium">
+                    {studentInitials}
                   </div>
-                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center space-x-3 text-xs text-slate-600 dark:text-white/60">
-                    <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-cyan-400 animate-ping" />
-                    <span>Processing natural language & executing MCP tools...</span>
-                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Loading Indicator */}
+            {loading && (
+              <div className="flex items-start space-x-2.5">
+                <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center shrink-0">
+                  <Bot className="w-3.5 h-3.5" />
                 </div>
-              )}
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.06] flex items-center space-x-2 text-xs text-slate-500">
+                  <span className="w-2 h-2 rounded-full bg-slate-600 dark:bg-slate-300 animate-ping" />
+                  <span>Processing speech intent & querying SQLite...</span>
+                </div>
+              </div>
+            )}
 
-              <div ref={chatBottomRef} />
+            <div ref={chatBottomRef} />
+          </div>
+
+          {/* Voice Microphone Error Notification */}
+          {speechError && (
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-300 text-xs flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{speechError}</span>
             </div>
+          )}
 
-            {/* Voice Microphone Error Notification */}
-            {speechError && (
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/30 dark:text-rose-300 text-xs flex items-center space-x-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{speechError}</span>
+          {/* Voice Listening Active Waveform Banner */}
+          {isListening && (
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-300 text-xs flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                <span className="font-medium">Listening... speak your request</span>
               </div>
-            )}
-
-            {/* Voice Listening Active Waveform Banner */}
-            {isListening && (
-              <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 dark:bg-[#E5A952]/15 dark:border-cyan-500/30 dark:text-[#E5A952] text-xs flex items-center justify-between animate-pulse">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-                  <span className="font-semibold">Listening to your voice... Speak now!</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleToggleListening}
-                  className="px-3 py-1 rounded-full bg-red-500 text-white font-mono text-[10px] font-semibold cursor-pointer hover:bg-red-600 transition"
-                >
-                  Stop Mic
-                </button>
-              </div>
-            )}
-
-            {/* Input Bar with Direct Microphone Button */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend(inputUtterance);
-              }}
-              className="flex items-center space-x-2.5 pt-3 border-t border-slate-200/80 dark:border-white/10"
-            >
-              {/* Live Microphone Toggle Button */}
-              <motion.button
+              <button
                 type="button"
                 onClick={handleToggleListening}
-                animate={isListening ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-                transition={isListening ? { repeat: Infinity, duration: 1, ease: 'easeInOut' } : { duration: 0.2 }}
-                className={`p-3 rounded-full border transition-colors flex items-center justify-center cursor-pointer ${isListening
-                  ? 'bg-rose-500 text-white border-rose-600 shadow-md shadow-rose-500/30'
-                  : 'bg-slate-100 dark:bg-white/[0.06] border-slate-200 dark:border-white/10 text-slate-700 dark:text-[#E5A952] hover:bg-slate-200 dark:hover:bg-white/[0.12] hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                title={isListening ? 'Stop listening' : 'Start voice input (speak via microphone)'}
+                className="px-2.5 py-0.5 rounded bg-rose-600 text-white font-mono text-[10px] font-medium cursor-pointer"
               >
-                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-              </motion.button>
-
-              {/* Text Input */}
-              <input
-                type="text"
-                value={inputUtterance}
-                onChange={(e) => setInputUtterance(e.target.value)}
-                placeholder="Talk to StudyMate (e.g. 'What's due this week?', '45 min study plan', 'yes'...)"
-                className="flex-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/15 rounded-full px-5 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:outline-none focus:border-blue-500 dark:focus:border-cyan-400 transition-colors font-sans"
-              />
-
-              {/* Send Button */}
-              <button
-                type="submit"
-                disabled={loading || !inputUtterance.trim()}
-                className="px-6 py-3 rounded-full text-white font-semibold text-xs transition flex items-center space-x-1.5 shadow-md border border-transparent dark:border-white/20 disabled:opacity-40 cursor-pointer hover:opacity-90 active:scale-95 bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-b dark:from-[#2B2B2B] dark:to-[#101010]"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Send</span>
+                Stop
               </button>
-            </form>
+            </div>
+          )}
+
+          {/* Input Bar */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend(inputUtterance);
+            }}
+            className="flex items-center space-x-2 pt-3 border-t border-slate-100 dark:border-white/[0.06]"
+          >
+            {/* Live Microphone Toggle */}
+            <button
+              type="button"
+              onClick={handleToggleListening}
+              className={`p-2.5 rounded-lg border transition cursor-pointer flex items-center justify-center ${
+                isListening
+                  ? 'bg-rose-600 text-white border-rose-600'
+                  : 'bg-slate-100 dark:bg-white/[0.05] border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/[0.1]'
+              }`}
+              title={isListening ? 'Stop recording' : 'Speak query via microphone'}
+            >
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </button>
+
+            {/* Text Input */}
+            <input
+              type="text"
+              value={inputUtterance}
+              onChange={(e) => setInputUtterance(e.target.value)}
+              placeholder="Ask Alexa (e.g. 'What's due this week?', 'Build a 45 min study plan', 'yes'...)"
+              className="flex-1 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-slate-400 transition"
+            />
+
+            {/* Send Button */}
+            <button
+              type="submit"
+              disabled={loading || !inputUtterance.trim()}
+              className="px-4 py-2 rounded-lg text-white font-medium text-xs transition flex items-center space-x-1.5 disabled:opacity-40 cursor-pointer bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Send</span>
+            </button>
+          </form>
+        </div>
+
+        {/* Right Column: Prompt Scenarios (4 cols) */}
+        <div className="lg:col-span-4 space-y-4">
+          <div className="p-5 rounded-xl bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              Sample Voice Queries
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+              Click any query below to test intent resolution and speech playback:
+            </p>
+
+            <div className="space-y-1.5 pt-1">
+              {samplePrompts.map((prompt, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(prompt)}
+                  disabled={loading}
+                  className="w-full text-left p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/80 hover:border-slate-300 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] dark:border-white/[0.06] transition text-xs text-slate-800 dark:text-slate-200 flex items-center justify-between group cursor-pointer"
+                >
+                  <span className="truncate">"{prompt}"</span>
+                  <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white shrink-0 ml-2">
+                    Test →
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Right Column: 1-Click Conversational Prompt Scenarios (4 cols) */}
-          <div className="lg:col-span-4 space-y-4">
-            <div className="p-6 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] space-y-3">
-              <div className="flex items-center space-x-2 text-xs font-bold text-slate-900 dark:text-white">
-                <Sparkles className="w-4 h-4 text-[#E5A952] dark:text-[#E5A952]" />
-                <span>Interactive Voice Scenarios</span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-white/50 leading-relaxed">
-                Click any scenario or test multi-turn flow: ask for a study plan, then click "yes" to launch the session!
-              </p>
-
-              <div className="space-y-2 pt-2">
-                {samplePrompts.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSend(prompt)}
-                    disabled={loading}
-                    className="w-full text-left p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200 hover:border-blue-400 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:border-white/10 dark:hover:border-cyan-400/40 transition-all text-xs text-slate-900 dark:text-white flex items-center justify-between group cursor-pointer shadow-sm"
-                  >
-                    <div className="flex items-center space-x-2 min-w-0">
-                      <Mic className="w-3.5 h-3.5 text-[#E5A952] dark:text-[#E5A952] shrink-0 group-hover:scale-110 transition-transform" />
-                      <span className="font-sans font-medium truncate">"{prompt}"</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-[#E5A952] dark:text-[#E5A952] opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                      Run →
-                    </span>
-                  </button>
-                ))}
-              </div>
+          <div className="p-5 rounded-xl bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] space-y-2 text-xs">
+            <div className="flex items-center space-x-2 font-semibold text-slate-800 dark:text-slate-200">
+              <Clock className="w-4 h-4 text-slate-500" />
+              <span>Contextual Multi-Turn Memory</span>
             </div>
-
-            {/* Multi-Turn Memory Callout Card */}
-            <div className="p-6 rounded-3xl bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.06] space-y-2 text-xs">
-              <div className="flex items-center space-x-2 font-bold text-slate-900 dark:text-white">
-                <Clock className="w-4 h-4 text-[#E5A952] dark:text-[#E5A952]" />
-                <span>Contextual State Memory</span>
-              </div>
-              <p className="text-slate-500 dark:text-white/50 leading-relaxed">
-                StudyMate tracks your pending questions across conversational turns. Saying "yes", "sure", or "start" after requesting a study plan will seamlessly initiate your Pomodoro timer.
-              </p>
-            </div>
+            <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
+              StudyMate stores pending conversational state in memory. For example, if you ask for a study plan and then reply "yes", the system recognizes your intent and automatically starts your Pomodoro focus session.
+            </p>
           </div>
         </div>
-      </AnimatedContent>
+      </div>
     </div>
   );
 };
