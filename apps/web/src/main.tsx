@@ -7,9 +7,11 @@ import { AuthProvider } from './context/AuthContext.js';
 import { ClerkProvider } from '@clerk/react';
 import './index.css';
 
+const envKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const CLERK_PUBLISHABLE_KEY =
-  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
-  'pk_test_Y29uY2lzZS13YXJ0aG9nLTUuY2xlcmsuYWNjb3VudHMuZGV2JA';
+  envKey && !envKey.includes('your_clerk_publishable_key')
+    ? envKey
+    : 'pk_test_Y29uY2lzZS13YXJ0aG9nLTUuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

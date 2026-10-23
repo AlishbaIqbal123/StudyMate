@@ -257,7 +257,6 @@ apiRouter.post('/auth/send-otp', (req, res) => {
     res.json({
       success: true,
       message: `Verification code sent to ${normalizedEmail}`,
-      code: otpCode, // Provided in development/demo mode for reviewer evaluation convenience
       expiresIn: expiresInSeconds,
     });
   } catch (err: unknown) {
