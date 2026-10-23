@@ -22,6 +22,7 @@ import { usePomodoro } from '../context/PomodoroContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { AuthGate } from '../components/AuthGate.js';
 import type { Course, CourseProgress, Task, TaskPriority, TaskStatus } from '@studymate/types';
+import { AnimatedContent, SpotlightCard } from '../components/animated/index.js';
 
 interface DashboardViewProps {
   tasks: Task[];
@@ -136,39 +137,41 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     <div className="space-y-6">
       {/* Guest Mode Notification Banner */}
       {isPreview && (
-        <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.08] shadow-sm animate-fadeIn">
-          <div className="flex items-center gap-3">
-            <span className="font-sans text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#E5A952]/15 text-[#B87D28] dark:text-[#E5A952] border border-[#E5A952]/30 uppercase tracking-wider shrink-0">
-              Scholar Preview Pass
-            </span>
-            <p className="text-xs text-stone-600 dark:text-[#C8BFB2] leading-relaxed">
-              You are exploring StudyMate with an <strong className="text-stone-900 dark:text-[#F5EFE6]">Academic Preview Pass</strong>. Test Pomodoro sprints and manage temporary coursework locally. <strong className="text-stone-900 dark:text-[#F5EFE6]">Sign in</strong> to sync across devices and pair Alexa+.
-            </p>
+        <AnimatedContent direction="up" fadeIn duration={0.5}>
+          <div className="rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#FAF7F2] dark:bg-[#121520] border border-[#E6DFD3] dark:border-white/[0.08] shadow-sm animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <span className="font-sans text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#E5A952]/15 text-[#B87D28] dark:text-[#E5A952] border border-[#E5A952]/30 uppercase tracking-wider shrink-0">
+                Scholar Preview Pass
+              </span>
+              <p className="text-xs text-stone-600 dark:text-[#C8BFB2] leading-relaxed">
+                You are exploring StudyMate with an <strong className="text-stone-900 dark:text-[#F5EFE6]">Academic Preview Pass</strong>. Test Pomodoro sprints and manage temporary coursework locally. <strong className="text-stone-900 dark:text-[#F5EFE6]">Sign in</strong> to sync across devices and pair Alexa+.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+              <button
+                type="button"
+                onClick={openClerkSignIn}
+                className="px-4 py-2 rounded-full text-xs font-semibold text-[#0E1117] bg-[#F5EFE6] hover:bg-white active:scale-95 transition cursor-pointer"
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={openClerkSignUp}
+                className="px-4 py-2 rounded-full text-xs font-semibold text-stone-700 dark:text-[#C8BFB2] bg-white dark:bg-white/[0.06] hover:bg-stone-100 dark:hover:bg-white/[0.12] border border-stone-300 dark:border-white/20 transition cursor-pointer"
+              >
+                Sign Up Free
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-            <button
-              type="button"
-              onClick={openClerkSignIn}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-[#0E1117] bg-[#F5EFE6] hover:bg-white active:scale-95 transition cursor-pointer"
-            >
-              Sign In
-            </button>
-            <button
-              type="button"
-              onClick={openClerkSignUp}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-stone-700 dark:text-[#C8BFB2] bg-white dark:bg-white/[0.06] hover:bg-stone-100 dark:hover:bg-white/[0.12] border border-stone-300 dark:border-white/20 transition cursor-pointer"
-            >
-              Sign Up Free
-            </button>
-          </div>
-        </div>
+        </AnimatedContent>
       )}
 
       {/* 1. Welcoming Hero Banner */}
       <div className="rounded-3xl p-6 sm:p-8 bg-[#121520] border border-white/[0.08] text-[#F5EFE6] relative overflow-hidden">
         {/* Ambient warm tungsten glow */}
         <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#E5A952]/[0.08] rounded-full blur-3xl pointer-events-none" />
-        
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div>
             <span className="font-sans text-[10px] font-semibold px-3 py-1 rounded-full bg-white/10 text-[#E5A952] border border-white/15 tracking-wider">
