@@ -20,6 +20,8 @@ import {
   Database,
   Monitor,
   Mic,
+  MicOff,
+  AlertCircle,
   Zap,
 } from 'lucide-react';
 import { useAuth } from './context/AuthContext.js';
@@ -29,6 +31,7 @@ import { WorkflowAccordion } from './components/WorkflowAccordion.js';
 import { FeatureCarousel } from './components/FeatureCarousel.js';
 import { CobaltBentoHighlights } from './components/CobaltBentoHighlights.js';
 import { HeroWavesBackground } from './components/HeroWavesBackground.js';
+import { useVoiceRecognition } from './hooks/useVoiceRecognition.js';
 
 interface StudyMateHeroProps {
   onOpenDashboard?: () => void;
@@ -214,6 +217,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
 
   // 3. Interactive Alexa+ Voice Simulator
   const [voiceLoading, setVoiceLoading] = useState(false);
+  const [customVoiceInput, setCustomVoiceInput] = useState('');
   const [voiceResult, setVoiceResult] = useState<{
     query: string;
     response: string;
@@ -226,11 +230,12 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   });
 
   const handleRunVoice = async (queryText: string) => {
+    if (!queryText.trim()) return;
     setVoiceLoading(true);
     try {
-      const res = await simulateVoice(queryText);
+      const res = await simulateVoice(queryText.trim());
       setVoiceResult({
-        query: queryText,
+        query: queryText.trim(),
         response: res.speechResponse,
         tool: res.intent,
       });
@@ -243,7 +248,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       }
     } catch {
       setVoiceResult({
-        query: queryText,
+        query: queryText.trim(),
         response:
           'I checked your coursework schedule. CS 420 Lab 3 requires 90 minutes of focused effort.',
         tool: 'get_tasks',
@@ -252,6 +257,25 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       setVoiceLoading(false);
     }
   };
+
+  const {
+    isListening,
+    audioLevel,
+    speechError,
+    toggleListening,
+  } = useVoiceRecognition({
+    onTranscriptChange: (text) => {
+      setCustomVoiceInput(text);
+      if (text) {
+        setVoiceResult((prev) => ({ ...prev, query: text }));
+      }
+    },
+    onFinalTranscript: (finalText) => {
+      setCustomVoiceInput('');
+      handleRunVoice(finalText);
+    },
+    autoSubmitOnEnd: true,
+  });
 
   // 4. MCP Tools Explorer Tab
   const [selectedMcpTool, setSelectedMcpTool] = useState<McpToolSpec>(MCP_TOOLS[0]);
@@ -637,13 +661,25 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
                   <Mic className="w-4 h-4 text-[#839758] dark:text-[#ABC270]" />
                   <span>Alexa+ Voice Simulation</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#7A6C5E]">
-                  Interactive
-                </span>
+                <button
+                  type="button"
+                  onClick={toggleListening}
+                  className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border transition flex items-center gap-1 cursor-pointer ${
+                    isListening
+                      ? 'bg-[#FDA769] text-white border-[#FDA769] font-bold animate-pulse'
+                      : 'bg-white dark:bg-[#2E2620] text-[#473C33] dark:text-[#FAF8F1] border-[#E6E0D0] dark:border-[#FEC868]/20 hover:bg-[#FEC868]/30'
+                  }`}
+                  title={isListening ? 'Stop microphone' : 'Click to speak via microphone'}
+                >
+                  {isListening ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3 text-[#FDA769]" />}
+                  <span>{isListening ? `Listening (${audioLevel}%)` : 'Speak Mic'}</span>
+                </button>
               </div>
 
               <div className="p-3 rounded-xl bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-2 text-xs leading-relaxed flex-1 flex flex-col justify-center">
-                <div className="text-[#87796B] text-[10px] font-mono">Student Query:</div>
+                <div className="text-[#87796B] text-[10px] font-mono">
+                  {isListening ? 'Listening to Microphone:' : 'Student Query:'}
+                </div>
                 <div className="text-[#473C33] dark:text-[#FAF8F1] font-semibold">"{voiceResult.query}"</div>
                 <div className="text-[#87796B] text-[10px] font-mono pt-1">Alexa Response:</div>
                 <div className="text-[#63574B] dark:text-[#E0D6C8] font-mono text-[11px]">{voiceResult.response}</div>
@@ -861,9 +897,61 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             </p>
           </div>
 
+          {/* Live Microphone & Custom Voice Input Bar */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (customVoiceInput.trim()) {
+                handleRunVoice(customVoiceInput);
+                setCustomVoiceInput('');
+              }
+            }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5"
+          >
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition cursor-pointer shrink-0 border ${
+                isListening
+                  ? 'bg-[#FDA769] text-white border-[#FDA769] shadow-md'
+                  : 'bg-[#FAF8F1] dark:bg-[#393028] text-[#473C33] dark:text-[#FAF8F1] border-[#E6E0D0] dark:border-[#FEC868]/20 hover:bg-[#FEC868]/30'
+              }`}
+            >
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-[#FDA769]" />}
+              <span>{isListening ? `Stop Mic (${audioLevel}%)` : 'Speak with Mic'}</span>
+            </button>
+
+            <input
+              type="text"
+              value={customVoiceInput}
+              onChange={(e) => setCustomVoiceInput(e.target.value)}
+              placeholder={
+                isListening
+                  ? 'Listening to your microphone... speak now'
+                  : "Or type/speak any request (e.g. 'What is due this week?')"
+              }
+              className="flex-1 px-4 py-2.5 rounded-xl text-xs bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/20 text-[#473C33] dark:text-[#FAF8F1] placeholder-[#87796B] focus:outline-none focus:border-[#ABC270]"
+            />
+
+            <button
+              type="submit"
+              disabled={voiceLoading || !customVoiceInput.trim()}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold text-[#473C33] bg-[#FEC868] hover:bg-[#F5B84D] disabled:opacity-40 transition cursor-pointer shrink-0"
+            >
+              Ask Alexa
+            </button>
+          </form>
+
+          {speechError && (
+            <div className="p-3 rounded-xl bg-[#FDA769]/20 border border-[#FDA769]/40 text-[#944519] dark:text-[#FDA769] text-xs flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{speechError}</span>
+            </div>
+          )}
+
           {/* Cue Selector Chips */}
           <div className="space-y-2">
-            <span className="text-xs text-[#7A6C5E] block font-mono">Select a sample voice query to test live:</span>
+            <span className="text-xs text-[#7A6C5E] block font-mono">Or select a sample voice query to test live:</span>
             <div className="flex flex-wrap gap-2">
               {[
                 "What's due this week?",

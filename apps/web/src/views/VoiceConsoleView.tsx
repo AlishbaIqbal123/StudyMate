@@ -20,6 +20,7 @@ import {
 } from '../api.js';
 import { usePomodoro } from '../context/PomodoroContext.js';
 import { VoiceResponseCard } from '../components/VoiceResponseCard.js';
+import { useVoiceRecognition } from '../hooks/useVoiceRecognition.js';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -49,10 +50,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [speechRate, setSpeechRate] = useState(1.05);
 
-  // Web Speech API Microphone State
-  const [isListening, setIsListening] = useState(false);
-  const [speechError, setSpeechError] = useState<string | null>(null);
-  const recognitionRef = useRef<any>(null);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   // Global Pomodoro Timer Context
@@ -79,21 +76,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
-  // Clean up speech recognition on unmount
-  useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.onstart = null;
-          recognitionRef.current.onresult = null;
-          recognitionRef.current.onerror = null;
-          recognitionRef.current.onend = null;
-          recognitionRef.current.abort();
-        } catch { }
-      }
-    };
-  }, []);
-
   const handleSpeak = (text: string) => {
     if (!ttsEnabled || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -101,72 +83,6 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     utterance.rate = speechRate;
     utterance.pitch = 1.0;
     window.speechSynthesis.speak(utterance);
-  };
-
-  const handleToggleListening = () => {
-    setSpeechError(null);
-
-    if (isListening) {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch { }
-      }
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      setSpeechError('Microphone speech recognition is not supported in this browser. Please type your query.');
-      return;
-    }
-
-    try {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = () => {
-        setIsListening(true);
-        setSpeechError(null);
-      };
-
-      recognition.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((res: any) => res[0].transcript)
-          .join('');
-        setInputUtterance(transcript);
-      };
-
-      recognition.onerror = (event: any) => {
-        if (event.error === 'aborted' || event.error === 'no-speech') {
-          setIsListening(false);
-          return;
-        }
-
-        if (event.error === 'not-allowed') {
-          setSpeechError('Microphone permission denied. Please allow microphone access in browser settings.');
-        } else {
-          setSpeechError(`Voice recognition error: ${event.error}`);
-        }
-        setIsListening(false);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognitionRef.current = recognition;
-      recognition.start();
-    } catch (err) {
-      console.error('Failed to start speech recognition:', err);
-      setSpeechError('Could not initialize microphone.');
-      setIsListening(false);
-    }
   };
 
   const handleStartPomodoro = (minutes: number, course: string, title?: string) => {
@@ -187,6 +103,20 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     }
   };
 
+  const {
+    isListening,
+    audioLevel,
+    speechError,
+    toggleListening: handleToggleListening,
+    stopListening,
+  } = useVoiceRecognition({
+    onTranscriptChange: (text) => setInputUtterance(text),
+    onFinalTranscript: (finalText) => {
+      handleSend(finalText);
+    },
+    autoSubmitOnEnd: true,
+  });
+
   const handleSend = async (text: string) => {
     if (!text.trim() || loading) return;
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -200,11 +130,8 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
     setInputUtterance('');
     setLoading(true);
 
-    if (isListening && recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch { }
-      setIsListening(false);
+    if (isListening) {
+      stopListening();
     }
 
     const startTime = performance.now();
@@ -392,18 +319,42 @@ export const VoiceConsoleView: React.FC<{ onDataChanged: () => void }> = ({ onDa
 
           {/* Voice Listening Active Waveform Banner */}
           {isListening && (
-            <div className="p-3 rounded-xl bg-[#FDA769]/20 border border-[#FDA769]/40 text-[#944519] dark:text-[#FDA769] text-xs flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-[#FDA769] animate-ping" />
-                <span className="font-medium">Listening... speak your request</span>
+            <div className="p-3 rounded-xl bg-[#FDA769]/20 border border-[#FDA769]/40 text-[#944519] dark:text-[#FDA769] text-xs flex items-center justify-between gap-3">
+              <div className="flex items-center space-x-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FDA769] animate-ping shrink-0" />
+                <div>
+                  <span className="font-semibold block">
+                    Listening... speak your request (auto-sends when you pause)
+                  </span>
+                  <span className="text-[10px] font-mono opacity-80">
+                    {inputUtterance ? `Heard: "${inputUtterance}"` : 'Waiting for voice input...'}
+                  </span>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={handleToggleListening}
-                className="px-2.5 py-0.5 rounded-full bg-[#FDA769] text-white font-mono text-[10px] font-bold cursor-pointer"
-              >
-                Stop
-              </button>
+
+              <div className="flex items-center space-x-3 shrink-0">
+                {/* Live Hardware Mic Volume Bars */}
+                <div className="flex items-end space-x-0.5 h-4" title={`Mic level: ${audioLevel}%`}>
+                  {[0.35, 0.65, 1, 0.75, 0.45].map((mult, idx) => {
+                    const barHeight = Math.max(20, Math.min(100, Math.round(audioLevel * mult + 15)));
+                    return (
+                      <span
+                        key={idx}
+                        className="w-1 rounded-full bg-[#944519] dark:bg-[#FDA769] transition-all duration-75"
+                        style={{ height: `${barHeight}%` }}
+                      />
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleToggleListening}
+                  className="px-3 py-1 rounded-full bg-[#FDA769] text-[#473C33] font-mono text-[10px] font-bold cursor-pointer hover:bg-[#F59856] transition"
+                >
+                  Done / Send
+                </button>
+              </div>
             </div>
           )}
 

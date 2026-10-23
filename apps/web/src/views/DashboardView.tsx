@@ -6,17 +6,20 @@ import {
   Plus,
   ArrowRight,
   Mic,
+  MicOff,
   Volume2,
   Play,
   Pause,
   RotateCcw,
   BookOpen,
+  AlertCircle,
 } from 'lucide-react';
 import { KpiCards } from '../components/KpiCards.js';
 import { simulateVoice, getActiveStudent } from '../api.js';
 import { usePomodoro } from '../context/PomodoroContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { AuthGate } from '../components/AuthGate.js';
+import { useVoiceRecognition } from '../hooks/useVoiceRecognition.js';
 import type { Course, CourseProgress, Task, TaskPriority, TaskStatus } from '@studymate/types';
 
 interface DashboardViewProps {
@@ -100,6 +103,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       setVoiceLoading(false);
     }
   };
+
+  const {
+    isListening,
+    audioLevel,
+    speechError,
+    toggleListening,
+  } = useVoiceRecognition({
+    onTranscriptChange: (text) => setVoiceQuery(text),
+    onFinalTranscript: (finalText) => {
+      handleQuickPrompt(finalText);
+    },
+    autoSubmitOnEnd: true,
+  });
 
   const pendingTasks = tasks.filter((t) => t.status !== 'done');
   const recentTasks = pendingTasks.slice(0, 5);
@@ -204,12 +220,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="rounded-2xl p-5 bg-white dark:bg-[#2E2620] border border-[#E6E0D0] dark:border-[#FEC868]/15 space-y-3 shadow-xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 rounded-lg bg-[#FDA769]/20 flex items-center justify-center">
-              <Mic className="w-3.5 h-3.5 text-[#E0712A] dark:text-[#FDA769]" />
-            </div>
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition cursor-pointer ${
+                isListening
+                  ? 'bg-[#FDA769] text-white animate-pulse'
+                  : 'bg-[#FDA769]/20 text-[#E0712A] dark:text-[#FDA769] hover:bg-[#FDA769]/35'
+              }`}
+              title={isListening ? 'Stop listening' : 'Click to speak via microphone'}
+            >
+              {isListening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
+            </button>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-[#473C33] dark:text-[#FAF8F1]">
               Alexa+ Voice Assistant
             </h3>
+            {isListening && (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FDA769]/25 text-[#944519] dark:text-[#FDA769] font-semibold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FDA769] animate-ping" />
+                Listening ({audioLevel}%)
+              </span>
+            )}
           </div>
           <button
             onClick={() => onNavigateToScreen('voice')}
@@ -220,22 +251,48 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </button>
         </div>
 
-        {/* Natural Language Prompt Input */}
-        <form onSubmit={handleVoiceSubmit} className="relative flex items-center">
-          <input
-            type="text"
-            value={voiceQuery}
-            onChange={(e) => setVoiceQuery(e.target.value)}
-            placeholder="Ask Alexa anything (e.g. 'What is due this week?' or 'Add task: Lab 3 for CS 420 due Friday')"
-            className="w-full pl-3.5 pr-24 py-2.5 text-xs rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 text-[#473C33] dark:text-[#FAF8F1] placeholder-[#87796B] dark:placeholder-[#A3907E] focus:outline-none focus:border-[#ABC270] transition"
-          />
+        {speechError && (
+          <div className="p-2.5 rounded-xl bg-[#FDA769]/20 border border-[#FDA769]/40 text-[#944519] dark:text-[#FDA769] text-xs flex items-center space-x-2">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+            <span>{speechError}</span>
+          </div>
+        )}
+
+        {/* Natural Language Prompt Input with Live Mic Button */}
+        <form onSubmit={handleVoiceSubmit} className="relative flex items-center gap-2">
           <button
-            type="submit"
-            disabled={voiceLoading}
-            className="absolute right-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#473C33] bg-[#FEC868] hover:bg-[#F5B84D] transition active:scale-95 disabled:opacity-50 cursor-pointer shadow-2xs"
+            type="button"
+            onClick={toggleListening}
+            className={`p-2.5 rounded-xl border transition cursor-pointer flex items-center justify-center shrink-0 ${
+              isListening
+                ? 'bg-[#FDA769] text-white border-[#FDA769] shadow-sm'
+                : 'bg-[#FAF8F1] dark:bg-[#393028] border-[#E6E0D0] dark:border-[#FEC868]/15 text-[#473C33] dark:text-[#FAF8F1] hover:bg-[#EAE5D5]'
+            }`}
+            title={isListening ? 'Stop microphone' : 'Speak query via microphone'}
           >
-            {voiceLoading ? 'Checking...' : 'Ask'}
+            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-[#FDA769]" />}
           </button>
+
+          <div className="relative flex-1 flex items-center">
+            <input
+              type="text"
+              value={voiceQuery}
+              onChange={(e) => setVoiceQuery(e.target.value)}
+              placeholder={
+                isListening
+                  ? 'Listening to your microphone... speak now'
+                  : "Ask Alexa anything (e.g. 'What is due this week?' or click Mic to speak)"
+              }
+              className="w-full pl-3.5 pr-20 py-2.5 text-xs rounded-xl bg-[#FAF8F1] dark:bg-[#393028] border border-[#E6E0D0] dark:border-[#FEC868]/15 text-[#473C33] dark:text-[#FAF8F1] placeholder-[#87796B] dark:placeholder-[#A3907E] focus:outline-none focus:border-[#ABC270] transition"
+            />
+            <button
+              type="submit"
+              disabled={voiceLoading}
+              className="absolute right-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#473C33] bg-[#FEC868] hover:bg-[#F5B84D] transition active:scale-95 disabled:opacity-50 cursor-pointer shadow-2xs"
+            >
+              {voiceLoading ? 'Checking...' : 'Ask'}
+            </button>
+          </div>
         </form>
 
         {/* Quick Suggestion Chips */}
