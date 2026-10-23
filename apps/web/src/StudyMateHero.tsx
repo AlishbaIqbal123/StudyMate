@@ -25,6 +25,9 @@ import {
 import { useAuth } from './context/AuthContext.js';
 import { useTheme } from './context/ThemeContext.js';
 import { simulateVoice } from './api.js';
+import { WorkflowAccordion } from './components/WorkflowAccordion.js';
+import { FeatureCarousel } from './components/FeatureCarousel.js';
+import { CobaltBentoHighlights } from './components/CobaltBentoHighlights.js';
 
 interface StudyMateHeroProps {
   onOpenDashboard?: () => void;
@@ -291,17 +294,31 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
             </button>
             <button
               type="button"
+              onClick={() => scrollToSection('workflows')}
+              className="hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+            >
+              Workflows
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('suite')}
+              className="hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+            >
+              App Suite
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('highlights')}
+              className="hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+            >
+              Highlights
+            </button>
+            <button
+              type="button"
               onClick={() => scrollToSection('mcp-protocol')}
               className="hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
             >
               MCP Protocol
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection('voice-lab')}
-              className="hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
-            >
-              Voice Simulator
             </button>
             <button
               type="button"
@@ -600,7 +617,54 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         </div>
       </section>
 
-      {/* 4. The 5 Model Context Protocol Tools Showcase */}
+      {/* 4. Interactive Expanding Study Workflows (Capital One / Zoom Accordion Style) */}
+      <section id="workflows" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16 sm:py-24 border-t border-slate-200 dark:border-white/[0.08]">
+        <div className="max-w-2xl mb-10 space-y-2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 dark:bg-blue-500/20 px-3 py-1 text-xs font-mono text-blue-600 dark:text-blue-400 border border-blue-500/20">
+            <span>Adaptive Study Modalities</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            Designed for how students actually study.
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Hover over any modality to expand the interface. Smoothly transition between focused Pomodoro blocks, hands-free voice notes, and syllabus tracking.
+          </p>
+        </div>
+
+        <WorkflowAccordion
+          onOpenDashboard={onOpenDashboard}
+          onOpenVoice={onOpenVoice}
+          onOpenPlanner={onOpenPlanner}
+          onOpenAssignments={onOpenAssignments}
+        />
+      </section>
+
+      {/* 5. Horizontal App Suite Carousel (Zoom App Suite Showcase Style) */}
+      <section id="suite" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16 sm:py-24 border-t border-slate-200 dark:border-white/[0.08]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div className="max-w-2xl space-y-2">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] px-3 py-1 text-xs font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
+              <span>Interactive App Ecosystem</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              Every tool a serious student needs. In one fluid desk.
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Scroll or swipe horizontally to inspect live feature cards. Each tool executes deterministic logic against your local database.
+            </p>
+          </div>
+        </div>
+
+        <FeatureCarousel
+          onOpenDashboard={onOpenDashboard}
+          onOpenVoice={onOpenVoice}
+          onOpenPlanner={onOpenPlanner}
+          onOpenAssignments={onOpenAssignments}
+          onOpenTelemetry={onOpenTelemetry}
+        />
+      </section>
+
+      {/* 6. The 5 Model Context Protocol Tools Showcase */}
       <section id="mcp-protocol" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16 sm:py-24 border-t border-slate-200 dark:border-white/[0.08]">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
           <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">
@@ -700,7 +764,30 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
         </div>
       </section>
 
-      {/* 5. Live Voice Studio Sandbox Section */}
+      {/* 7. Asymmetric Royal Cobalt Bento Highlights Grid (Zoom Cobalt Bento Style) */}
+      <section id="highlights" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16 sm:py-24 border-t border-slate-200 dark:border-white/[0.08]">
+        <div className="max-w-2xl mb-12 space-y-2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 dark:bg-blue-500/20 px-3 py-1 text-xs font-mono text-blue-600 dark:text-blue-400 border border-blue-500/20">
+            <span>Academic Performance System</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            Built for speed, focus, and zero distractions.
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Engineered with high typographic craft, authentic local storage, and instant voice interaction.
+          </p>
+        </div>
+
+        <CobaltBentoHighlights
+          onOpenDashboard={onOpenDashboard}
+          onOpenVoice={onOpenVoice}
+          onOpenPlanner={onOpenPlanner}
+          onOpenAssignments={onOpenAssignments}
+          onOpenTelemetry={onOpenTelemetry}
+        />
+      </section>
+
+      {/* 8. Live Voice Studio Sandbox Section */}
       <section id="voice-lab" className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16 sm:py-24 border-t border-slate-200 dark:border-white/[0.08]">
         <div className="rounded-xl bg-white dark:bg-[#0E121B] border border-slate-200 dark:border-white/[0.08] p-6 sm:p-10 space-y-6 shadow-xs">
           <div className="max-w-2xl space-y-2">
