@@ -265,10 +265,13 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
   const [selectedMcpTool, setSelectedMcpTool] = useState<McpToolSpec>(MCP_TOOLS[0]);
 
   return (
-    <div className="min-h-[100dvh] bg-[#07090E] text-[#F5EFE6] selection:bg-[#E5A952]/30 selection:text-[#E5A952] font-sans antialiased relative overflow-x-hidden">
+    <div className={`min-h-[100dvh] font-sans antialiased relative overflow-x-hidden selection:bg-[#E5A952]/30 selection:text-[#E5A952] transition-colors duration-300 ${theme === 'dark'
+      ? 'bg-[#07090E] text-[#F5EFE6]'
+      : 'bg-[#F7F4EE] text-[#1C1917]'
+      }`}>
       {/* Ambient Film Grain & Atmospheric Spatial Glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(229,169,82,0.08),transparent)]" />
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] ${theme === 'dark' ? 'bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(229,169,82,0.08),transparent)]' : 'bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(229,169,82,0.12),transparent)]'}`} />
         <div className="absolute top-1/3 -right-48 w-96 h-96 rounded-full bg-[#3B82F6]/[0.03] blur-3xl" />
         <div className="absolute bottom-1/4 -left-48 w-96 h-96 rounded-full bg-[#10B981]/[0.03] blur-3xl" />
       </div>
@@ -277,7 +280,10 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
       {/* 1. FLOATING PRECISION ISLAND NAVIGATION                           */}
       {/* ================================================================== */}
       <header className="sticky top-0 z-50 px-4 sm:px-6 lg:px-8 pt-4">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between p-2 sm:p-2.5 rounded-full bg-[#0D111C]/85 backdrop-blur-2xl border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+        <nav className={`max-w-7xl mx-auto flex items-center justify-between p-2 sm:p-2.5 rounded-full backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-colors ${theme === 'dark'
+          ? 'bg-[#0D111C]/85 border border-white/[0.08]'
+          : 'bg-white/90 border border-black/[0.06]'
+          }`}>
           {/* Logo Brand */}
           <button
             type="button"
@@ -288,7 +294,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
               <GraduationCap className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="font-serif text-base font-semibold tracking-tight text-white">
+              <span className={`font-serif text-base font-semibold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-[#1C1917]'}`}>
                 Study<span className="text-[#E5A952]">Mate</span>
               </span>
               <span className="font-mono text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-[#C8BFB2] border border-white/[0.08]">
@@ -298,7 +304,7 @@ export const StudyMateHero: React.FC<StudyMateHeroProps> = ({
           </button>
 
           {/* Clean Editorial Nav Links */}
-          <div className="hidden md:flex items-center space-x-6 text-xs font-medium text-[#C8BFB2]">
+          <div className={`hidden md:flex items-center space-x-6 text-xs font-medium ${theme === 'dark' ? 'text-[#C8BFB2]' : 'text-[#6B5E52]'}`}>
             <button
               type="button"
               onClick={() => scrollToSection('workstation')}

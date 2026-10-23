@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AnimatedContent, BorderGlow } from './animated/index.js';
+import { BorderGlow } from './animated/index.js';
 import {
   Home,
   LayoutDashboard,
@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
 import { useAuth } from '../context/AuthContext.js';
-import { DEMO_STUDENTS } from '../api.js';
 
 interface SidebarProps {
   activeScreen: string;
@@ -125,7 +124,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       {/* Main Sidebar */}
-      <AnimatedContent direction="left" fadeIn duration={0.5} once={true}>
+      <motion.div
+        initial={{ x: -20, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <aside
           className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#FAF7F2] dark:bg-[#0E1117] border-r border-[#E6DFD3] dark:border-white/[0.06] flex flex-col justify-between p-4 text-slate-800 dark:text-white transition-all duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
             }`}
@@ -276,8 +279,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button
                       onClick={() => handleSelectScreen(item.id)}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition cursor-pointer ${isActive
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-sm dark:bg-white/10 dark:text-white dark:border-white/15 dark:shadow-lg font-semibold'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/[0.05]'
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-sm dark:bg-white/10 dark:text-white dark:border-white/15 dark:shadow-lg font-semibold'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/[0.05]'
                         }`}
                     >
                       <div className="flex items-center space-x-3">
@@ -293,8 +296,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       {item.badge && (
                         <span
                           className={`font-mono text-[9px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider ${isActive
-                              ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/30'
-                              : 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-white/10 dark:text-white/60 dark:border-white/10'
+                            ? 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-cyan-500/20 dark:text-cyan-300 dark:border-cyan-500/30'
+                            : 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-white/10 dark:text-white/60 dark:border-white/10'
                             }`}
                         >
                           {item.badge}
@@ -371,7 +374,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
         </aside>
-      </AnimatedContent>
+      </motion.div>
     </>
   );
 };
