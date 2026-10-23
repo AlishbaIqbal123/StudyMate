@@ -21,6 +21,8 @@ import {
 import { useTheme } from '../context/ThemeContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { DEMO_STUDENTS, getPreviewTasksRemaining } from '../api.js';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShinyText } from './animated/index.js';
 
 interface HeaderProps {
   serverHealthy: boolean;
@@ -116,12 +118,22 @@ export const Header: React.FC<HeaderProps> = ({
               <Icon className="w-4 h-4 text-[#E5A952]" />
             </div>
             <div className="min-w-0">
-              <h1 className="font-serif text-base sm:text-lg font-medium text-[#1C1917] dark:text-[#F5EFE6] tracking-tight truncate">
-                {screenInfo.title}
-              </h1>
-              <p className="hidden md:block text-[11px] text-slate-500 dark:text-white/50 truncate">
-                {screenInfo.subtitle}
-              </p>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeScreen}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                >
+                  <h1 className="font-serif text-base sm:text-lg font-medium text-[#1C1917] dark:text-[#F5EFE6] tracking-tight truncate">
+                    {screenInfo.title}
+                  </h1>
+                  <p className="hidden md:block text-[11px] text-slate-500 dark:text-white/50 truncate">
+                    {screenInfo.subtitle}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -192,11 +204,10 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
                     <button
                       onClick={toggleAlexaAccountLinking}
-                      className={`text-[9px] font-semibold px-2 py-0.5 rounded cursor-pointer transition ${
-                        user.alexaLinked
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
-                          : 'bg-slate-200 text-slate-700 hover:text-blue-700 border border-slate-300 dark:bg-white/10 dark:text-white/70 dark:hover:text-cyan-300 dark:border-white/10'
-                      }`}
+                      className={`text-[9px] font-semibold px-2 py-0.5 rounded cursor-pointer transition ${user.alexaLinked
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                        : 'bg-slate-200 text-slate-700 hover:text-blue-700 border border-slate-300 dark:bg-white/10 dark:text-white/70 dark:hover:text-cyan-300 dark:border-white/10'
+                        }`}
                     >
                       {user.alexaLinked ? 'Linked (OAuth 2.1)' : 'Pair Device'}
                     </button>
@@ -260,9 +271,8 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Server Status Indicator */}
           <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-300 text-xs font-mono">
             <span
-              className={`w-2 h-2 rounded-full ${
-                serverHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-emerald-500'
-              }`}
+              className={`w-2 h-2 rounded-full ${serverHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-emerald-500'
+                }`}
             />
             <span className="hidden sm:inline text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
               Alexa+ MCP Online
